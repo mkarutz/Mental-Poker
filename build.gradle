@@ -15,6 +15,11 @@ task farJar(type: Jar) {
     with jar
 }
 
+task(run, dependsOn: 'classes', type: JavaExec) {
+    main = 'au.edu.unimelb.mentalpoker.MentalPoker'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 repositories {
     mavenCentral()
 }
