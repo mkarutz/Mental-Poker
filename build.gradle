@@ -2,18 +2,11 @@ group 'au.edu.unimelb.mentalpoker'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "au.edu.unimelb.mentalpoker.MentalPoker"
 
 sourceCompatibility = 1.8
-
-//create a single Jar with all dependencies
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': 'au.edu.unimelb.mentalpoker.MentalPoker'
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
 
 task(run, dependsOn: 'classes', type: JavaExec) {
     main = 'au.edu.unimelb.mentalpoker.MentalPoker'
@@ -26,4 +19,13 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.2.0'
+    compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
 }
+
+task protoc(type: Exec) {
+    commandLine 'protoc', '--java_out=src/main/java', 'src/protos.proto'
+}
+
+build.dependsOn protoc
+run.dependsOn build
