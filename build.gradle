@@ -8,11 +8,6 @@ mainClassName = "au.edu.unimelb.mentalpoker.MentalPoker"
 
 sourceCompatibility = 1.8
 
-task(run, dependsOn: 'classes', type: JavaExec) {
-    main = 'au.edu.unimelb.mentalpoker.MentalPoker'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 repositories {
     mavenCentral()
 }
