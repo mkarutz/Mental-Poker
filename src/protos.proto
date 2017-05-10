@@ -3,7 +3,7 @@ syntax = "proto2";
 package mentalpoker;
 
 option java_package = "au.edu.unimelb.mentalpoker";
-option java_outer_classname = "MentalPokerProtos";
+option java_outer_classname = "Proto";
 
 message PeerAddress {
     optional string hostname = 1;
@@ -13,4 +13,19 @@ message PeerAddress {
 message Table {
     optional string table_id = 1;
     repeated PeerAddress players = 2;
+}
+
+message JoinRoomMessage {
+    required string playerName = 1;
+}
+
+message NetworkMessage {
+    enum Type {
+        JOIN_ROOM = 0;
+        PLAYER_READY = 1;
+    };
+
+    required Type type = 1;
+
+    optional JoinRoomMessage joinRoomMessage = 2;
 }

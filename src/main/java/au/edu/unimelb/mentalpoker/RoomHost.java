@@ -8,14 +8,16 @@ import java.io.IOException;
 public class RoomHost implements IRemoteListener {
 
     private Remote remote;
+    private GameTable gameTable;
 
-    public RoomHost() {
-        this.remote = new Remote(4001, this);
+    public RoomHost(int port) {
+        this.gameTable = new GameTable();
+        this.remote = new Remote(port, this);
         this.remote.start();
     }
 
-    public synchronized void Receive(Address remote, byte[] message) {
-        System.out.println(new String(message));
+    public void Receive(Address remote, Proto.NetworkMessage message) {
+        //System.out.println(new String(message));
         try {
             this.remote.Send(remote, message);
         } catch (IOException e) {

@@ -9,15 +9,19 @@ import java.util.Random;
 public class RoomClient implements IRemoteListener {
     private Remote remote;
 
-    public RoomClient() throws IOException {
-        this.remote = new Remote((new Random().nextInt() % 30000) + 5000, this);
+    public RoomClient(int hostPort, int port) throws IOException {
+        this.remote = new Remote(port, this);
         this.remote.start();
 
-        Address testRemoteAddress = new Address("127.0.0.1", 4001);
-        this.remote.Send(testRemoteAddress, new String("Hello server").getBytes());
+        Address testRemoteAddress = new Address("127.0.0.1", hostPort);
+        Proto.NetworkMessage.Builder messageBuilder = Proto.NetworkMessage.newBuilder();
+        messageBuilder.setType(Proto.NetworkMessage.Type.JOIN_ROOM);
+        this.remote.Send(testRemoteAddress, messageBuilder.build());
+        //this.remote.Send(testRemoteAddress, new String("Hello server again").getBytes());
     }
 
-    public synchronized void Receive(Address remote, byte[] message) {
-        System.out.println(new String(message));
+    public synchronized void Receive(Address remote, Proto.NetworkMessage message) {
+        ;
+        System.out.println(message.getType().toString());
     }
 }

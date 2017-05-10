@@ -1,6 +1,9 @@
 package au.edu.unimelb.mentalpoker;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.HashMap;
 
@@ -33,7 +36,12 @@ public class Remote extends Thread implements IConnectionListener {
     }*/
 
     public synchronized void Receive(Address source, byte[] message) {
-        this.remoteListener.Receive(source, message);
+        try {
+            Proto.NetworkMessage networkMessage = Proto.NetworkMessage.parseFrom(message);
+            this.remoteListener.Receive(source, networkMessage);
+        } catch (Exception e) {
+            System.out.println("Error: Invalid protobuf message");
+        }
     }
 
     public synchronized void ConnectionClosed(Address source) {
@@ -47,15 +55,17 @@ public class Remote extends Thread implements IConnectionListener {
         }
     }*/
 
-    public void Send(Address destination, byte[] message) throws IOException {
+    public void Send(Address destination, Proto.NetworkMessage message) throws IOException {
+        byte[] messageBytes = message.toByteArray();
+
         if (!this.outgoingConnections.containsKey(destination)) {
             Connect(destination);
         }
-        boolean result = this.outgoingConnections.get(destination).Write(message);
+        boolean result = this.outgoingConnections.get(destination).Write(messageBytes);
         int retries = 0;
         while (!result && retries++ < RETRY_LIMIT) {
             Connect(destination);
-            result = this.outgoingConnections.get(destination).Write(message);
+            result = this.outgoingConnections.get(destination).Write(messageBytes);
         }
         if (retries >= RETRY_LIMIT) {
             throw new IOException("Could not resolve remote host");
