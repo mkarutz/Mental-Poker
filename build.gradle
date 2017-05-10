@@ -22,5 +22,23 @@ task protoc(type: Exec) {
     commandLine 'protoc', '--java_out=src/main/java', 'src/protos.proto'
 }
 
+task test1(type: Exec, dependsOn: build) {
+	commandLine 'sh', 'tests/test.sh'
+}
+
 build.dependsOn protoc
 run.dependsOn build
+
+run {
+	standardInput = System.in
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'au.edu.unimelb.mentalpoker.MentalPoker'
+        )
+    }
+}
+
