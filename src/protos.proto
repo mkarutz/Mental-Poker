@@ -29,6 +29,7 @@ message NetworkMessage {
         JOIN_ROOM = 0;
         PLAYER_READY = 1;
         GAME_STARTED = 2;
+        SYNC = 3;
     };
 
     required Type type = 1;

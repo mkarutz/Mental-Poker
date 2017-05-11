@@ -11,7 +11,7 @@ public class RoomClient implements Remote.Callbacks {
     private Callbacks listener;
 
     public interface Callbacks {
-        void onGameReady(Proto.GameStartedMessage message);
+        void onGameReady(Proto.GameStartedMessage message, Remote remote);
     }
 
     public RoomClient(int hostPort, int port, Callbacks listener) throws IOException {
@@ -32,8 +32,13 @@ public class RoomClient implements Remote.Callbacks {
 
     public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
-            this.listener.onGameReady(message.getGameStartedMessage());
-            this.remote.finish();
+            /*this.remote.finish();
+            try {
+                this.remote.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+            this.listener.onGameReady(message.getGameStartedMessage(), this.remote);
         }
         //System.out.println(message.getType().toString());
         //System.out.println(message.getGameStartedMessage().toString());

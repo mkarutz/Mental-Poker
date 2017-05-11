@@ -1,7 +1,10 @@
 package au.edu.unimelb.mentalpoker;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** This class provides an interface for reliable message delivery. */
@@ -10,8 +13,8 @@ public class Remote extends Thread implements Connection.Callbacks {
 
     private final ServerSocket serverSocket;
     private final HashMap<Address, Connection> outgoingConnections;
-    private final Callbacks remoteListener;
     private final int port;
+    private Callbacks remoteListener;
     private boolean listening;
 
     /** Interface for callbacks. */
@@ -20,16 +23,20 @@ public class Remote extends Thread implements Connection.Callbacks {
     }
 
     public Remote(int port, Callbacks listener) {
-        this.remoteListener = listener;
+        setListener(listener);
         this.listening = true;
         this.port = port;
         this.outgoingConnections = new HashMap<>();
         try {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public void setListener(Callbacks listener) {
+        this.remoteListener = listener;
     }
 
     /** Handles messages received on connections. Parses a NetworkMessage proto and calls onReceive callback. */
@@ -38,7 +45,7 @@ public class Remote extends Thread implements Connection.Callbacks {
         try {
             Proto.NetworkMessage networkMessage = Proto.NetworkMessage.parseFrom(message);
             this.remoteListener.onReceive(source, networkMessage);
-        } catch (Exception e) {
+        } catch (InvalidProtocolBufferException e) {
             System.out.println("Error: Invalid protobuf message");
         }
     }
@@ -55,6 +62,7 @@ public class Remote extends Thread implements Connection.Callbacks {
         if (!this.outgoingConnections.containsKey(destination)) {
             connect(destination);
         }
+
         boolean result = this.outgoingConnections.get(destination).Write(messageBytes);
         int retries = 0;
         while (!result && retries++ < RETRY_LIMIT) {
@@ -73,7 +81,7 @@ public class Remote extends Thread implements Connection.Callbacks {
             new Thread(connection).start();
             this.outgoingConnections.put(to, connection);
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -85,20 +93,27 @@ public class Remote extends Thread implements Connection.Callbacks {
                     Connection clientConnection = new Connection(clientSocket, this.port, this);
                     new Thread(clientConnection).start();
                 } catch (IOException e) {
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
             }
         }
-
+        System.out.println("Got here...");
         closeAllConnections();
     }
 
     public void finish() {
+        System.out.println("Finishing...");
         this.listening = false;
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void closeAllConnections() {
-        for (Connection connection : this.outgoingConnections.values()) {
+    private synchronized void closeAllConnections() {
+        ArrayList<Connection> connections = new ArrayList<>(this.outgoingConnections.values());
+        for (Connection connection : connections) {
             connection.close();
         }
         this.outgoingConnections.clear();
