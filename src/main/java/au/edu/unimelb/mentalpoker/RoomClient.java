@@ -8,17 +8,13 @@ import java.io.IOException;
 public class RoomClient implements Remote.Callbacks {
     private Remote remote;
     private Address hostAddress;
-    private Callbacks listener;
+    private boolean gameStarted;
+    private Proto.GameStartedMessage gameStartedMessage;
 
-    public interface Callbacks {
-        void onGameReady(Proto.GameStartedMessage message);
-    }
-
-    public RoomClient(Address hostAddress, Remote remote, Callbacks listener) throws IOException {
-        this.remote = remote;
-        this.remote.setListener(this);
+    public RoomClient(Address hostAddress, int listeningPort) throws IOException {
+        this.remote = new Remote(listeningPort, this);
         this.remote.start();
-        this.listener = listener;
+        this.gameStarted = false;
 
         this.hostAddress = hostAddress;
 
@@ -31,7 +27,7 @@ public class RoomClient implements Remote.Callbacks {
         this.remote.send(this.hostAddress, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.PLAYER_READY).build());
     }
 
-    public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
+    public void onReceive(Address remote, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
             /*this.remote.finish();
             try {
@@ -40,9 +36,19 @@ public class RoomClient implements Remote.Callbacks {
                 e.printStackTrace();
             }*/
             System.out.println("GAME STARTED");
-            this.listener.onGameReady(message.getGameStartedMessage());
+            this.gameStarted = true;
+            this.gameStartedMessage = message.getGameStartedMessage();
+            this.remote.close();
         }
         //System.out.println(message.getType().toString());
         //System.out.println(message.getGameStartedMessage().toString());
+    }
+
+    public boolean isGameStarted() {
+        return this.gameStarted;
+    }
+
+    public Proto.GameStartedMessage getGameStartedMessage() {
+        return this.gameStartedMessage;
     }
 }

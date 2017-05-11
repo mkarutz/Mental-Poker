@@ -22,7 +22,6 @@ public class RoomHost implements Remote.Callbacks {
     }
 
     public void onReceive(Address remote, Proto.NetworkMessage message) {
-        System.out.println("bbb1");
         if (message.getType() == Proto.NetworkMessage.Type.JOIN_ROOM) {
             this.gameTable.addPlayerConnection(remote);
         } else if (message.getType() == Proto.NetworkMessage.Type.PLAYER_READY) {
@@ -70,6 +69,6 @@ public class RoomHost implements Remote.Callbacks {
             playerId++;
         }
 
-        this.remote.finish();
+        this.remote.close();
     }
 }

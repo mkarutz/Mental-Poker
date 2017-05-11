@@ -16,9 +16,9 @@ public class PeerNetwork implements Remote.Callbacks {
     private int localId;
     private Remote remote;
     private HashMap<Integer, Queue<Proto.NetworkMessage>> playerMessages;
-    private HashSet<Integer> playersSynced;
+    private HashSet<Integer> playersNotSynced;
 
-    public PeerNetwork(Proto.GameStartedMessage gameInfo, Remote remote) {
+    public PeerNetwork(Proto.GameStartedMessage gameInfo, int listeningPort) {
         this.players = HashBiMap.create();
         for (Proto.Player peer : gameInfo.getPlayersList()) {
             Proto.PeerAddress peerAddress = peer.getAddress();
@@ -29,9 +29,9 @@ public class PeerNetwork implements Remote.Callbacks {
                             peerAddress.getPort()));
         }
         this.localId = gameInfo.getPlayerId();
-        this.remote = remote;
-        this.remote.setListener(this);
-        this.playersSynced = new HashSet<>();
+        this.remote = new Remote(listeningPort, this);
+        this.remote.start();
+        this.playersNotSynced = new HashSet<>();
         initPlayerMessagesHashMap();
         synchronize();
     }
@@ -48,10 +48,12 @@ public class PeerNetwork implements Remote.Callbacks {
         Proto.NetworkMessage syncMessage =
                 Proto.NetworkMessage.newBuilder()
                     .setType(Proto.NetworkMessage.Type.SYNC).build();
-        while (this.playersSynced.size() < numPlayers() - 1) {
+
+        while (!this.playersNotSynced.isEmpty()) {
             try {
-                System.out.println("Sending sync message");
-                broadcast(syncMessage);
+                for (Integer playerId : this.playersNotSynced) {
+                    send(playerId, syncMessage);
+                }
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -61,7 +63,7 @@ public class PeerNetwork implements Remote.Callbacks {
     }
 
     private void resetSyncMap() {
-        this.playersSynced.clear();
+        this.playersNotSynced = new HashSet<>(this.players.keySet());
     }
 
     public void broadcast(Proto.NetworkMessage message) {
@@ -93,12 +95,27 @@ public class PeerNetwork implements Remote.Callbacks {
         }
     }
 
-    public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
-        int playerId = this.players.inverse().get(remote);
+    private Address lookupPlayerAddress(int playerId) {
+        return this.players.get(playerId);
+    }
+
+    private int lookupPlayerId(Address address) {
+        return this.players.inverse().get(address);
+    }
+
+    public void onReceive(Address remote, Proto.NetworkMessage message) {
+        int playerId = lookupPlayerId(remote);
 
         if (message.getType() == Proto.NetworkMessage.Type.SYNC) {
-            this.playersSynced.add(playerId);
-            System.out.println("...");
+            Proto.NetworkMessage syncAckMessage =
+                    Proto.NetworkMessage.newBuilder()
+                            .setType(Proto.NetworkMessage.Type.SYNC_ACK).build();
+            send(playerId, syncAckMessage);
+            return;
+        }
+
+        if (message.getType() == Proto.NetworkMessage.Type.SYNC_ACK) {
+            this.playersNotSynced.remove(playerId);
             return;
         }
 

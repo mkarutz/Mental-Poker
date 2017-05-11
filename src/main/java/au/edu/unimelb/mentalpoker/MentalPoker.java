@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
+import static java.lang.Thread.sleep;
+
 public class MentalPoker {
-    static boolean t = false;
     static Proto.GameStartedMessage msg;
 
     public static void main(String[] args) throws IOException {
@@ -35,32 +36,28 @@ public class MentalPoker {
             scanner.nextLine();
         }
 
-        Remote remote = new Remote(listenPort, null);
-
         RoomClient client =
                 new RoomClient(
                         new Address("127.0.0.1", remotePort),
-                        remote,
-                        new RoomClient.Callbacks() {
-                            @Override
-                            public void onGameReady(Proto.GameStartedMessage message) {
-                                t = true;
-                                msg = message;
-                                System.out.println("aaaaaaaaaaaaa");
-                            }
-                        });
+                        listenPort);
 
         System.out.println("Press any key when you are ready to play");
         scanner.nextLine();
         client.Ready();
         System.out.println("You are ready. Waiting for other players...");
 
-        while (!t) {}
+        while (!client.isGameStarted()) {
+            try {
+                sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
 
         System.out.println("Game has started.");
         // Create a new Poker peer client and start game.
 
-        PeerNetwork network = new PeerNetwork(msg, remote);
+        PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), listenPort);
         int id = network.localId();
         System.out.println("My id is: " + id);
         if (id != 1) {
