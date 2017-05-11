@@ -31,7 +31,16 @@ public class MentalPoker {
             scanner.nextLine();
         }
 
-        RoomClient client = new RoomClient(remotePort, Math.abs((new Random().nextInt() % 30000)) + 5000);
+        RoomClient client =
+                new RoomClient(
+                        remotePort,
+                        Math.abs((new Random().nextInt() % 30000)) + 5000,
+                        new RoomClient.Callbacks() {
+                            @Override
+                            public void onGameReady(Proto.GameStartedMessage message) {
+                                // Create a new Poker peer client and start game.
+                            }
+                        });
 
         System.out.println("Press any key when you are ready to play");
         scanner.nextLine();

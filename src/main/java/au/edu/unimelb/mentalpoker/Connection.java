@@ -47,7 +47,7 @@ public class Connection implements Runnable {
             WriteNext(message);
         } catch (Exception e) {
             //System.out.println(e);
-            Close();
+            close();
             return false;
         }
         return true;
@@ -59,12 +59,12 @@ public class Connection implements Runnable {
                 byte[] next = ReadNext();
                 this.listener.onReceive(new Address(this.endPoint.getInetAddress().getHostAddress(), this.remoteListenPort), next);
             } catch (Exception e) {
-                Close();
+                close();
             }
         }
     }
 
-    private void Close() {
+    public void close() {
         this.listener.onConnectionClosed(new Address(this.endPoint));
         this.closed = true;
     }

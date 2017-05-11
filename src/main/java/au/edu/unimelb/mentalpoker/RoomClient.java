@@ -8,10 +8,16 @@ import java.io.IOException;
 public class RoomClient implements Remote.Callbacks {
     private Remote remote;
     private Address hostAddress;
+    private Callbacks listener;
 
-    public RoomClient(int hostPort, int port) throws IOException {
+    public interface Callbacks {
+        void onGameReady(Proto.GameStartedMessage message);
+    }
+
+    public RoomClient(int hostPort, int port, Callbacks listener) throws IOException {
         this.remote = new Remote(port, this);
         this.remote.start();
+        this.listener = listener;
 
         this.hostAddress = new Address("127.0.0.1", hostPort);
 
@@ -25,7 +31,10 @@ public class RoomClient implements Remote.Callbacks {
     }
 
     public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
-        System.out.println(message.getType().toString());
-        System.out.println(message.getGameStartedMessage().toString());
+        if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
+            this.listener.onGameReady(message.getGameStartedMessage());
+        }
+        //System.out.println(message.getType().toString());
+        //System.out.println(message.getGameStartedMessage().toString());
     }
 }

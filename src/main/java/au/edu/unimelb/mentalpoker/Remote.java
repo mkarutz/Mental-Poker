@@ -12,6 +12,7 @@ public class Remote extends Thread implements Connection.Callbacks {
     private final HashMap<Address, Connection> outgoingConnections;
     private final Callbacks remoteListener;
     private final int port;
+    private boolean listening;
 
     /** Interface for callbacks. */
     public interface Callbacks {
@@ -20,6 +21,7 @@ public class Remote extends Thread implements Connection.Callbacks {
 
     public Remote(int port, Callbacks listener) {
         this.remoteListener = listener;
+        this.listening = true;
         this.port = port;
         this.outgoingConnections = new HashMap<>();
         try {
@@ -76,17 +78,29 @@ public class Remote extends Thread implements Connection.Callbacks {
     }
 
     public void run() {
-        while (true) {
+        while (this.listening) {
             if (this.serverSocket != null) {
                 try {
                     Socket clientSocket = this.serverSocket.accept();
                     Connection clientConnection = new Connection(clientSocket, this.port, this);
                     new Thread(clientConnection).start();
-                    //this.outgoingConnections.put(new Address(clientSocket), clientConnection);
                 } catch (IOException e) {
                     System.out.println(e);
                 }
             }
         }
+
+        closeAllConnections();
+    }
+
+    public void finish() {
+        this.listening = false;
+    }
+
+    private void closeAllConnections() {
+        for (Connection connection : this.outgoingConnections.values()) {
+            connection.close();
+        }
+        this.outgoingConnections.clear();
     }
 }
