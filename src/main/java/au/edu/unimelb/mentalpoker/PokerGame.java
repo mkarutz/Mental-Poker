@@ -20,19 +20,19 @@ public class PokerGame extends Thread {
 
     private void playHand() {
         // Deal hands
-        for (int playerId = 1; playerId <= network.getNumPlayers(); playerId++) {
+        for (int playerId = 1; playerId <= poker.getNumPlayers(); playerId++) {
             for (int i = 0; i < CARDS_PER_HAND; i++) {
                 poker.draw(playerId);
             }
         }
 
         // Print my cards
-        displayCards(poker.getLocalPlayerCards());
+        displayHand();
     }
 
-    private void displayCards(Iterable<Card> cards) {
+    private void displayHand() {
         final StringBuilder sb = new StringBuilder("Your hand: ");
-        for (Card card : cards) {
+        for (Card card : poker.getLocalPlayerCards()) {
             sb.append(card);
             sb.append(" ");
         }

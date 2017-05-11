@@ -36,4 +36,7 @@ public interface MentalPokerEngine {
 
     /** Gets a list of the cards in the local player's hand. */
     ImmutableList<Card> getLocalPlayerCards();
+
+    /** Gets the number of players in the game. */
+    int getNumPlayers();
 }

@@ -129,6 +129,11 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
         return ImmutableList.copyOf(result);
     }
 
+    @Override
+    public int getNumPlayers() {
+        return peerNetwork.getNumPlayers();
+    }
+
     private int getLocalPlayerId() {
         return peerNetwork.getLocalPlayerId();
     }
