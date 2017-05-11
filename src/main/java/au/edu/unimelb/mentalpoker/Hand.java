@@ -6,7 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hand {
-    private ImmutableList<Card> cards;
+    private final List<Card> cards = new ArrayList<>();
+
+    public int getNumClosedCards() {
+        return 0;
+    }
+
+    public ImmutableList<Card> getOpenCards() {
+        return ImmutableList.of();
+    }
 
     public void display() {
         StringBuilder sb = new StringBuilder();
