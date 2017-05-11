@@ -1,6 +1,8 @@
 package au.edu.unimelb.mentalpoker;
 
 
+import com.google.common.collect.Iterables;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -41,6 +43,10 @@ public class GameTable
     public void resetReadyState()
     {
         this.table.replaceAll((k,v) -> Boolean.FALSE);
+    }
+
+    public boolean allPlayersReady() {
+        return Iterables.all(table.values(), (Boolean value) -> value);
     }
 
     //gets the list of Player IPs

@@ -2237,6 +2237,10 @@ public final class Proto {
        * <code>PLAYER_READY = 1;</code>
        */
       PLAYER_READY(1),
+      /**
+       * <code>GAME_STARTED = 2;</code>
+       */
+      GAME_STARTED(2),
       ;
 
       /**
@@ -2247,6 +2251,10 @@ public final class Proto {
        * <code>PLAYER_READY = 1;</code>
        */
       public static final int PLAYER_READY_VALUE = 1;
+      /**
+       * <code>GAME_STARTED = 2;</code>
+       */
+      public static final int GAME_STARTED_VALUE = 2;
 
 
       public final int getNumber() {
@@ -2265,6 +2273,7 @@ public final class Proto {
         switch (value) {
           case 0: return JOIN_ROOM;
           case 1: return PLAYER_READY;
+          case 2: return GAME_STARTED;
           default: return null;
         }
       }
@@ -2923,12 +2932,13 @@ public final class Proto {
       "ddress\022\020\n\010hostname\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\"D" +
       "\n\005Table\022\020\n\010table_id\030\001 \001(\t\022)\n\007players\030\002 \003" +
       "(\0132\030.mentalpoker.PeerAddress\"%\n\017JoinRoom" +
-      "Message\022\022\n\nplayerName\030\001 \002(\t\"\240\001\n\016NetworkM" +
+      "Message\022\022\n\nplayerName\030\001 \002(\t\"\262\001\n\016NetworkM" +
       "essage\022.\n\004type\030\001 \002(\0162 .mentalpoker.Netwo" +
       "rkMessage.Type\0225\n\017joinRoomMessage\030\002 \001(\0132" +
-      "\034.mentalpoker.JoinRoomMessage\"\'\n\004Type\022\r\n" +
-      "\tJOIN_ROOM\020\000\022\020\n\014PLAYER_READY\020\001B#\n\032au.edu" +
-      ".unimelb.mentalpokerB\005Proto"
+      "\034.mentalpoker.JoinRoomMessage\"9\n\004Type\022\r\n" +
+      "\tJOIN_ROOM\020\000\022\020\n\014PLAYER_READY\020\001\022\020\n\014GAME_S" +
+      "TARTED\020\002B#\n\032au.edu.unimelb.mentalpokerB\005",
+      "Proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

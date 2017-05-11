@@ -12,16 +12,29 @@ public class MentalPoker {
         Scanner scanner = new Scanner(System.in);
         String c = scanner.nextLine();
 
+        int remotePort;
+
         if (c.equals("s")) {
             System.out.println("Enter the port for the new dungeon: ");
-            int port = scanner.nextInt();
+            remotePort = scanner.nextInt();
+            scanner.nextLine();
 
-            RoomHost r = new RoomHost(port);
+            RoomHost r = new RoomHost(remotePort, new RoomHost.Callbacks() {
+                @Override
+                public void onConnectionFailed(String message) {
+                    System.exit(1);
+                }
+            });
         } else {
             System.out.println("Enter the port for the existing dungeon: ");
-            int port = scanner.nextInt();
-
-            RoomClient r = new RoomClient(port, (new Random().nextInt() % 30000) + 5000);
+            remotePort = scanner.nextInt();
+            scanner.nextLine();
         }
+
+        RoomClient client = new RoomClient(remotePort, Math.abs((new Random().nextInt() % 30000)) + 5000);
+
+        System.out.println("Press any key when you are ready to play");
+        scanner.nextLine();
+        client.Ready();
     }
 }

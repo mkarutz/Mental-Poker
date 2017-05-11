@@ -8,4 +8,8 @@ public class PeerNetwork {
     public PeerNetwork() {
 
     }
+
+    //public void Barrier() {}
+
+    //public void Receive(int n)
 }
