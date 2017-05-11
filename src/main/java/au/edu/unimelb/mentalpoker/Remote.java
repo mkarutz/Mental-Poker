@@ -16,6 +16,7 @@ public class Remote extends Thread implements Connection.Callbacks {
     private final int port;
     private Callbacks remoteListener;
     private boolean listening;
+    private RemoteReceiver remoteReceiver;
 
     /** Interface for callbacks. */
     public interface Callbacks {
@@ -23,6 +24,9 @@ public class Remote extends Thread implements Connection.Callbacks {
     }
 
     public Remote(int port, Callbacks listener) {
+        this.remoteReceiver = new RemoteReceiver();
+        this.remoteReceiver.start();
+
         setListener(listener);
         this.listening = true;
         this.port = port;
@@ -36,18 +40,15 @@ public class Remote extends Thread implements Connection.Callbacks {
     }
 
     public void setListener(Callbacks listener) {
-        this.remoteListener = listener;
+        this.remoteReceiver.setListener(listener);
+        //this.remoteListener = listener;
     }
 
     /** Handles messages received on connections. Parses a NetworkMessage proto and calls onReceive callback. */
     @Override
     public synchronized void onReceive(Address source, byte[] message) {
-        try {
-            Proto.NetworkMessage networkMessage = Proto.NetworkMessage.parseFrom(message);
-            this.remoteListener.onReceive(source, networkMessage);
-        } catch (InvalidProtocolBufferException e) {
-            System.out.println("Error: Invalid protobuf message");
-        }
+        //System.out.println("aaaaaaaaaaaaaaaaaaaaaaggg");
+        this.remoteReceiver.pushIncomingMessage(source, message);
     }
 
     @Override
@@ -65,44 +66,44 @@ public class Remote extends Thread implements Connection.Callbacks {
 
         boolean result = this.outgoingConnections.get(destination).Write(messageBytes);
         int retries = 0;
-        while (!result && retries++ < RETRY_LIMIT) {
-            connect(destination);
-            result = this.outgoingConnections.get(destination).Write(messageBytes);
+        while (!result && retries < RETRY_LIMIT) {
+            result = connect(destination);
+            if (result) {
+                result &= this.outgoingConnections.get(destination).Write(messageBytes);
+            }
+            retries++;
         }
         if (retries >= RETRY_LIMIT) {
             throw new IOException("Could not resolve remote host");
         }
     }
 
-    private void connect(Address to) {
+    private boolean connect(Address to) {
         try {
             Socket remoteSocket = new Socket(to.ip, to.port);
             Connection connection = new Connection(remoteSocket, this.port, this);
             new Thread(connection).start();
             this.outgoingConnections.put(to, connection);
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
     }
 
     public void run() {
         while (this.listening) {
-            if (this.serverSocket != null) {
-                try {
-                    Socket clientSocket = this.serverSocket.accept();
-                    Connection clientConnection = new Connection(clientSocket, this.port, this);
-                    new Thread(clientConnection).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Socket clientSocket = this.serverSocket.accept();
+                Connection clientConnection = new Connection(clientSocket, this.port, this);
+                new Thread(clientConnection).start();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        System.out.println("Got here...");
         closeAllConnections();
     }
 
     public void finish() {
-        System.out.println("Finishing...");
         this.listening = false;
         try {
             this.serverSocket.close();

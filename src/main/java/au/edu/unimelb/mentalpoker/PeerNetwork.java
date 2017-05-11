@@ -94,12 +94,14 @@ public class PeerNetwork implements Remote.Callbacks {
     }
 
     public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
+        int playerId = this.players.inverse().get(remote);
+
         if (message.getType() == Proto.NetworkMessage.Type.SYNC) {
-            this.playersSynced.add(this.players.inverse().get(remote));
+            this.playersSynced.add(playerId);
             System.out.println("...");
             return;
         }
-        int playerId = this.players.inverse().get(remote);
+
         queueForPlayer(playerId).add(message);
     }
 

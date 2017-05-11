@@ -11,15 +11,16 @@ public class RoomClient implements Remote.Callbacks {
     private Callbacks listener;
 
     public interface Callbacks {
-        void onGameReady(Proto.GameStartedMessage message, Remote remote);
+        void onGameReady(Proto.GameStartedMessage message);
     }
 
-    public RoomClient(int hostPort, int port, Callbacks listener) throws IOException {
-        this.remote = new Remote(port, this);
+    public RoomClient(Address hostAddress, Remote remote, Callbacks listener) throws IOException {
+        this.remote = remote;
+        this.remote.setListener(this);
         this.remote.start();
         this.listener = listener;
 
-        this.hostAddress = new Address("127.0.0.1", hostPort);
+        this.hostAddress = hostAddress;
 
         Proto.NetworkMessage.Builder messageBuilder = Proto.NetworkMessage.newBuilder();
         messageBuilder.setType(Proto.NetworkMessage.Type.JOIN_ROOM);
@@ -38,7 +39,8 @@ public class RoomClient implements Remote.Callbacks {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }*/
-            this.listener.onGameReady(message.getGameStartedMessage(), this.remote);
+            System.out.println("GAME STARTED");
+            this.listener.onGameReady(message.getGameStartedMessage());
         }
         //System.out.println(message.getType().toString());
         //System.out.println(message.getGameStartedMessage().toString());

@@ -46,7 +46,6 @@ public class Connection implements Runnable {
         try {
             WriteNext(message);
         } catch (Exception e) {
-            //System.out.println(e);
             close();
             return false;
         }
@@ -57,7 +56,7 @@ public class Connection implements Runnable {
         while (!this.closed) {
             try {
                 byte[] next = ReadNext();
-                System.out.println("a");
+                //System.out.println("a");
                 this.listener.onReceive(new Address(this.endPoint.getInetAddress().getHostAddress(), this.remoteListenPort), next);
             } catch (Exception e) {
                 close();
@@ -75,15 +74,17 @@ public class Connection implements Runnable {
         dataOutputStream.writeInt(message.length);
         this.outStream.write(message);
         this.outStream.flush();
-        System.out.println("b");
+        //System.out.println("b");
     }
 
     private byte[] ReadNext() throws IOException {
-        while (this.inStream.available() == 0);
+        //while (this.inStream.available() == 0);
+        //System.out.println("Waiting to read something...");
         DataInputStream dataInputStream = new DataInputStream(this.inStream);
         int bufferSize = dataInputStream.readInt();
         byte[] buffer = new byte[bufferSize];
         this.inStream.read(buffer);
+        //System.out.println("...read something");
         return buffer;
     }
 }
