@@ -1,12 +1,11 @@
 package au.edu.unimelb.mentalpoker;
 
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * Created by azable on 10/05/17.
  */
-public class RoomClient implements IRemoteListener {
+public class RoomClient implements Remote.Callbacks {
     private Remote remote;
     private Address hostAddress;
 
@@ -18,14 +17,15 @@ public class RoomClient implements IRemoteListener {
 
         Proto.NetworkMessage.Builder messageBuilder = Proto.NetworkMessage.newBuilder();
         messageBuilder.setType(Proto.NetworkMessage.Type.JOIN_ROOM);
-        this.remote.Send(this.hostAddress, messageBuilder.build());
+        this.remote.send(this.hostAddress, messageBuilder.build());
     }
 
     public void Ready() throws IOException {
-        this.remote.Send(this.hostAddress, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.PLAYER_READY).build());
+        this.remote.send(this.hostAddress, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.PLAYER_READY).build());
     }
 
-    public synchronized void Receive(Address remote, Proto.NetworkMessage message) {
+    public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
         System.out.println(message.getType().toString());
+        System.out.println(message.getGameStartedMessage().toString());
     }
 }

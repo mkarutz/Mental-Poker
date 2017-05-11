@@ -10,12 +10,19 @@ public class Connection implements Runnable {
     private Socket endPoint;
     private InputStream inStream;
     private OutputStream outStream;
-    private IConnectionListener listener;
+    private Callbacks listener;
     private boolean closed = false;
     private int localListenPort;
     private int remoteListenPort;
 
-    public Connection(Socket endPoint, int localListenPort, IConnectionListener listener) throws IOException {
+    /** Interface for callbacks. */
+    public interface Callbacks {
+        void onReceive(Address source, byte[] message);
+        void onConnectionClosed(Address source);
+    }
+
+    /** Constructor. */
+    public Connection(Socket endPoint, int localListenPort, Callbacks listener) throws IOException {
         this.listener = listener;
         this.localListenPort = localListenPort;
         this.endPoint = endPoint;
@@ -50,7 +57,7 @@ public class Connection implements Runnable {
         while (!this.closed) {
             try {
                 byte[] next = ReadNext();
-                this.listener.Receive(new Address(this.endPoint.getInetAddress().getHostAddress(), this.remoteListenPort), next);
+                this.listener.onReceive(new Address(this.endPoint.getInetAddress().getHostAddress(), this.remoteListenPort), next);
             } catch (Exception e) {
                 Close();
             }
@@ -58,7 +65,7 @@ public class Connection implements Runnable {
     }
 
     private void Close() {
-        this.listener.ConnectionClosed(new Address(this.endPoint));
+        this.listener.onConnectionClosed(new Address(this.endPoint));
         this.closed = true;
     }
 

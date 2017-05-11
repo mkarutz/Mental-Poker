@@ -11,5 +11,5 @@ public class PeerNetwork {
 
     //public void Barrier() {}
 
-    //public void Receive(int n)
+    //public void onReceive(int n)
 }

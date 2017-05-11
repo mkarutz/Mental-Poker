@@ -10,9 +10,14 @@ message PeerAddress {
     optional int32 port = 2;
 }
 
-message Table {
-    optional string table_id = 1;
-    repeated PeerAddress players = 2;
+message GameStartedMessage {
+    required int32 playerId = 1;
+    repeated Player players = 2;
+}
+
+message Player {
+    required int32 playerId = 1;
+    required PeerAddress address = 2;
 }
 
 message JoinRoomMessage {
@@ -29,4 +34,5 @@ message NetworkMessage {
     required Type type = 1;
 
     optional JoinRoomMessage joinRoomMessage = 2;
+    optional GameStartedMessage gameStartedMessage = 3;
 }

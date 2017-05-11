@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * Created by azable on 10/05/17.
  */
-public class RoomHost implements IRemoteListener {
+public class RoomHost implements Remote.Callbacks {
     private Remote remote;
     private GameTable gameTable;
     private Callbacks callbacks;
@@ -21,21 +21,52 @@ public class RoomHost implements IRemoteListener {
         this.callbacks = callbacks;
     }
 
-    public void Receive(Address remote, Proto.NetworkMessage message) {
+    public void onReceive(Address remote, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.JOIN_ROOM) {
             this.gameTable.addPlayerConnection(remote);
         } else if (message.getType() == Proto.NetworkMessage.Type.PLAYER_READY) {
-            this.gameTable.changeReadyState(remote, true);
+            handlePlayerReadyMessage(remote);
         }
 
-        if (this.gameTable.allPlayersReady()) {
-            for (Address address : this.gameTable.getPlayers()) {
-                try {
-                    this.remote.Send(address, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.GAME_STARTED).build());
-                } catch (IOException e) {
-                    callbacks.onConnectionFailed("Failed to establish connections with players.");
-                }
+
+    }
+
+    private void handlePlayerReadyMessage(Address remote) {
+        gameTable.changeReadyState(remote, true);
+        maybeStartGame();
+    }
+
+    private void maybeStartGame() {
+        if (!gameTable.allPlayersReady()) {
+            return;
+        }
+
+        // Build game started message
+        Proto.GameStartedMessage.Builder gameStartedMessage = Proto.GameStartedMessage.newBuilder();
+        int playerId = 1;
+        for (Address address : this.gameTable.getPlayers()) {
+            Proto.PeerAddress.Builder peerAddress = Proto.PeerAddress.newBuilder()
+                    .setHostname(address.ip)
+                    .setPort(address.port);
+
+            Proto.Player.Builder player = Proto.Player.newBuilder().setPlayerId(playerId).setAddress(peerAddress);
+            gameStartedMessage.addPlayers(player);
+            playerId++;
+        }
+
+        // Send game started message
+        playerId = 1;
+        for (Address address : this.gameTable.getPlayers()) {
+            gameStartedMessage.setPlayerId(playerId);
+            try {
+                this.remote.send(address, Proto.NetworkMessage.newBuilder()
+                        .setType(Proto.NetworkMessage.Type.GAME_STARTED)
+                        .setGameStartedMessage(gameStartedMessage)
+                        .build());
+            } catch (IOException e) {
+                callbacks.onConnectionFailed("Failed to establish connections with players.");
             }
+            playerId++;
         }
     }
 }

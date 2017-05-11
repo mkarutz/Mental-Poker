@@ -1,24 +1,24 @@
 package au.edu.unimelb.mentalpoker;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.HashMap;
 
-/**
- * Created by azable on 9/05/17.
- */
-public class Remote extends Thread implements IConnectionListener {
+/** This class provides an interface for reliable message delivery. */
+public class Remote extends Thread implements Connection.Callbacks {
     private static final int RETRY_LIMIT = 10;
 
-    private ServerSocket serverSocket;
-    private HashMap<Address, Connection> outgoingConnections;
-    private IRemoteListener remoteListener;
-    private int port;
+    private final ServerSocket serverSocket;
+    private final HashMap<Address, Connection> outgoingConnections;
+    private final Callbacks remoteListener;
+    private final int port;
 
-    public Remote(int port, IRemoteListener listener) {
+    /** Interface for callbacks. */
+    public interface Callbacks {
+        void onReceive(Address source, Proto.NetworkMessage message);
+    }
+
+    public Remote(int port, Callbacks listener) {
         this.remoteListener = listener;
         this.port = port;
         this.outgoingConnections = new HashMap<>();
@@ -26,45 +26,37 @@ public class Remote extends Thread implements IConnectionListener {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
-    /*public Remote(IRemoteListener listener) {
-        this.remoteListener = listener;
-        this.outgoingConnections = new HashMap<>();
-        this.serverSocket = null;
-    }*/
-
-    public synchronized void Receive(Address source, byte[] message) {
+    /** Handles messages received on connections. Parses a NetworkMessage proto and calls onReceive callback. */
+    @Override
+    public synchronized void onReceive(Address source, byte[] message) {
         try {
             Proto.NetworkMessage networkMessage = Proto.NetworkMessage.parseFrom(message);
-            this.remoteListener.Receive(source, networkMessage);
+            this.remoteListener.onReceive(source, networkMessage);
         } catch (Exception e) {
             System.out.println("Error: Invalid protobuf message");
         }
     }
 
-    public synchronized void ConnectionClosed(Address source) {
+    @Override
+    public synchronized void onConnectionClosed(Address source) {
         this.outgoingConnections.remove(source);
     }
 
-    /*public void Broadcast(byte[] message) {
-        for (Map.Entry<Address, Connection> connection : this.outgoingConnections.entrySet()) {
-            System.out.println("Outgoing braodcast to " + connection.getKey().toString());
-            Send(connection.getKey(), message);
-        }
-    }*/
-
-    public void Send(Address destination, Proto.NetworkMessage message) throws IOException {
+    /** Sends a message reliably to the given destination address */
+    public void send(Address destination, Proto.NetworkMessage message) throws IOException {
         byte[] messageBytes = message.toByteArray();
 
         if (!this.outgoingConnections.containsKey(destination)) {
-            Connect(destination);
+            connect(destination);
         }
         boolean result = this.outgoingConnections.get(destination).Write(messageBytes);
         int retries = 0;
         while (!result && retries++ < RETRY_LIMIT) {
-            Connect(destination);
+            connect(destination);
             result = this.outgoingConnections.get(destination).Write(messageBytes);
         }
         if (retries >= RETRY_LIMIT) {
@@ -72,7 +64,7 @@ public class Remote extends Thread implements IConnectionListener {
         }
     }
 
-    private void Connect(Address to) {
+    private void connect(Address to) {
         try {
             Socket remoteSocket = new Socket(to.ip, to.port);
             Connection connection = new Connection(remoteSocket, this.port, this);
@@ -97,5 +89,4 @@ public class Remote extends Thread implements IConnectionListener {
             }
         }
     }
-
 }
