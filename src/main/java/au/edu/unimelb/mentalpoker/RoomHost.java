@@ -68,5 +68,7 @@ public class RoomHost implements Remote.Callbacks {
             }
             playerId++;
         }
+
+        this.remote.finish();
     }
 }

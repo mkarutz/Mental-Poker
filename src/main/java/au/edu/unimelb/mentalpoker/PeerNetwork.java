@@ -5,11 +5,19 @@ package au.edu.unimelb.mentalpoker;
  */
 public class PeerNetwork {
 
-    public PeerNetwork() {
+    public PeerNetwork(Proto.GameStartedMessage gameInfo) {
 
     }
 
-    //public void Barrier() {}
+    public void broadcast(Proto.NetworkMessage message) {
 
-    //public void onReceive(int n)
+    }
+
+    public Proto.NetworkMessage receive(int playerId) {
+        return null;
+    }
+
+    public void send(int playerId, Proto.NetworkMessage message) {
+
+    }
 }

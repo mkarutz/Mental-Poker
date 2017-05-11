@@ -33,6 +33,7 @@ public class RoomClient implements Remote.Callbacks {
     public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
             this.listener.onGameReady(message.getGameStartedMessage());
+            this.remote.finish();
         }
         //System.out.println(message.getType().toString());
         //System.out.println(message.getGameStartedMessage().toString());

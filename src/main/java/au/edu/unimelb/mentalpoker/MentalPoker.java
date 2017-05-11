@@ -38,12 +38,16 @@ public class MentalPoker {
                         new RoomClient.Callbacks() {
                             @Override
                             public void onGameReady(Proto.GameStartedMessage message) {
+                                System.out.println("Game has started.");
                                 // Create a new Poker peer client and start game.
+
+
                             }
                         });
 
         System.out.println("Press any key when you are ready to play");
         scanner.nextLine();
+        System.out.println("You are ready. Waiting for other players...");
         client.Ready();
     }
 }
