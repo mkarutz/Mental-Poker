@@ -3,24 +3,12 @@ package au.edu.unimelb.mentalpoker;
 import com.google.common.collect.ImmutableList;
 
 /**
- * This interface defines the services provided by a mental poker protocol. Poker clients make use of this class to
- * perform secure dealing, shuffling and handling of cards.
+ * This interface defines the services provided by a mental poker protocol. {@link PokerGame} makes use of a
+ * {@link MentalPokerEngine} to perform secure dealing, shuffling and handling of cards.
  */
 public interface MentalPokerEngine {
-    /**
-     * Adds a player to the table. Adding players to the table once the game has started is not supported by all
-     * implementations.
-     */
-    void addPlayer(PlayerConnection playerConnection);
-
-    /**
-     * Removes a player from the table. Removing players from the table during gameplay is not supported by all
-     * implementations.
-     */
-    void removePlayer(PlayerConnection playerConnection);
-
     /** Initialises the Mental Poker engine ready for dealing. */
-    void start();
+    void init();
 
     /** Deals a secret card to the player with ID {@code playerId}. */
     void draw(int playerId);
@@ -39,9 +27,6 @@ public interface MentalPokerEngine {
 
     /** Completes the game, performing any necessary validity verification. */
     void finish();
-
-    /** Gets the list of players at the table. */
-    ImmutableList<PlayerConnection> getPlayers();
 
     /** Gets the Hand of the player with ID {@code playerId}. */
     Hand getPlayerHand(int playerId);

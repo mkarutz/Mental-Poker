@@ -6,26 +6,6 @@ import java.util.List;
 public class Card {
     private final Suit suit;
     private final int rank;
-    private boolean isFaceUp;
-
-    public Card(Suit suit, int rank) {
-        if (rank < 1 || rank > 13) {
-            throw new IllegalArgumentException("Rank out of range.");
-        }
-
-        this.suit = suit;
-        this.rank = rank;
-    }
-
-    public static List<Card> standardDeck() {
-        final List<Card> result = new ArrayList<>(52);
-        for (Suit suit : Suit.values()) {
-            for (int rank = 0; rank < 13; rank++) {
-                result.add(new Card(suit, rank));
-            }
-        }
-        return result;
-    }
 
     /** An enum representing the suit of a card. */
     private enum Suit {
@@ -46,15 +26,27 @@ public class Card {
         }
     }
 
-    public boolean isFaceUp() {
-        return isFaceUp;
+    public Card(Suit suit, int rank) {
+        if (rank < 1 || rank > 13) {
+            throw new IllegalArgumentException("Rank out of range.");
+        }
+
+        this.suit = suit;
+        this.rank = rank;
+    }
+
+    public static List<Card> standardDeck() {
+        final List<Card> result = new ArrayList<>(52);
+        for (Suit suit : Suit.values()) {
+            for (int rank = 0; rank < 13; rank++) {
+                result.add(new Card(suit, rank));
+            }
+        }
+        return result;
     }
 
     @Override
     public String toString() {
-        if (!isFaceUp()) {
-            return "?";
-        }
         return suit.toString() + getRank();
     }
 
