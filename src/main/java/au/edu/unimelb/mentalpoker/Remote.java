@@ -44,6 +44,7 @@ public class Remote extends Thread implements Connection.Callbacks {
     public synchronized void onReceive(Address source, byte[] message) {
         try {
             Proto.NetworkMessage networkMessage = Proto.NetworkMessage.parseFrom(message);
+            //System.out.println("Receiving ="+networkMessage.getType().toString());
             this.remoteListener.onReceive(source, networkMessage);
         } catch (InvalidProtocolBufferException e) {
             System.out.println("Error: Invalid protobuf message");
@@ -57,31 +58,37 @@ public class Remote extends Thread implements Connection.Callbacks {
 
     /** Sends a message reliably to the given destination address */
     public void send(Address destination, Proto.NetworkMessage message) throws IOException {
+        int retries = 0;
         byte[] messageBytes = message.toByteArray();
 
         if (!this.outgoingConnections.containsKey(destination)) {
-            connect(destination);
+            connect(destination,retries);
         }
-
-        boolean result = this.outgoingConnections.get(destination).Write(messageBytes);
-        int retries = 0;
-        while (!result && retries++ < RETRY_LIMIT) {
-            connect(destination);
-            result = this.outgoingConnections.get(destination).Write(messageBytes);
-        }
-        if (retries >= RETRY_LIMIT) {
-            throw new IOException("Could not resolve remote host");
-        }
+       boolean result = this.outgoingConnections.get(destination).Write(messageBytes);
     }
 
-    private void connect(Address to) {
+    private void connect(Address to, int retries) {
         try {
             Socket remoteSocket = new Socket(to.ip, to.port);
             Connection connection = new Connection(remoteSocket, this.port, this);
             new Thread(connection).start();
             this.outgoingConnections.put(to, connection);
         } catch (IOException e) {
-            e.printStackTrace();
+            if(retries<RETRY_LIMIT){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                retries++;
+                System.out.println("retries ="+retries);
+                connect(to,retries);
+            }
+            else{
+                System.out.println("Could not resolve Hostname");
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -93,7 +100,8 @@ public class Remote extends Thread implements Connection.Callbacks {
                     Connection clientConnection = new Connection(clientSocket, this.port, this);
                     new Thread(clientConnection).start();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("listening socket closed");
+//                    e.printStackTrace();
                 }
             }
         }

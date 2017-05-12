@@ -1,10 +1,12 @@
 package au.edu.unimelb.mentalpoker;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
 public class MentalPoker {
+
     public static void main(String[] args) throws IOException {
         System.out.println("Hello, welcome to Mental Poker!");
         System.out.println("Would you like to start or join a poker dungeon? (s/j)");
@@ -38,11 +40,9 @@ public class MentalPoker {
                         listenPort,
                         new RoomClient.Callbacks() {
                             @Override
-                            public void onGameReady(Proto.GameStartedMessage message, Remote remote) {
-                                System.out.println("Game has started.");
-                                // Create a new Poker peer client and start game.
+                            public void onGameReady(Proto.GameStartedMessage message) {
+                                PeerNetwork network = new PeerNetwork(message,listenPort);
 
-                                PeerNetwork network = new PeerNetwork(message, remote);
                                 int id = network.localId();
                                 System.out.println("My id is: " + id);
                                 if (id != 1) {

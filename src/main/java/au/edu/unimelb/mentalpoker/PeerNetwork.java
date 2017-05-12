@@ -18,7 +18,7 @@ public class PeerNetwork implements Remote.Callbacks {
     private HashMap<Integer, Queue<Proto.NetworkMessage>> playerMessages;
     private HashSet<Integer> playersSynced;
 
-    public PeerNetwork(Proto.GameStartedMessage gameInfo, Remote remote) {
+    public PeerNetwork(Proto.GameStartedMessage gameInfo,int listenPort) {
         this.players = HashBiMap.create();
         for (Proto.Player peer : gameInfo.getPlayersList()) {
             Proto.PeerAddress peerAddress = peer.getAddress();
@@ -29,8 +29,8 @@ public class PeerNetwork implements Remote.Callbacks {
                             peerAddress.getPort()));
         }
         this.localId = gameInfo.getPlayerId();
-        this.remote = remote;
-        this.remote.setListener(this);
+        this.remote = new Remote(listenPort,this);
+        this.remote.start();
         this.playersSynced = new HashSet<>();
         initPlayerMessagesHashMap();
         synchronize();
@@ -44,13 +44,13 @@ public class PeerNetwork implements Remote.Callbacks {
     }
 
     public void synchronize() {
+        //System.out.println("Peer Network id ="+Thread.currentThread().getId());
         resetSyncMap();
         Proto.NetworkMessage syncMessage =
                 Proto.NetworkMessage.newBuilder()
                     .setType(Proto.NetworkMessage.Type.SYNC).build();
         while (this.playersSynced.size() < numPlayers() - 1) {
             try {
-                System.out.println("Sending sync message");
                 broadcast(syncMessage);
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -96,7 +96,6 @@ public class PeerNetwork implements Remote.Callbacks {
     public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.SYNC) {
             this.playersSynced.add(this.players.inverse().get(remote));
-            System.out.println("...");
             return;
         }
         int playerId = this.players.inverse().get(remote);

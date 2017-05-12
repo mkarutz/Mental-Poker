@@ -57,7 +57,7 @@ public class Connection implements Runnable {
         while (!this.closed) {
             try {
                 byte[] next = ReadNext();
-                System.out.println("a");
+                //System.out.println("Connection id ="+Thread.currentThread().getId());
                 this.listener.onReceive(new Address(this.endPoint.getInetAddress().getHostAddress(), this.remoteListenPort), next);
             } catch (Exception e) {
                 close();
@@ -75,7 +75,6 @@ public class Connection implements Runnable {
         dataOutputStream.writeInt(message.length);
         this.outStream.write(message);
         this.outStream.flush();
-        System.out.println("b");
     }
 
     private byte[] ReadNext() throws IOException {

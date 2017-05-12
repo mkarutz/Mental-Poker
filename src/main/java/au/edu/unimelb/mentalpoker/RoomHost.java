@@ -37,10 +37,11 @@ public class RoomHost implements Remote.Callbacks {
     }
 
     private void maybeStartGame() {
+
         if (!gameTable.allPlayersReady()) {
             return;
         }
-
+        //System.out.println("startGame id = "+Thread.currentThread().getId());
         // Build game started message
         Proto.GameStartedMessage.Builder gameStartedMessage = Proto.GameStartedMessage.newBuilder();
         int playerId = 1;
