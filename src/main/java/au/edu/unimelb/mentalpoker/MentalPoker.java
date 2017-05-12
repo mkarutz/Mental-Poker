@@ -36,10 +36,13 @@ public class MentalPoker {
             scanner.nextLine();
         }
 
+        Remote remote = new Remote(listenPort, null);
+        remote.start();
+
         RoomClient client =
                 new RoomClient(
                         new Address("127.0.0.1", remotePort),
-                        listenPort);
+                        remote);
 
         System.out.println("Press any key when you are ready to play");
         scanner.nextLine();
@@ -57,7 +60,7 @@ public class MentalPoker {
         System.out.println("Game has started.");
         // Create a new Poker peer client and start game.
 
-        PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), listenPort);
+        PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), remote);
         int id = network.localId();
         System.out.println("My id is: " + id);
         if (id != 1) {

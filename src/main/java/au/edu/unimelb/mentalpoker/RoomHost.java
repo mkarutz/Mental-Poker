@@ -46,8 +46,8 @@ public class RoomHost implements Remote.Callbacks {
         int playerId = 1;
         for (Address address : this.gameTable.getPlayers()) {
             Proto.PeerAddress.Builder peerAddress = Proto.PeerAddress.newBuilder()
-                    .setHostname(address.ip)
-                    .setPort(address.port);
+                    .setHostname(address.getIp())
+                    .setPort(address.getPort());
 
             Proto.Player.Builder player = Proto.Player.newBuilder().setPlayerId(playerId).setAddress(peerAddress);
             gameStartedMessage.addPlayers(player);
@@ -69,6 +69,6 @@ public class RoomHost implements Remote.Callbacks {
             playerId++;
         }
 
-        this.remote.close();
+        //this.remote.close();
     }
 }

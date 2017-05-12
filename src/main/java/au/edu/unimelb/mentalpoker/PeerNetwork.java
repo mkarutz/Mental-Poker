@@ -18,7 +18,7 @@ public class PeerNetwork implements Remote.Callbacks {
     private HashMap<Integer, Queue<Proto.NetworkMessage>> playerMessages;
     private HashSet<Integer> playersNotSynced;
 
-    public PeerNetwork(Proto.GameStartedMessage gameInfo, int listeningPort) {
+    public PeerNetwork(Proto.GameStartedMessage gameInfo, Remote remote) {
         this.players = HashBiMap.create();
         for (Proto.Player peer : gameInfo.getPlayersList()) {
             Proto.PeerAddress peerAddress = peer.getAddress();
@@ -29,8 +29,10 @@ public class PeerNetwork implements Remote.Callbacks {
                             peerAddress.getPort()));
         }
         this.localId = gameInfo.getPlayerId();
-        this.remote = new Remote(listeningPort, this);
-        this.remote.start();
+        //this.remote = new Remote(listeningPort, this);
+        //this.remote.start();
+        this.remote = remote;
+        this.remote.setListener(this);
         this.playersNotSynced = new HashSet<>();
         initPlayerMessagesHashMap();
         synchronize();
@@ -64,6 +66,7 @@ public class PeerNetwork implements Remote.Callbacks {
 
     private void resetSyncMap() {
         this.playersNotSynced = new HashSet<>(this.players.keySet());
+        this.playersNotSynced.remove(localId);
     }
 
     public void broadcast(Proto.NetworkMessage message) {

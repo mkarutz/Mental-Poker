@@ -11,9 +11,9 @@ public class RoomClient implements Remote.Callbacks {
     private boolean gameStarted;
     private Proto.GameStartedMessage gameStartedMessage;
 
-    public RoomClient(Address hostAddress, int listeningPort) throws IOException {
-        this.remote = new Remote(listeningPort, this);
-        this.remote.start();
+    public RoomClient(Address hostAddress, Remote remote) throws IOException {
+        this.remote = remote;
+        this.remote.setListener(this);
         this.gameStarted = false;
 
         this.hostAddress = hostAddress;
@@ -29,19 +29,10 @@ public class RoomClient implements Remote.Callbacks {
 
     public void onReceive(Address remote, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
-            /*this.remote.finish();
-            try {
-                this.remote.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-            System.out.println("GAME STARTED");
             this.gameStarted = true;
             this.gameStartedMessage = message.getGameStartedMessage();
-            this.remote.close();
+
         }
-        //System.out.println(message.getType().toString());
-        //System.out.println(message.getGameStartedMessage().toString());
     }
 
     public boolean isGameStarted() {

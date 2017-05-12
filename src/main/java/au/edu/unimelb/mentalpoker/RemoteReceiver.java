@@ -5,10 +5,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Queue;
+import java.net.SocketTimeoutException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,13 +14,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RemoteReceiver extends Thread {
 
+    private Remote remote;
+    private IPacketReceiver packetReceiver;
     private DatagramSocket socket;
     private ConcurrentHashMap<Address, Queue<Proto.NetworkPacket>> incoming;
+    private ConcurrentHashMap<Address, HashSet<Integer>> alreadyReceivedMessageIds;
     private boolean closed = false;
 
-    public RemoteReceiver(DatagramSocket socket) {
+    public RemoteReceiver(DatagramSocket socket, IPacketReceiver packetReceiver, Remote remote) {
+        this.packetReceiver = packetReceiver;
+        this.remote = remote;
         this.socket = socket;
         this.incoming = new ConcurrentHashMap<>();
+        this.alreadyReceivedMessageIds = new ConcurrentHashMap<>();
     }
 
     public synchronized Proto.NetworkMessage pop(Address source) {
@@ -31,8 +35,9 @@ public class RemoteReceiver extends Thread {
             Queue<Proto.NetworkPacket> queue = addressQueuePair.getValue();
 
             if (!queue.isEmpty()) {
-                source.ip = address.ip;
-                source.port = address.port;
+                source.setIp(address.getIp());
+                source.setPort(address.getPort());
+
                 return queue.remove().getNetworkMessage();
             }
         }
@@ -41,7 +46,13 @@ public class RemoteReceiver extends Thread {
 
     public void run() {
         while (!this.closed) {
-            processQueue();
+            try {
+                processQueue();
+            } catch (SocketTimeoutException e) {
+                // do nothing
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -49,47 +60,58 @@ public class RemoteReceiver extends Thread {
         this.closed = true;
     }
 
-    private void processQueue() {
+    private void processQueue() throws IOException {
         Address sourceAddress = new Address();
         Proto.NetworkPacket nextReceivedPacket = receivePacket(sourceAddress);
-        ensureIncomingQueueForAddressExists(sourceAddress);
-        this.incoming.get(sourceAddress).add(nextReceivedPacket);
+        if (nextReceivedPacket != null) {
+            if (nextReceivedPacket.getNetworkMessageHeader().getAck() == true) {
+                // Ack packet
+                //System.out.println("ACK PACKET");
+                this.remote.onReceivedPacketAck(sourceAddress, nextReceivedPacket);
+            } else {
+                // Regular packet
+                //System.out.println("REGULAR PACKET");
+                if (!packetAlreadyReceivedFromAddress(sourceAddress, nextReceivedPacket)) {
+                    addPacketToIncomingAddressQueue(sourceAddress, nextReceivedPacket);
+                    logPacketReceivedFromAddress(sourceAddress, nextReceivedPacket);
+                }
+                this.remote.sendPacketAck(sourceAddress, nextReceivedPacket);
+            }
+        }
     }
 
-    private void ensureIncomingQueueForAddressExists(Address address) {
+    private boolean packetAlreadyReceivedFromAddress(Address sourceAddress, Proto.NetworkPacket packet) {
+        ensureAddressAlreadyReceivedMessageIdSetExists(sourceAddress);
+
+        int messageId = packet.getNetworkMessageHeader().getMessageId();
+        return this.alreadyReceivedMessageIds.get(sourceAddress).contains(messageId);
+    }
+
+    private void logPacketReceivedFromAddress(Address sourceAddress, Proto.NetworkPacket packet) {
+        ensureAddressAlreadyReceivedMessageIdSetExists(sourceAddress);
+
+        int messageId = packet.getNetworkMessageHeader().getMessageId();
+        this.alreadyReceivedMessageIds.get(sourceAddress).add(messageId);
+    }
+
+    private void addPacketToIncomingAddressQueue(Address sourceAddress, Proto.NetworkPacket packet) {
+        ensureIncomingAddressQueueExists(sourceAddress);
+        this.incoming.get(sourceAddress).add(packet);
+    }
+
+    private void ensureIncomingAddressQueueExists(Address address) {
         if (!this.incoming.containsKey(address)) {
             this.incoming.put(address, new ArrayDeque<>());
         }
     }
 
-    private Proto.NetworkPacket receivePacket(Address source) {
-        byte[] buffer = new byte[65000];
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-        try {
-            this.socket.receive(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void ensureAddressAlreadyReceivedMessageIdSetExists(Address address) {
+        if (!this.alreadyReceivedMessageIds.containsKey(address)) {
+            this.alreadyReceivedMessageIds.put(address, new HashSet<>());
         }
-
-        byte[] packetBytes = Arrays.copyOf(packet.getData(), packet.getLength());
-        //System.out.println("Receiving packet from " + packet.getPort() + " : " + messageBytes.length);
-        try {
-            //Proto.NetworkPacket receivedPacket =
-
-            //Proto.NetworkMessage protoMessage = readAndAckPacket(receivedPacket);
-            //System.out.println(protoMessage.toString());
-            source.ip = packet.getAddress().getHostName();
-            source.port = packet.getPort();
-
-            return Proto.NetworkPacket.parseFrom(packetBytes);
-
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    //public Proto.NetworkMessage readMessageFromPacket(Proto.NetworkPacket packet) {
-    //    return packet.getNetworkMessage();
-    //}
+    private Proto.NetworkPacket receivePacket(Address source) throws IOException {
+        return this.packetReceiver.receivePacket(source);
+    }
 }

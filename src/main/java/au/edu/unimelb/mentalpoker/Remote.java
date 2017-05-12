@@ -29,16 +29,21 @@ public class Remote extends Thread {
         this.listener = listener;
         try {
             this.socket = new DatagramSocket(this.listeningPort);
+            this.socket.setSoTimeout(100);
         } catch (SocketException e) {
             e.printStackTrace();
         }
         this.running = true;
 
-        this.remoteSender = new RemoteSender(this.socket);
+        this.remoteSender = new RemoteSender(this.socket, new UnreliablePacketSender(0, new UDPPacketSender(this.socket)));
         this.remoteSender.start();
 
-        this.remoteReceiver = new RemoteReceiver(this.socket);
+        this.remoteReceiver = new RemoteReceiver(this.socket, new UDPPacketReceiver(this.socket), this);
         this.remoteReceiver.start();
+    }
+
+    public void setListener(Callbacks listener) {
+        this.listener = listener;
     }
 
     public void run() {
@@ -46,26 +51,25 @@ public class Remote extends Thread {
             Address sourceAddress = new Address();
             Proto.NetworkMessage message = this.remoteReceiver.pop(sourceAddress);
             if (message != null) {
-                this.listener.onReceive(sourceAddress, message);
+                if (this.listener != null) {
+                    this.listener.onReceive(sourceAddress, message);
+                }
             }
         }
-
-        System.out.println("********************************");
-        this.socket.close();
     }
 
     public void close() {
-        System.out.println("*****************************************************");
         this.remoteSender.close();
         this.remoteReceiver.close();
-        this.remoteReceiver.interrupt();
+
         try {
             this.remoteSender.join();
             this.remoteReceiver.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("********************************%%%%%%%%%%%%%");
+
+        this.socket.close();
         this.running = false;
     }
 
@@ -74,5 +78,11 @@ public class Remote extends Thread {
         this.remoteSender.push(destination, message);
     }
 
+    public synchronized void sendPacketAck(Address sourceAddress, Proto.NetworkPacket packet) {
+        this.remoteSender.sendPacketAck(sourceAddress, packet);
+    }
 
+    public synchronized void onReceivedPacketAck(Address sourceAddress, Proto.NetworkPacket ackPacket) {
+        this.remoteSender.ackMessageIdForAddress(sourceAddress, ackPacket.getNetworkMessageHeader().getMessageId());
+    }
 }
