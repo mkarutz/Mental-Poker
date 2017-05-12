@@ -2726,6 +2726,1376 @@ public final class Proto {
 
   }
 
+  public interface NetworkMessageHeaderOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mentalpoker.NetworkMessageHeader)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required int32 messageId = 1;</code>
+     */
+    boolean hasMessageId();
+    /**
+     * <code>required int32 messageId = 1;</code>
+     */
+    int getMessageId();
+
+    /**
+     * <code>required bool ack = 2;</code>
+     */
+    boolean hasAck();
+    /**
+     * <code>required bool ack = 2;</code>
+     */
+    boolean getAck();
+  }
+  /**
+   * Protobuf type {@code mentalpoker.NetworkMessageHeader}
+   */
+  public  static final class NetworkMessageHeader extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:mentalpoker.NetworkMessageHeader)
+      NetworkMessageHeaderOrBuilder {
+    // Use NetworkMessageHeader.newBuilder() to construct.
+    private NetworkMessageHeader(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private NetworkMessageHeader() {
+      messageId_ = 0;
+      ack_ = false;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private NetworkMessageHeader(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              messageId_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              ack_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.class, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int MESSAGEID_FIELD_NUMBER = 1;
+    private int messageId_;
+    /**
+     * <code>required int32 messageId = 1;</code>
+     */
+    public boolean hasMessageId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 messageId = 1;</code>
+     */
+    public int getMessageId() {
+      return messageId_;
+    }
+
+    public static final int ACK_FIELD_NUMBER = 2;
+    private boolean ack_;
+    /**
+     * <code>required bool ack = 2;</code>
+     */
+    public boolean hasAck() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required bool ack = 2;</code>
+     */
+    public boolean getAck() {
+      return ack_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasMessageId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasAck()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, messageId_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBool(2, ack_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, messageId_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, ack_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader other = (au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader) obj;
+
+      boolean result = true;
+      result = result && (hasMessageId() == other.hasMessageId());
+      if (hasMessageId()) {
+        result = result && (getMessageId()
+            == other.getMessageId());
+      }
+      result = result && (hasAck() == other.hasAck());
+      if (hasAck()) {
+        result = result && (getAck()
+            == other.getAck());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasMessageId()) {
+        hash = (37 * hash) + MESSAGEID_FIELD_NUMBER;
+        hash = (53 * hash) + getMessageId();
+      }
+      if (hasAck()) {
+        hash = (37 * hash) + ACK_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+            getAck());
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mentalpoker.NetworkMessageHeader}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mentalpoker.NetworkMessageHeader)
+        au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.class, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder.class);
+      }
+
+      // Construct using au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        messageId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        ack_ = false;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_descriptor;
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getDefaultInstanceForType() {
+        return au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance();
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader build() {
+        au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader buildPartial() {
+        au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader result = new au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.messageId_ = messageId_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.ack_ = ack_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader) {
+          return mergeFrom((au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader other) {
+        if (other == au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance()) return this;
+        if (other.hasMessageId()) {
+          setMessageId(other.getMessageId());
+        }
+        if (other.hasAck()) {
+          setAck(other.getAck());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasMessageId()) {
+          return false;
+        }
+        if (!hasAck()) {
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private int messageId_ ;
+      /**
+       * <code>required int32 messageId = 1;</code>
+       */
+      public boolean hasMessageId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 messageId = 1;</code>
+       */
+      public int getMessageId() {
+        return messageId_;
+      }
+      /**
+       * <code>required int32 messageId = 1;</code>
+       */
+      public Builder setMessageId(int value) {
+        bitField0_ |= 0x00000001;
+        messageId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 messageId = 1;</code>
+       */
+      public Builder clearMessageId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        messageId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean ack_ ;
+      /**
+       * <code>required bool ack = 2;</code>
+       */
+      public boolean hasAck() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required bool ack = 2;</code>
+       */
+      public boolean getAck() {
+        return ack_;
+      }
+      /**
+       * <code>required bool ack = 2;</code>
+       */
+      public Builder setAck(boolean value) {
+        bitField0_ |= 0x00000002;
+        ack_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required bool ack = 2;</code>
+       */
+      public Builder clearAck() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        ack_ = false;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:mentalpoker.NetworkMessageHeader)
+    }
+
+    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkMessageHeader)
+    private static final au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader();
+    }
+
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<NetworkMessageHeader>
+        PARSER = new com.google.protobuf.AbstractParser<NetworkMessageHeader>() {
+      public NetworkMessageHeader parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new NetworkMessageHeader(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<NetworkMessageHeader> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkMessageHeader> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface NetworkPacketOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mentalpoker.NetworkPacket)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+     */
+    boolean hasNetworkMessageHeader();
+    /**
+     * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+     */
+    au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getNetworkMessageHeader();
+    /**
+     * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+     */
+    au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder getNetworkMessageHeaderOrBuilder();
+
+    /**
+     * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+     */
+    boolean hasNetworkMessage();
+    /**
+     * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+     */
+    au.edu.unimelb.mentalpoker.Proto.NetworkMessage getNetworkMessage();
+    /**
+     * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+     */
+    au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder getNetworkMessageOrBuilder();
+  }
+  /**
+   * Protobuf type {@code mentalpoker.NetworkPacket}
+   */
+  public  static final class NetworkPacket extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:mentalpoker.NetworkPacket)
+      NetworkPacketOrBuilder {
+    // Use NetworkPacket.newBuilder() to construct.
+    private NetworkPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private NetworkPacket() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private NetworkPacket(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = networkMessageHeader_.toBuilder();
+              }
+              networkMessageHeader_ = input.readMessage(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(networkMessageHeader_);
+                networkMessageHeader_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = networkMessage_.toBuilder();
+              }
+              networkMessage_ = input.readMessage(au.edu.unimelb.mentalpoker.Proto.NetworkMessage.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(networkMessage_);
+                networkMessage_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              au.edu.unimelb.mentalpoker.Proto.NetworkPacket.class, au.edu.unimelb.mentalpoker.Proto.NetworkPacket.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int NETWORKMESSAGEHEADER_FIELD_NUMBER = 1;
+    private au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader networkMessageHeader_;
+    /**
+     * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+     */
+    public boolean hasNetworkMessageHeader() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+     */
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getNetworkMessageHeader() {
+      return networkMessageHeader_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
+    }
+    /**
+     * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+     */
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder getNetworkMessageHeaderOrBuilder() {
+      return networkMessageHeader_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
+    }
+
+    public static final int NETWORKMESSAGE_FIELD_NUMBER = 2;
+    private au.edu.unimelb.mentalpoker.Proto.NetworkMessage networkMessage_;
+    /**
+     * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+     */
+    public boolean hasNetworkMessage() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+     */
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessage getNetworkMessage() {
+      return networkMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
+    }
+    /**
+     * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+     */
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder getNetworkMessageOrBuilder() {
+      return networkMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasNetworkMessageHeader()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getNetworkMessageHeader().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasNetworkMessage()) {
+        if (!getNetworkMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, getNetworkMessageHeader());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, getNetworkMessage());
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getNetworkMessageHeader());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getNetworkMessage());
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.NetworkPacket)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.NetworkPacket other = (au.edu.unimelb.mentalpoker.Proto.NetworkPacket) obj;
+
+      boolean result = true;
+      result = result && (hasNetworkMessageHeader() == other.hasNetworkMessageHeader());
+      if (hasNetworkMessageHeader()) {
+        result = result && getNetworkMessageHeader()
+            .equals(other.getNetworkMessageHeader());
+      }
+      result = result && (hasNetworkMessage() == other.hasNetworkMessage());
+      if (hasNetworkMessage()) {
+        result = result && getNetworkMessage()
+            .equals(other.getNetworkMessage());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasNetworkMessageHeader()) {
+        hash = (37 * hash) + NETWORKMESSAGEHEADER_FIELD_NUMBER;
+        hash = (53 * hash) + getNetworkMessageHeader().hashCode();
+      }
+      if (hasNetworkMessage()) {
+        hash = (37 * hash) + NETWORKMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getNetworkMessage().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkPacket prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mentalpoker.NetworkPacket}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mentalpoker.NetworkPacket)
+        au.edu.unimelb.mentalpoker.Proto.NetworkPacketOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                au.edu.unimelb.mentalpoker.Proto.NetworkPacket.class, au.edu.unimelb.mentalpoker.Proto.NetworkPacket.Builder.class);
+      }
+
+      // Construct using au.edu.unimelb.mentalpoker.Proto.NetworkPacket.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getNetworkMessageHeaderFieldBuilder();
+          getNetworkMessageFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (networkMessageHeaderBuilder_ == null) {
+          networkMessageHeader_ = null;
+        } else {
+          networkMessageHeaderBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (networkMessageBuilder_ == null) {
+          networkMessage_ = null;
+        } else {
+          networkMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_descriptor;
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.NetworkPacket getDefaultInstanceForType() {
+        return au.edu.unimelb.mentalpoker.Proto.NetworkPacket.getDefaultInstance();
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.NetworkPacket build() {
+        au.edu.unimelb.mentalpoker.Proto.NetworkPacket result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.NetworkPacket buildPartial() {
+        au.edu.unimelb.mentalpoker.Proto.NetworkPacket result = new au.edu.unimelb.mentalpoker.Proto.NetworkPacket(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (networkMessageHeaderBuilder_ == null) {
+          result.networkMessageHeader_ = networkMessageHeader_;
+        } else {
+          result.networkMessageHeader_ = networkMessageHeaderBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (networkMessageBuilder_ == null) {
+          result.networkMessage_ = networkMessage_;
+        } else {
+          result.networkMessage_ = networkMessageBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof au.edu.unimelb.mentalpoker.Proto.NetworkPacket) {
+          return mergeFrom((au.edu.unimelb.mentalpoker.Proto.NetworkPacket)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(au.edu.unimelb.mentalpoker.Proto.NetworkPacket other) {
+        if (other == au.edu.unimelb.mentalpoker.Proto.NetworkPacket.getDefaultInstance()) return this;
+        if (other.hasNetworkMessageHeader()) {
+          mergeNetworkMessageHeader(other.getNetworkMessageHeader());
+        }
+        if (other.hasNetworkMessage()) {
+          mergeNetworkMessage(other.getNetworkMessage());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasNetworkMessageHeader()) {
+          return false;
+        }
+        if (!getNetworkMessageHeader().isInitialized()) {
+          return false;
+        }
+        if (hasNetworkMessage()) {
+          if (!getNetworkMessage().isInitialized()) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        au.edu.unimelb.mentalpoker.Proto.NetworkPacket parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (au.edu.unimelb.mentalpoker.Proto.NetworkPacket) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader networkMessageHeader_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder> networkMessageHeaderBuilder_;
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public boolean hasNetworkMessageHeader() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getNetworkMessageHeader() {
+        if (networkMessageHeaderBuilder_ == null) {
+          return networkMessageHeader_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
+        } else {
+          return networkMessageHeaderBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public Builder setNetworkMessageHeader(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader value) {
+        if (networkMessageHeaderBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          networkMessageHeader_ = value;
+          onChanged();
+        } else {
+          networkMessageHeaderBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public Builder setNetworkMessageHeader(
+          au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder builderForValue) {
+        if (networkMessageHeaderBuilder_ == null) {
+          networkMessageHeader_ = builderForValue.build();
+          onChanged();
+        } else {
+          networkMessageHeaderBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public Builder mergeNetworkMessageHeader(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader value) {
+        if (networkMessageHeaderBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              networkMessageHeader_ != null &&
+              networkMessageHeader_ != au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance()) {
+            networkMessageHeader_ =
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.newBuilder(networkMessageHeader_).mergeFrom(value).buildPartial();
+          } else {
+            networkMessageHeader_ = value;
+          }
+          onChanged();
+        } else {
+          networkMessageHeaderBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public Builder clearNetworkMessageHeader() {
+        if (networkMessageHeaderBuilder_ == null) {
+          networkMessageHeader_ = null;
+          onChanged();
+        } else {
+          networkMessageHeaderBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder getNetworkMessageHeaderBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getNetworkMessageHeaderFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder getNetworkMessageHeaderOrBuilder() {
+        if (networkMessageHeaderBuilder_ != null) {
+          return networkMessageHeaderBuilder_.getMessageOrBuilder();
+        } else {
+          return networkMessageHeader_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
+        }
+      }
+      /**
+       * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder> 
+          getNetworkMessageHeaderFieldBuilder() {
+        if (networkMessageHeaderBuilder_ == null) {
+          networkMessageHeaderBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder>(
+                  getNetworkMessageHeader(),
+                  getParentForChildren(),
+                  isClean());
+          networkMessageHeader_ = null;
+        }
+        return networkMessageHeaderBuilder_;
+      }
+
+      private au.edu.unimelb.mentalpoker.Proto.NetworkMessage networkMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          au.edu.unimelb.mentalpoker.Proto.NetworkMessage, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder> networkMessageBuilder_;
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public boolean hasNetworkMessage() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessage getNetworkMessage() {
+        if (networkMessageBuilder_ == null) {
+          return networkMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
+        } else {
+          return networkMessageBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public Builder setNetworkMessage(au.edu.unimelb.mentalpoker.Proto.NetworkMessage value) {
+        if (networkMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          networkMessage_ = value;
+          onChanged();
+        } else {
+          networkMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public Builder setNetworkMessage(
+          au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder builderForValue) {
+        if (networkMessageBuilder_ == null) {
+          networkMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          networkMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public Builder mergeNetworkMessage(au.edu.unimelb.mentalpoker.Proto.NetworkMessage value) {
+        if (networkMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              networkMessage_ != null &&
+              networkMessage_ != au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance()) {
+            networkMessage_ =
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessage.newBuilder(networkMessage_).mergeFrom(value).buildPartial();
+          } else {
+            networkMessage_ = value;
+          }
+          onChanged();
+        } else {
+          networkMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public Builder clearNetworkMessage() {
+        if (networkMessageBuilder_ == null) {
+          networkMessage_ = null;
+          onChanged();
+        } else {
+          networkMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder getNetworkMessageBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getNetworkMessageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder getNetworkMessageOrBuilder() {
+        if (networkMessageBuilder_ != null) {
+          return networkMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return networkMessage_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
+        }
+      }
+      /**
+       * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          au.edu.unimelb.mentalpoker.Proto.NetworkMessage, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder> 
+          getNetworkMessageFieldBuilder() {
+        if (networkMessageBuilder_ == null) {
+          networkMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessage, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder>(
+                  getNetworkMessage(),
+                  getParentForChildren(),
+                  isClean());
+          networkMessage_ = null;
+        }
+        return networkMessageBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:mentalpoker.NetworkPacket)
+    }
+
+    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkPacket)
+    private static final au.edu.unimelb.mentalpoker.Proto.NetworkPacket DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.NetworkPacket();
+    }
+
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<NetworkPacket>
+        PARSER = new com.google.protobuf.AbstractParser<NetworkPacket>() {
+      public NetworkPacket parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new NetworkPacket(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<NetworkPacket> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkPacket> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.NetworkPacket getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface NetworkMessageOrBuilder extends
       // @@protoc_insertion_point(interface_extends:mentalpoker.NetworkMessage)
       com.google.protobuf.MessageOrBuilder {
@@ -3767,6 +5137,16 @@ public final class Proto {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_JoinRoomMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mentalpoker_NetworkMessageHeader_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mentalpoker_NetworkPacket_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_mentalpoker_NetworkPacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_NetworkMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -3786,15 +5166,20 @@ public final class Proto {
       "\n\007players\030\002 \003(\0132\023.mentalpoker.Player\"E\n\006" +
       "Player\022\020\n\010playerId\030\001 \002(\005\022)\n\007address\030\002 \002(" +
       "\0132\030.mentalpoker.PeerAddress\"%\n\017JoinRoomM" +
-      "essage\022\022\n\nplayerName\030\001 \002(\t\"\207\002\n\016NetworkMe" +
-      "ssage\022.\n\004type\030\001 \002(\0162 .mentalpoker.Networ" +
-      "kMessage.Type\0225\n\017joinRoomMessage\030\002 \001(\0132\034" +
-      ".mentalpoker.JoinRoomMessage\022;\n\022gameStar",
-      "tedMessage\030\003 \001(\0132\037.mentalpoker.GameStart" +
-      "edMessage\"Q\n\004Type\022\r\n\tJOIN_ROOM\020\000\022\020\n\014PLAY" +
-      "ER_READY\020\001\022\020\n\014GAME_STARTED\020\002\022\010\n\004SYNC\020\003\022\014" +
-      "\n\010SYNC_ACK\020\004B#\n\032au.edu.unimelb.mentalpok" +
-      "erB\005Proto"
+      "essage\022\022\n\nplayerName\030\001 \002(\t\"6\n\024NetworkMes" +
+      "sageHeader\022\021\n\tmessageId\030\001 \002(\005\022\013\n\003ack\030\002 \002" +
+      "(\010\"\205\001\n\rNetworkPacket\022?\n\024networkMessageHe" +
+      "ader\030\001 \002(\0132!.mentalpoker.NetworkMessageH",
+      "eader\0223\n\016networkMessage\030\002 \001(\0132\033.mentalpo" +
+      "ker.NetworkMessage\"\207\002\n\016NetworkMessage\022.\n" +
+      "\004type\030\001 \002(\0162 .mentalpoker.NetworkMessage" +
+      ".Type\0225\n\017joinRoomMessage\030\002 \001(\0132\034.mentalp" +
+      "oker.JoinRoomMessage\022;\n\022gameStartedMessa" +
+      "ge\030\003 \001(\0132\037.mentalpoker.GameStartedMessag" +
+      "e\"Q\n\004Type\022\r\n\tJOIN_ROOM\020\000\022\020\n\014PLAYER_READY" +
+      "\020\001\022\020\n\014GAME_STARTED\020\002\022\010\n\004SYNC\020\003\022\014\n\010SYNC_A" +
+      "CK\020\004B#\n\032au.edu.unimelb.mentalpokerB\005Prot" +
+      "o"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3832,8 +5217,20 @@ public final class Proto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_JoinRoomMessage_descriptor,
         new java.lang.String[] { "PlayerName", });
-    internal_static_mentalpoker_NetworkMessage_descriptor =
+    internal_static_mentalpoker_NetworkMessageHeader_descriptor =
       getDescriptor().getMessageTypes().get(4);
+    internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_mentalpoker_NetworkMessageHeader_descriptor,
+        new java.lang.String[] { "MessageId", "Ack", });
+    internal_static_mentalpoker_NetworkPacket_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_mentalpoker_NetworkPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_mentalpoker_NetworkPacket_descriptor,
+        new java.lang.String[] { "NetworkMessageHeader", "NetworkMessage", });
+    internal_static_mentalpoker_NetworkMessage_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_mentalpoker_NetworkMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_NetworkMessage_descriptor,

@@ -24,6 +24,16 @@ message JoinRoomMessage {
     required string playerName = 1;
 }
 
+message NetworkMessageHeader {
+    required int32 messageId = 1;
+    required bool ack = 2;
+}
+
+message NetworkPacket {
+    required NetworkMessageHeader networkMessageHeader = 1;
+    optional NetworkMessage networkMessage = 2;
+}
+
 message NetworkMessage {
     enum Type {
         JOIN_ROOM = 0;

@@ -10,6 +10,10 @@ public class Address {
     public String ip;
     public int port;
 
+    public Address() {
+
+    }
+
     public Address(String ip, int port) {
         this.ip = ip;
         this.port = port;
