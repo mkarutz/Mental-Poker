@@ -31,7 +31,7 @@ public class Address {
         String ipResolved = ip;
         try {
             InetAddress address = InetAddress.getByName(ip);
-            ipResolved = address.getHostName();
+            ipResolved = address.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
