@@ -71,7 +71,7 @@ public class PeerNetwork implements Remote.Callbacks {
 
     public void broadcast(Proto.NetworkMessage message) {
         for (Integer playerId : this.players.keySet()) {
-            if (playerId != localId()) {
+            if (playerId != getLocalPlayerId()) {
                 send(playerId, message);
             }
         }
@@ -82,7 +82,7 @@ public class PeerNetwork implements Remote.Callbacks {
         return queueForPlayer(playerId).remove();
     }
 
-    public int localId() {
+    public int getLocalPlayerId() {
         return this.localId;
     }
 
@@ -133,5 +133,9 @@ public class PeerNetwork implements Remote.Callbacks {
         if (!this.playerMessages.containsKey(playerId)) {
             this.playerMessages.put(playerId, new ConcurrentLinkedDeque<>());
         }
+    }
+
+    public int getNumPlayers() {
+        return players.size();
     }
 }

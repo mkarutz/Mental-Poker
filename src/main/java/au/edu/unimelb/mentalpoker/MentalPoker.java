@@ -61,7 +61,7 @@ public class MentalPoker {
         // Create a new Poker peer client and start game.
 
         PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), remote);
-        int id = network.localId();
+        int id = network.getLocalPlayerId();
         System.out.println("My id is: " + id);
         if (id != 1) {
             System.out.println("Waiting for received from: " + (id - 1));

@@ -49,7 +49,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         if (getLocalPlayerId() == 1) {
             prevDeck = initialDeck;
         } else {
-            prevDeck = recvDeck(getLocalPlayerId() - 1);
+            prevDeck = receiveDeck(getLocalPlayerId() - 1);
         }
 
         // Shuffle and encrypt the deck
@@ -59,9 +59,26 @@ public class SRAPokerEngine implements MentalPokerEngine {
         if (getLocalPlayerId() == getNumPlayers()) {
             broadcastDeck(deck);
         } else {
-            sendDeck(deck, getLocalPlayerCards() + 1);
-            deck = recvDeck(getNumPlayers());
+            sendDeck(deck, getLocalPlayerId() + 1);
+            deck = receiveDeck(getNumPlayers());
         }
+    }
+
+    private int getLocalPlayerId() {
+        return network.getLocalPlayerId();
+    }
+
+    private void broadcastDeck(List<BigInteger> deck) {
+        // TODO
+    }
+
+    private void sendDeck(List<BigInteger> deck, int playerId) {
+        // TODO
+    }
+
+    private List<BigInteger> receiveDeck(int playerId) {
+        // TODO
+        return null;
     }
 
     private List<BigInteger> encryptPermutation(List<BigInteger> deck) {

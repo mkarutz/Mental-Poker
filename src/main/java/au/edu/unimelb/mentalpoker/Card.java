@@ -38,7 +38,7 @@ public class Card {
     public static List<Card> standardDeck() {
         final List<Card> result = new ArrayList<>(52);
         for (Suit suit : Suit.values()) {
-            for (int rank = 0; rank < 13; rank++) {
+            for (int rank = 1; rank <= 13; rank++) {
                 result.add(new Card(suit, rank));
             }
         }
@@ -47,7 +47,7 @@ public class Card {
 
     @Override
     public String toString() {
-        return suit.toString() + getRank();
+        return getRank() + suit.toString();
     }
 
     private String getRank() {
