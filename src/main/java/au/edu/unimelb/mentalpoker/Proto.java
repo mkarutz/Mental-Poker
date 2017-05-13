@@ -2610,6 +2610,10 @@ public final class Proto {
        * <code>SYNC = 3;</code>
        */
       SYNC(3, 3),
+      /**
+       * <code>SYNC_ACK = 4;</code>
+       */
+      SYNC_ACK(4, 4),
       ;
 
       /**
@@ -2628,6 +2632,10 @@ public final class Proto {
        * <code>SYNC = 3;</code>
        */
       public static final int SYNC_VALUE = 3;
+      /**
+       * <code>SYNC_ACK = 4;</code>
+       */
+      public static final int SYNC_ACK_VALUE = 4;
 
 
       public final int getNumber() { return value; }
@@ -2638,6 +2646,7 @@ public final class Proto {
           case 1: return PLAYER_READY;
           case 2: return GAME_STARTED;
           case 3: return SYNC;
+          case 4: return SYNC_ACK;
           default: return null;
         }
       }
@@ -3382,14 +3391,15 @@ public final class Proto {
       "\n\007players\030\002 \003(\0132\023.mentalpoker.Player\"E\n\006" +
       "Player\022\020\n\010playerId\030\001 \002(\005\022)\n\007address\030\002 \002(" +
       "\0132\030.mentalpoker.PeerAddress\"%\n\017JoinRoomM" +
-      "essage\022\022\n\nplayerName\030\001 \002(\t\"\371\001\n\016NetworkMe" +
+      "essage\022\022\n\nplayerName\030\001 \002(\t\"\207\002\n\016NetworkMe" +
       "ssage\022.\n\004type\030\001 \002(\0162 .mentalpoker.Networ" +
       "kMessage.Type\0225\n\017joinRoomMessage\030\002 \001(\0132\034" +
       ".mentalpoker.JoinRoomMessage\022;\n\022gameStar",
       "tedMessage\030\003 \001(\0132\037.mentalpoker.GameStart" +
-      "edMessage\"C\n\004Type\022\r\n\tJOIN_ROOM\020\000\022\020\n\014PLAY" +
-      "ER_READY\020\001\022\020\n\014GAME_STARTED\020\002\022\010\n\004SYNC\020\003B#" +
-      "\n\032au.edu.unimelb.mentalpokerB\005Proto"
+      "edMessage\"Q\n\004Type\022\r\n\tJOIN_ROOM\020\000\022\020\n\014PLAY" +
+      "ER_READY\020\001\022\020\n\014GAME_STARTED\020\002\022\010\n\004SYNC\020\003\022\014" +
+      "\n\010SYNC_ACK\020\004B#\n\032au.edu.unimelb.mentalpok" +
+      "erB\005Proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
