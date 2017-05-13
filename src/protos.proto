@@ -38,6 +38,10 @@ message SraDeckMessage {
     repeated string card = 1;
 }
 
+message SraCardMessage {
+    required string card = 1;
+}
+
 message NetworkMessage {
     enum Type {
         JOIN_ROOM = 0;
@@ -46,6 +50,7 @@ message NetworkMessage {
         SYNC = 3;
         SYNC_ACK = 4;
         SRA_DECK = 5;
+        SRA_CARD = 6;
     };
 
     required Type type = 1;
@@ -53,4 +58,5 @@ message NetworkMessage {
     optional JoinRoomMessage joinRoomMessage = 2;
     optional GameStartedMessage gameStartedMessage = 3;
     optional SraDeckMessage sraDeckMessage = 4;
+    optional SraCardMessage sraCardMessage = 5;
 }

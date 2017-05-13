@@ -56,6 +56,7 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
                 return i;
             }
         }
+        // TODO: shuffle a new deck if we run out of cards.
         throw new RuntimeException();
     }
 

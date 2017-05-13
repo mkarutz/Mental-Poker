@@ -4140,6 +4140,490 @@ public final class Proto {
     // @@protoc_insertion_point(class_scope:mentalpoker.SraDeckMessage)
   }
 
+  public interface SraCardMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:mentalpoker.SraCardMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required string card = 1;</code>
+     */
+    boolean hasCard();
+    /**
+     * <code>required string card = 1;</code>
+     */
+    java.lang.String getCard();
+    /**
+     * <code>required string card = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getCardBytes();
+  }
+  /**
+   * Protobuf type {@code mentalpoker.SraCardMessage}
+   */
+  public static final class SraCardMessage extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:mentalpoker.SraCardMessage)
+      SraCardMessageOrBuilder {
+    // Use SraCardMessage.newBuilder() to construct.
+    private SraCardMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private SraCardMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final SraCardMessage defaultInstance;
+    public static SraCardMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public SraCardMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SraCardMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              card_ = bs;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              au.edu.unimelb.mentalpoker.Proto.SraCardMessage.class, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<SraCardMessage> PARSER =
+        new com.google.protobuf.AbstractParser<SraCardMessage>() {
+      public SraCardMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SraCardMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SraCardMessage> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    public static final int CARD_FIELD_NUMBER = 1;
+    private java.lang.Object card_;
+    /**
+     * <code>required string card = 1;</code>
+     */
+    public boolean hasCard() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string card = 1;</code>
+     */
+    public java.lang.String getCard() {
+      java.lang.Object ref = card_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          card_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string card = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getCardBytes() {
+      java.lang.Object ref = card_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        card_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      card_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasCard()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getCardBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getCardBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.SraCardMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code mentalpoker.SraCardMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:mentalpoker.SraCardMessage)
+        au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                au.edu.unimelb.mentalpoker.Proto.SraCardMessage.class, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder.class);
+      }
+
+      // Construct using au.edu.unimelb.mentalpoker.Proto.SraCardMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        card_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_descriptor;
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.SraCardMessage getDefaultInstanceForType() {
+        return au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.SraCardMessage build() {
+        au.edu.unimelb.mentalpoker.Proto.SraCardMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public au.edu.unimelb.mentalpoker.Proto.SraCardMessage buildPartial() {
+        au.edu.unimelb.mentalpoker.Proto.SraCardMessage result = new au.edu.unimelb.mentalpoker.Proto.SraCardMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.card_ = card_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof au.edu.unimelb.mentalpoker.Proto.SraCardMessage) {
+          return mergeFrom((au.edu.unimelb.mentalpoker.Proto.SraCardMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(au.edu.unimelb.mentalpoker.Proto.SraCardMessage other) {
+        if (other == au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance()) return this;
+        if (other.hasCard()) {
+          bitField0_ |= 0x00000001;
+          card_ = other.card_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasCard()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        au.edu.unimelb.mentalpoker.Proto.SraCardMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (au.edu.unimelb.mentalpoker.Proto.SraCardMessage) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object card_ = "";
+      /**
+       * <code>required string card = 1;</code>
+       */
+      public boolean hasCard() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string card = 1;</code>
+       */
+      public java.lang.String getCard() {
+        java.lang.Object ref = card_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            card_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string card = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getCardBytes() {
+        java.lang.Object ref = card_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          card_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string card = 1;</code>
+       */
+      public Builder setCard(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        card_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string card = 1;</code>
+       */
+      public Builder clearCard() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        card_ = getDefaultInstance().getCard();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string card = 1;</code>
+       */
+      public Builder setCardBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        card_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:mentalpoker.SraCardMessage)
+    }
+
+    static {
+      defaultInstance = new SraCardMessage(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:mentalpoker.SraCardMessage)
+  }
+
   public interface NetworkMessageOrBuilder extends
       // @@protoc_insertion_point(interface_extends:mentalpoker.NetworkMessage)
       com.google.protobuf.MessageOrBuilder {
@@ -4191,6 +4675,19 @@ public final class Proto {
      * <code>optional .mentalpoker.SraDeckMessage sraDeckMessage = 4;</code>
      */
     au.edu.unimelb.mentalpoker.Proto.SraDeckMessageOrBuilder getSraDeckMessageOrBuilder();
+
+    /**
+     * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+     */
+    boolean hasSraCardMessage();
+    /**
+     * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+     */
+    au.edu.unimelb.mentalpoker.Proto.SraCardMessage getSraCardMessage();
+    /**
+     * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+     */
+    au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder getSraCardMessageOrBuilder();
   }
   /**
    * Protobuf type {@code mentalpoker.NetworkMessage}
@@ -4294,6 +4791,19 @@ public final class Proto {
               bitField0_ |= 0x00000008;
               break;
             }
+            case 42: {
+              au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = sraCardMessage_.toBuilder();
+              }
+              sraCardMessage_ = input.readMessage(au.edu.unimelb.mentalpoker.Proto.SraCardMessage.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(sraCardMessage_);
+                sraCardMessage_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -4362,6 +4872,10 @@ public final class Proto {
        * <code>SRA_DECK = 5;</code>
        */
       SRA_DECK(5, 5),
+      /**
+       * <code>SRA_CARD = 6;</code>
+       */
+      SRA_CARD(6, 6),
       ;
 
       /**
@@ -4388,6 +4902,10 @@ public final class Proto {
        * <code>SRA_DECK = 5;</code>
        */
       public static final int SRA_DECK_VALUE = 5;
+      /**
+       * <code>SRA_CARD = 6;</code>
+       */
+      public static final int SRA_CARD_VALUE = 6;
 
 
       public final int getNumber() { return value; }
@@ -4400,6 +4918,7 @@ public final class Proto {
           case 3: return SYNC;
           case 4: return SYNC_ACK;
           case 5: return SRA_DECK;
+          case 6: return SRA_CARD;
           default: return null;
         }
       }
@@ -4530,11 +5049,33 @@ public final class Proto {
       return sraDeckMessage_;
     }
 
+    public static final int SRACARDMESSAGE_FIELD_NUMBER = 5;
+    private au.edu.unimelb.mentalpoker.Proto.SraCardMessage sraCardMessage_;
+    /**
+     * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+     */
+    public boolean hasSraCardMessage() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+     */
+    public au.edu.unimelb.mentalpoker.Proto.SraCardMessage getSraCardMessage() {
+      return sraCardMessage_;
+    }
+    /**
+     * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+     */
+    public au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder getSraCardMessageOrBuilder() {
+      return sraCardMessage_;
+    }
+
     private void initFields() {
       type_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM;
       joinRoomMessage_ = au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance();
       gameStartedMessage_ = au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance();
       sraDeckMessage_ = au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance();
+      sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -4558,6 +5099,12 @@ public final class Proto {
           return false;
         }
       }
+      if (hasSraCardMessage()) {
+        if (!getSraCardMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -4576,6 +5123,9 @@ public final class Proto {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeMessage(4, sraDeckMessage_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, sraCardMessage_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -4601,6 +5151,10 @@ public final class Proto {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, sraDeckMessage_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, sraCardMessage_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4714,6 +5268,7 @@ public final class Proto {
           getJoinRoomMessageFieldBuilder();
           getGameStartedMessageFieldBuilder();
           getSraDeckMessageFieldBuilder();
+          getSraCardMessageFieldBuilder();
         }
       }
       private static Builder create() {
@@ -4742,6 +5297,12 @@ public final class Proto {
           sraDeckMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
+        if (sraCardMessageBuilder_ == null) {
+          sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
+        } else {
+          sraCardMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -4798,6 +5359,14 @@ public final class Proto {
         } else {
           result.sraDeckMessage_ = sraDeckMessageBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (sraCardMessageBuilder_ == null) {
+          result.sraCardMessage_ = sraCardMessage_;
+        } else {
+          result.sraCardMessage_ = sraCardMessageBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4826,6 +5395,9 @@ public final class Proto {
         if (other.hasSraDeckMessage()) {
           mergeSraDeckMessage(other.getSraDeckMessage());
         }
+        if (other.hasSraCardMessage()) {
+          mergeSraCardMessage(other.getSraCardMessage());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -4843,6 +5415,12 @@ public final class Proto {
         }
         if (hasGameStartedMessage()) {
           if (!getGameStartedMessage().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasSraCardMessage()) {
+          if (!getSraCardMessage().isInitialized()) {
             
             return false;
           }
@@ -5252,6 +5830,122 @@ public final class Proto {
         return sraDeckMessageBuilder_;
       }
 
+      private au.edu.unimelb.mentalpoker.Proto.SraCardMessage sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          au.edu.unimelb.mentalpoker.Proto.SraCardMessage, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder> sraCardMessageBuilder_;
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public boolean hasSraCardMessage() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.SraCardMessage getSraCardMessage() {
+        if (sraCardMessageBuilder_ == null) {
+          return sraCardMessage_;
+        } else {
+          return sraCardMessageBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public Builder setSraCardMessage(au.edu.unimelb.mentalpoker.Proto.SraCardMessage value) {
+        if (sraCardMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          sraCardMessage_ = value;
+          onChanged();
+        } else {
+          sraCardMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public Builder setSraCardMessage(
+          au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder builderForValue) {
+        if (sraCardMessageBuilder_ == null) {
+          sraCardMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          sraCardMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public Builder mergeSraCardMessage(au.edu.unimelb.mentalpoker.Proto.SraCardMessage value) {
+        if (sraCardMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              sraCardMessage_ != au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance()) {
+            sraCardMessage_ =
+              au.edu.unimelb.mentalpoker.Proto.SraCardMessage.newBuilder(sraCardMessage_).mergeFrom(value).buildPartial();
+          } else {
+            sraCardMessage_ = value;
+          }
+          onChanged();
+        } else {
+          sraCardMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public Builder clearSraCardMessage() {
+        if (sraCardMessageBuilder_ == null) {
+          sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
+          onChanged();
+        } else {
+          sraCardMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder getSraCardMessageBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getSraCardMessageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      public au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder getSraCardMessageOrBuilder() {
+        if (sraCardMessageBuilder_ != null) {
+          return sraCardMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return sraCardMessage_;
+        }
+      }
+      /**
+       * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          au.edu.unimelb.mentalpoker.Proto.SraCardMessage, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder> 
+          getSraCardMessageFieldBuilder() {
+        if (sraCardMessageBuilder_ == null) {
+          sraCardMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              au.edu.unimelb.mentalpoker.Proto.SraCardMessage, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder>(
+                  getSraCardMessage(),
+                  getParentForChildren(),
+                  isClean());
+          sraCardMessage_ = null;
+        }
+        return sraCardMessageBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:mentalpoker.NetworkMessage)
     }
 
@@ -5299,6 +5993,11 @@ public final class Proto {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_mentalpoker_SraDeckMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_mentalpoker_SraCardMessage_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_mentalpoker_SraCardMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_NetworkMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -5324,16 +6023,18 @@ public final class Proto {
       "ader\030\001 \002(\0132!.mentalpoker.NetworkMessageH",
       "eader\0223\n\016networkMessage\030\002 \001(\0132\033.mentalpo" +
       "ker.NetworkMessage\"\036\n\016SraDeckMessage\022\014\n\004" +
-      "card\030\001 \003(\t\"\312\002\n\016NetworkMessage\022.\n\004type\030\001 " +
-      "\002(\0162 .mentalpoker.NetworkMessage.Type\0225\n" +
-      "\017joinRoomMessage\030\002 \001(\0132\034.mentalpoker.Joi" +
-      "nRoomMessage\022;\n\022gameStartedMessage\030\003 \001(\013" +
-      "2\037.mentalpoker.GameStartedMessage\0223\n\016sra" +
-      "DeckMessage\030\004 \001(\0132\033.mentalpoker.SraDeckM" +
-      "essage\"_\n\004Type\022\r\n\tJOIN_ROOM\020\000\022\020\n\014PLAYER_" +
-      "READY\020\001\022\020\n\014GAME_STARTED\020\002\022\010\n\004SYNC\020\003\022\014\n\010S",
-      "YNC_ACK\020\004\022\014\n\010SRA_DECK\020\005B#\n\032au.edu.unimel" +
-      "b.mentalpokerB\005Proto"
+      "card\030\001 \003(\t\"\036\n\016SraCardMessage\022\014\n\004card\030\001 \002" +
+      "(\t\"\215\003\n\016NetworkMessage\022.\n\004type\030\001 \002(\0162 .me" +
+      "ntalpoker.NetworkMessage.Type\0225\n\017joinRoo" +
+      "mMessage\030\002 \001(\0132\034.mentalpoker.JoinRoomMes" +
+      "sage\022;\n\022gameStartedMessage\030\003 \001(\0132\037.menta" +
+      "lpoker.GameStartedMessage\0223\n\016sraDeckMess" +
+      "age\030\004 \001(\0132\033.mentalpoker.SraDeckMessage\0223" +
+      "\n\016sraCardMessage\030\005 \001(\0132\033.mentalpoker.Sra",
+      "CardMessage\"m\n\004Type\022\r\n\tJOIN_ROOM\020\000\022\020\n\014PL" +
+      "AYER_READY\020\001\022\020\n\014GAME_STARTED\020\002\022\010\n\004SYNC\020\003" +
+      "\022\014\n\010SYNC_ACK\020\004\022\014\n\010SRA_DECK\020\005\022\014\n\010SRA_CARD" +
+      "\020\006B#\n\032au.edu.unimelb.mentalpokerB\005Proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5389,12 +6090,18 @@ public final class Proto {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mentalpoker_SraDeckMessage_descriptor,
         new java.lang.String[] { "Card", });
-    internal_static_mentalpoker_NetworkMessage_descriptor =
+    internal_static_mentalpoker_SraCardMessage_descriptor =
       getDescriptor().getMessageTypes().get(7);
+    internal_static_mentalpoker_SraCardMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_mentalpoker_SraCardMessage_descriptor,
+        new java.lang.String[] { "Card", });
+    internal_static_mentalpoker_NetworkMessage_descriptor =
+      getDescriptor().getMessageTypes().get(8);
     internal_static_mentalpoker_NetworkMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_mentalpoker_NetworkMessage_descriptor,
-        new java.lang.String[] { "Type", "JoinRoomMessage", "GameStartedMessage", "SraDeckMessage", });
+        new java.lang.String[] { "Type", "JoinRoomMessage", "GameStartedMessage", "SraDeckMessage", "SraCardMessage", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

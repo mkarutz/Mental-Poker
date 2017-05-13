@@ -4,9 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SRAPokerEngine implements MentalPokerEngine {
     private final PeerNetwork network;
@@ -14,13 +12,33 @@ public class SRAPokerEngine implements MentalPokerEngine {
     /** The un-shuffled, unencrypted list of cards used for playing the game. */
     private final ImmutableList<Card> cardList = ImmutableList.copyOf(Card.standardDeck());
 
+    private final Map<BigInteger, Card> cardMap = new HashMap<>();
+
     private List<BigInteger> initialDeck;
     private List<BigInteger> deck;
 
     private BigInteger p;
-    private BigInteger k;
-    private BigInteger d;
+    private SraKeyPair keyPair;
     private List<Integer> pi;
+
+    private final List<CardInfo> cardInfoList = new ArrayList<>();
+
+    /** Data structure representing the global view of a card. */
+    private static class CardInfo {
+        public static final int NO_OWNER = -1;
+        public static final int PUBLIC = 0;
+        public static final int BURNT = -2;
+
+        BigInteger value;
+        int ownerId;
+        boolean isOpen;
+
+        public CardInfo(BigInteger value, int ownerId, boolean isOpen) {
+            this.value = value;
+            this.ownerId = ownerId;
+            this.isOpen = isOpen;
+        }
+    }
 
     public SRAPokerEngine(PeerNetwork network) {
         this.network = network;
@@ -28,17 +46,22 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     @Override
     public void init() {
+        // Agree on large prime
         p = BigInteger.valueOf(100012421);
-        k = BigInteger.valueOf(network.getLocalPlayerId());
-        d = k.modInverse(p.subtract(BigInteger.ONE));
+
+        // Generate private key
+        keyPair = SraKeyPair.create(p);
+
+        // Prepare deck
         initializeDeck();
         shuffle();
     }
 
     private void initializeDeck() {
         List<BigInteger> cardRepresentations = new ArrayList<>(cardList.size());
-        for (int i = 0; i < cardList.size(); i++) {
-            cardRepresentations.add(BigInteger.valueOf(i));
+        for (int i = 1; i <= cardList.size(); i++) {
+            cardRepresentations.add(BigInteger.valueOf(i*i));
+            cardMap.put(cardRepresentations.get(i - 1), cardList.get(i - 1));
         }
         initialDeck = ImmutableList.copyOf(cardRepresentations);
     }
@@ -62,6 +85,10 @@ public class SRAPokerEngine implements MentalPokerEngine {
         } else {
             sendDeck(deck, getLocalPlayerId() + 1);
             deck = receiveDeck(getNumPlayers());
+        }
+
+        for (BigInteger card : deck) {
+            cardInfoList.add(new CardInfo(card, CardInfo.NO_OWNER, false /* isOpen */));
         }
     }
 
@@ -97,6 +124,21 @@ public class SRAPokerEngine implements MentalPokerEngine {
         return deckFromMessage(msg.getSraDeckMessage());
     }
 
+    private void sendCard(BigInteger card, int playerId) {
+        Proto.NetworkMessage msg =
+                Proto.NetworkMessage.newBuilder()
+                        .setType(Proto.NetworkMessage.Type.SRA_CARD)
+                        .setSraCardMessage(
+                                Proto.SraCardMessage.newBuilder()
+                                        .setCard(card.toString()))
+                        .build();
+        network.send(playerId, msg);
+    }
+
+    private BigInteger receiveCard(int playerId) {
+        return new BigInteger(network.receive(playerId).getSraCardMessage().getCard());
+    }
+
     private List<BigInteger> deckFromMessage(Proto.SraDeckMessage msg) {
         List<BigInteger> result = new ArrayList<>(msg.getCardCount());
         for (String card : msg.getCardList()) {
@@ -126,7 +168,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         }
 
         for (int i = 0; i < size; i++) {
-            final int j = i + random.nextInt(size);
+            final int j = i + random.nextInt(size - i);
             int temp = result.get(i);
             result.set(i, result.get(j));
             result.set(j, temp);
@@ -136,15 +178,49 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private BigInteger encrypt(BigInteger x) {
-        return x.modPow(k, p);
+        return keyPair.encrypt(x);
     }
 
     private BigInteger decrypt(BigInteger c) {
-        return c.modPow(d, p);
+        return keyPair.decrypt(c);
     }
 
     @Override
     public void draw(int playerId) {
+        int cardId = nextCard();
+
+        BigInteger card;
+        if (getLocalPlayerId() == 1) {
+            card = deck.get(cardId);
+        } else {
+            card = receiveCard(getLocalPlayerId() - 1);
+        }
+
+        if (getLocalPlayerId() != playerId) {
+            card = decrypt(card);
+        }
+
+        if (getLocalPlayerId() == getNumPlayers()) {
+            sendCard(card, playerId);
+        } else {
+            sendCard(card, getLocalPlayerId() + 1);
+        }
+
+        if (getLocalPlayerId() == playerId) {
+            card = receiveCard(getNumPlayers());
+            card = decrypt(card);
+            cardInfoList.get(cardId).value = card;
+        }
+    }
+
+    public int nextCard() {
+        for (int i = 0; i < cardInfoList.size(); i++) {
+            final CardInfo cardInfo = cardInfoList.get(i);
+            if (cardInfo.ownerId == CardInfo.NO_OWNER) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -179,7 +255,15 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     @Override
     public ImmutableList<Card> getLocalPlayerCards() {
-        return null;
+        final List<Card> result = new ArrayList<>();
+
+        for (final CardInfo cardInfo : cardInfoList) {
+            if (cardInfo.ownerId == getLocalPlayerId()) {
+                result.add(cardMap.get(cardInfo.value));
+            }
+        }
+
+        return ImmutableList.copyOf(result);
     }
 
     @Override

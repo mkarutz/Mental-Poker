@@ -61,7 +61,7 @@ public class MentalPoker {
         // Create a new Poker peer client and start game.
 
         PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), remote);
-        PokerGame poker = new PokerGame(network, new DeterministicPokerEngine(network));
+        PokerGame poker = new PokerGame(network, new SRAPokerEngine(network));
         poker.start();
 //        int id = network.getLocalPlayerId();
 //        System.out.println("My id is: " + id);
