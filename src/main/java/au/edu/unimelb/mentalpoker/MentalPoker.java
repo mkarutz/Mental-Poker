@@ -61,16 +61,18 @@ public class MentalPoker {
         // Create a new Poker peer client and start game.
 
         PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), remote);
-        int id = network.getLocalPlayerId();
-        System.out.println("My id is: " + id);
-        if (id != 1) {
-            System.out.println("Waiting for received from: " + (id - 1));
-            Proto.NetworkMessage m = network.receive(id - 1);
-            System.out.println("Received from: " + (id - 1));
-        }
-        if (id < network.numPlayers()) {
-            System.out.println("Sending to: " + (id + 1));
-            network.send(id + 1, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.JOIN_ROOM).build());
-        }
+        PokerGame poker = new PokerGame(network, new DeterministicPokerEngine(network));
+        poker.start();
+//        int id = network.getLocalPlayerId();
+//        System.out.println("My id is: " + id);
+//        if (id != 1) {
+//            System.out.println("Waiting for received from: " + (id - 1));
+//            Proto.NetworkMessage m = network.receive(id - 1);
+//            System.out.println("Received from: " + (id - 1));
+//        }
+//        if (id < network.numPlayers()) {
+//            System.out.println("Sending to: " + (id + 1));
+//            network.send(id + 1, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.JOIN_ROOM).build());
+//        }
     }
 }

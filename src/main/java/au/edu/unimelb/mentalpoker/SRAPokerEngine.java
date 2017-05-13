@@ -1,6 +1,7 @@
 package au.edu.unimelb.mentalpoker;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -69,16 +70,39 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private void broadcastDeck(List<BigInteger> deck) {
-        // TODO
+        Proto.NetworkMessage msg = buildDeckMessage();
+        network.broadcast(msg);
+    }
+
+    private Proto.NetworkMessage buildDeckMessage() {
+        return Proto.NetworkMessage.newBuilder()
+                .setType(Proto.NetworkMessage.Type.SRA_DECK)
+                .setSraDeckMessage(
+                        Proto.SraDeckMessage.newBuilder()
+                                .addAllCard(buildDeck()))
+                .build();
+    }
+
+    private Iterable<String> buildDeck() {
+        return Iterables.transform(deck, BigInteger::toString);
     }
 
     private void sendDeck(List<BigInteger> deck, int playerId) {
-        // TODO
+        Proto.NetworkMessage msg = buildDeckMessage();
+        network.send(playerId, msg);
     }
 
     private List<BigInteger> receiveDeck(int playerId) {
-        // TODO
-        return null;
+        Proto.NetworkMessage msg = network.receive(playerId);
+        return deckFromMessage(msg.getSraDeckMessage());
+    }
+
+    private List<BigInteger> deckFromMessage(Proto.SraDeckMessage msg) {
+        List<BigInteger> result = new ArrayList<>(msg.getCardCount());
+        for (String card : msg.getCardList()) {
+            result.add(new BigInteger(card));
+        }
+        return result;
     }
 
     private List<BigInteger> encryptPermutation(List<BigInteger> deck) {

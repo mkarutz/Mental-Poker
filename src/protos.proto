@@ -34,6 +34,10 @@ message NetworkPacket {
     optional NetworkMessage networkMessage = 2;
 }
 
+message SraDeckMessage {
+    repeated string card = 1;
+}
+
 message NetworkMessage {
     enum Type {
         JOIN_ROOM = 0;
@@ -41,10 +45,12 @@ message NetworkMessage {
         GAME_STARTED = 2;
         SYNC = 3;
         SYNC_ACK = 4;
+        SRA_DECK = 5;
     };
 
     required Type type = 1;
 
     optional JoinRoomMessage joinRoomMessage = 2;
     optional GameStartedMessage gameStartedMessage = 3;
+    optional SraDeckMessage sraDeckMessage = 4;
 }
