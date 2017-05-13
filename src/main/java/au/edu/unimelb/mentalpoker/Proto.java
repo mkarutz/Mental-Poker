@@ -6,7 +6,13 @@ package au.edu.unimelb.mentalpoker;
 public final class Proto {
   private Proto() {}
   public static void registerAllExtensions(
+      com.google.protobuf.ExtensionRegistryLite registry) {
+  }
+
+  public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+        (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface PeerAddressOrBuilder extends
       // @@protoc_insertion_point(interface_extends:mentalpoker.PeerAddress)
@@ -38,37 +44,29 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.PeerAddress}
    */
-  public static final class PeerAddress extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class PeerAddress extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.PeerAddress)
       PeerAddressOrBuilder {
     // Use PeerAddress.newBuilder() to construct.
-    private PeerAddress(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private PeerAddress(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private PeerAddress(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PeerAddress defaultInstance;
-    public static PeerAddress getDefaultInstance() {
-      return defaultInstance;
+    private PeerAddress() {
+      hostname_ = "";
+      port_ = 0;
     }
 
-    public PeerAddress getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private PeerAddress(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -104,7 +102,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -115,31 +113,16 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_PeerAddress_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_PeerAddress_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.PeerAddress.class, au.edu.unimelb.mentalpoker.Proto.PeerAddress.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<PeerAddress> PARSER =
-        new com.google.protobuf.AbstractParser<PeerAddress>() {
-      public PeerAddress parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PeerAddress(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PeerAddress> getParserForType() {
-      return PARSER;
-    }
-
     private int bitField0_;
     public static final int HOSTNAME_FIELD_NUMBER = 1;
-    private java.lang.Object hostname_;
+    private volatile java.lang.Object hostname_;
     /**
      * <code>optional string hostname = 1;</code>
      */
@@ -195,10 +178,6 @@ public final class Proto {
       return port_;
     }
 
-    private void initFields() {
-      hostname_ = "";
-      port_ = 0;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -211,40 +190,76 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getHostnameBytes());
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, hostname_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, port_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getHostnameBytes());
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, hostname_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, port_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.PeerAddress)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.PeerAddress other = (au.edu.unimelb.mentalpoker.Proto.PeerAddress) obj;
+
+      boolean result = true;
+      result = result && (hasHostname() == other.hasHostname());
+      if (hasHostname()) {
+        result = result && getHostname()
+            .equals(other.getHostname());
+      }
+      result = result && (hasPort() == other.hasPort());
+      if (hasPort()) {
+        result = result && (getPort()
+            == other.getPort());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasHostname()) {
+        hash = (37 * hash) + HOSTNAME_FIELD_NUMBER;
+        hash = (53 * hash) + getHostname().hashCode();
+      }
+      if (hasPort()) {
+        hash = (37 * hash) + PORT_FIELD_NUMBER;
+        hash = (53 * hash) + getPort();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseFrom(
@@ -270,46 +285,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.PeerAddress parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.PeerAddress prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.PeerAddress prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -317,7 +343,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.PeerAddress}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.PeerAddress)
         au.edu.unimelb.mentalpoker.Proto.PeerAddressOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -325,7 +351,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_PeerAddress_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_PeerAddress_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -338,18 +364,15 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         hostname_ = "";
@@ -357,10 +380,6 @@ public final class Proto {
         port_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -397,6 +416,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.PeerAddress) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.PeerAddress)other);
@@ -416,7 +461,8 @@ public final class Proto {
         if (other.hasPort()) {
           setPort(other.getPort());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
@@ -433,7 +479,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.PeerAddress) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -550,16 +596,53 @@ public final class Proto {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.PeerAddress)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.PeerAddress)
+    private static final au.edu.unimelb.mentalpoker.Proto.PeerAddress DEFAULT_INSTANCE;
     static {
-      defaultInstance = new PeerAddress(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.PeerAddress();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.PeerAddress)
+    public static au.edu.unimelb.mentalpoker.Proto.PeerAddress getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<PeerAddress>
+        PARSER = new com.google.protobuf.AbstractParser<PeerAddress>() {
+      public PeerAddress parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new PeerAddress(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<PeerAddress> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PeerAddress> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.PeerAddress getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface GameStartedMessageOrBuilder extends
@@ -602,37 +685,29 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.GameStartedMessage}
    */
-  public static final class GameStartedMessage extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class GameStartedMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.GameStartedMessage)
       GameStartedMessageOrBuilder {
     // Use GameStartedMessage.newBuilder() to construct.
-    private GameStartedMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private GameStartedMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private GameStartedMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final GameStartedMessage defaultInstance;
-    public static GameStartedMessage getDefaultInstance() {
-      return defaultInstance;
+    private GameStartedMessage() {
+      playerId_ = 0;
+      players_ = java.util.Collections.emptyList();
     }
 
-    public GameStartedMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private GameStartedMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -661,7 +736,8 @@ public final class Proto {
                 players_ = new java.util.ArrayList<au.edu.unimelb.mentalpoker.Proto.Player>();
                 mutable_bitField0_ |= 0x00000002;
               }
-              players_.add(input.readMessage(au.edu.unimelb.mentalpoker.Proto.Player.PARSER, extensionRegistry));
+              players_.add(
+                  input.readMessage(au.edu.unimelb.mentalpoker.Proto.Player.PARSER, extensionRegistry));
               break;
             }
           }
@@ -670,7 +746,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           players_ = java.util.Collections.unmodifiableList(players_);
@@ -684,26 +760,11 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_GameStartedMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_GameStartedMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.class, au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<GameStartedMessage> PARSER =
-        new com.google.protobuf.AbstractParser<GameStartedMessage>() {
-      public GameStartedMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GameStartedMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<GameStartedMessage> getParserForType() {
-      return PARSER;
     }
 
     private int bitField0_;
@@ -757,10 +818,6 @@ public final class Proto {
       return players_.get(index);
     }
 
-    private void initFields() {
-      playerId_ = 0;
-      players_ = java.util.Collections.emptyList();
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -783,19 +840,17 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, playerId_);
       }
       for (int i = 0; i < players_.size(); i++) {
         output.writeMessage(2, players_.get(i));
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -807,16 +862,52 @@ public final class Proto {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, players_.get(i));
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.GameStartedMessage)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.GameStartedMessage other = (au.edu.unimelb.mentalpoker.Proto.GameStartedMessage) obj;
+
+      boolean result = true;
+      result = result && (hasPlayerId() == other.hasPlayerId());
+      if (hasPlayerId()) {
+        result = result && (getPlayerId()
+            == other.getPlayerId());
+      }
+      result = result && getPlayersList()
+          .equals(other.getPlayersList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasPlayerId()) {
+        hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
+        hash = (53 * hash) + getPlayerId();
+      }
+      if (getPlayersCount() > 0) {
+        hash = (37 * hash) + PLAYERS_FIELD_NUMBER;
+        hash = (53 * hash) + getPlayersList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseFrom(
@@ -842,46 +933,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.GameStartedMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.GameStartedMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -889,7 +991,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.GameStartedMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.GameStartedMessage)
         au.edu.unimelb.mentalpoker.Proto.GameStartedMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -897,7 +999,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_GameStartedMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_GameStartedMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -910,19 +1012,16 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getPlayersFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         playerId_ = 0;
@@ -934,10 +1033,6 @@ public final class Proto {
           playersBuilder_.clear();
         }
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -979,6 +1074,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.GameStartedMessage) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.GameStartedMessage)other);
@@ -1012,25 +1133,24 @@ public final class Proto {
               players_ = other.players_;
               bitField0_ = (bitField0_ & ~0x00000002);
               playersBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getPlayersFieldBuilder() : null;
             } else {
               playersBuilder_.addAllMessages(other.players_);
             }
           }
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasPlayerId()) {
-          
           return false;
         }
         for (int i = 0; i < getPlayersCount(); i++) {
           if (!getPlayers(i).isInitialized()) {
-            
             return false;
           }
         }
@@ -1046,7 +1166,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.GameStartedMessage) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -1097,7 +1217,7 @@ public final class Proto {
          }
       }
 
-      private com.google.protobuf.RepeatedFieldBuilder<
+      private com.google.protobuf.RepeatedFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.Player, au.edu.unimelb.mentalpoker.Proto.Player.Builder, au.edu.unimelb.mentalpoker.Proto.PlayerOrBuilder> playersBuilder_;
 
       /**
@@ -1313,11 +1433,11 @@ public final class Proto {
            getPlayersBuilderList() {
         return getPlayersFieldBuilder().getBuilderList();
       }
-      private com.google.protobuf.RepeatedFieldBuilder<
+      private com.google.protobuf.RepeatedFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.Player, au.edu.unimelb.mentalpoker.Proto.Player.Builder, au.edu.unimelb.mentalpoker.Proto.PlayerOrBuilder> 
           getPlayersFieldBuilder() {
         if (playersBuilder_ == null) {
-          playersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+          playersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.Player, au.edu.unimelb.mentalpoker.Proto.Player.Builder, au.edu.unimelb.mentalpoker.Proto.PlayerOrBuilder>(
                   players_,
                   ((bitField0_ & 0x00000002) == 0x00000002),
@@ -1327,16 +1447,53 @@ public final class Proto {
         }
         return playersBuilder_;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.GameStartedMessage)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.GameStartedMessage)
+    private static final au.edu.unimelb.mentalpoker.Proto.GameStartedMessage DEFAULT_INSTANCE;
     static {
-      defaultInstance = new GameStartedMessage(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.GameStartedMessage();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.GameStartedMessage)
+    public static au.edu.unimelb.mentalpoker.Proto.GameStartedMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<GameStartedMessage>
+        PARSER = new com.google.protobuf.AbstractParser<GameStartedMessage>() {
+      public GameStartedMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new GameStartedMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GameStartedMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GameStartedMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.GameStartedMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface PlayerOrBuilder extends
@@ -1368,37 +1525,28 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.Player}
    */
-  public static final class Player extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class Player extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.Player)
       PlayerOrBuilder {
     // Use Player.newBuilder() to construct.
-    private Player(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private Player(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private Player(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final Player defaultInstance;
-    public static Player getDefaultInstance() {
-      return defaultInstance;
+    private Player() {
+      playerId_ = 0;
     }
 
-    public Player getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private Player(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -1441,7 +1589,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1452,26 +1600,11 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_Player_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_Player_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.Player.class, au.edu.unimelb.mentalpoker.Proto.Player.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<Player> PARSER =
-        new com.google.protobuf.AbstractParser<Player>() {
-      public Player parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Player(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Player> getParserForType() {
-      return PARSER;
     }
 
     private int bitField0_;
@@ -1502,19 +1635,15 @@ public final class Proto {
      * <code>required .mentalpoker.PeerAddress address = 2;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.PeerAddress getAddress() {
-      return address_;
+      return address_ == null ? au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance() : address_;
     }
     /**
      * <code>required .mentalpoker.PeerAddress address = 2;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.PeerAddressOrBuilder getAddressOrBuilder() {
-      return address_;
+      return address_ == null ? au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance() : address_;
     }
 
-    private void initFields() {
-      playerId_ = 0;
-      address_ = au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance();
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1535,19 +1664,17 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, playerId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, address_);
+        output.writeMessage(2, getAddress());
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -1557,18 +1684,57 @@ public final class Proto {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, address_);
+          .computeMessageSize(2, getAddress());
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.Player)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.Player other = (au.edu.unimelb.mentalpoker.Proto.Player) obj;
+
+      boolean result = true;
+      result = result && (hasPlayerId() == other.hasPlayerId());
+      if (hasPlayerId()) {
+        result = result && (getPlayerId()
+            == other.getPlayerId());
+      }
+      result = result && (hasAddress() == other.hasAddress());
+      if (hasAddress()) {
+        result = result && getAddress()
+            .equals(other.getAddress());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasPlayerId()) {
+        hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
+        hash = (53 * hash) + getPlayerId();
+      }
+      if (hasAddress()) {
+        hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
+        hash = (53 * hash) + getAddress().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.Player parseFrom(
@@ -1594,46 +1760,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.Player parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.Player parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.Player parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.Player parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.Player parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.Player parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.Player prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.Player prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1641,7 +1818,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.Player}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.Player)
         au.edu.unimelb.mentalpoker.Proto.PlayerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -1649,7 +1826,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_Player_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_Player_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -1662,34 +1839,27 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getAddressFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         playerId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
         if (addressBuilder_ == null) {
-          address_ = au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance();
+          address_ = null;
         } else {
           addressBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -1730,6 +1900,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.Player) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.Player)other);
@@ -1747,17 +1943,16 @@ public final class Proto {
         if (other.hasAddress()) {
           mergeAddress(other.getAddress());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasPlayerId()) {
-          
           return false;
         }
         if (!hasAddress()) {
-          
           return false;
         }
         return true;
@@ -1772,7 +1967,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.Player) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -1814,8 +2009,8 @@ public final class Proto {
         return this;
       }
 
-      private au.edu.unimelb.mentalpoker.Proto.PeerAddress address_ = au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.PeerAddress address_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.PeerAddress, au.edu.unimelb.mentalpoker.Proto.PeerAddress.Builder, au.edu.unimelb.mentalpoker.Proto.PeerAddressOrBuilder> addressBuilder_;
       /**
        * <code>required .mentalpoker.PeerAddress address = 2;</code>
@@ -1828,7 +2023,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.PeerAddress getAddress() {
         if (addressBuilder_ == null) {
-          return address_;
+          return address_ == null ? au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance() : address_;
         } else {
           return addressBuilder_.getMessage();
         }
@@ -1869,6 +2064,7 @@ public final class Proto {
       public Builder mergeAddress(au.edu.unimelb.mentalpoker.Proto.PeerAddress value) {
         if (addressBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              address_ != null &&
               address_ != au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance()) {
             address_ =
               au.edu.unimelb.mentalpoker.Proto.PeerAddress.newBuilder(address_).mergeFrom(value).buildPartial();
@@ -1887,7 +2083,7 @@ public final class Proto {
        */
       public Builder clearAddress() {
         if (addressBuilder_ == null) {
-          address_ = au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance();
+          address_ = null;
           onChanged();
         } else {
           addressBuilder_.clear();
@@ -1910,17 +2106,18 @@ public final class Proto {
         if (addressBuilder_ != null) {
           return addressBuilder_.getMessageOrBuilder();
         } else {
-          return address_;
+          return address_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.PeerAddress.getDefaultInstance() : address_;
         }
       }
       /**
        * <code>required .mentalpoker.PeerAddress address = 2;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.PeerAddress, au.edu.unimelb.mentalpoker.Proto.PeerAddress.Builder, au.edu.unimelb.mentalpoker.Proto.PeerAddressOrBuilder> 
           getAddressFieldBuilder() {
         if (addressBuilder_ == null) {
-          addressBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          addressBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.PeerAddress, au.edu.unimelb.mentalpoker.Proto.PeerAddress.Builder, au.edu.unimelb.mentalpoker.Proto.PeerAddressOrBuilder>(
                   getAddress(),
                   getParentForChildren(),
@@ -1929,16 +2126,53 @@ public final class Proto {
         }
         return addressBuilder_;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.Player)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.Player)
+    private static final au.edu.unimelb.mentalpoker.Proto.Player DEFAULT_INSTANCE;
     static {
-      defaultInstance = new Player(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.Player();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.Player)
+    public static au.edu.unimelb.mentalpoker.Proto.Player getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<Player>
+        PARSER = new com.google.protobuf.AbstractParser<Player>() {
+      public Player parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Player(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Player> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Player> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.Player getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface JoinRoomMessageOrBuilder extends
@@ -1962,37 +2196,28 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.JoinRoomMessage}
    */
-  public static final class JoinRoomMessage extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class JoinRoomMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.JoinRoomMessage)
       JoinRoomMessageOrBuilder {
     // Use JoinRoomMessage.newBuilder() to construct.
-    private JoinRoomMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private JoinRoomMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private JoinRoomMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final JoinRoomMessage defaultInstance;
-    public static JoinRoomMessage getDefaultInstance() {
-      return defaultInstance;
+    private JoinRoomMessage() {
+      playerName_ = "";
     }
 
-    public JoinRoomMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private JoinRoomMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -2023,7 +2248,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -2034,31 +2259,16 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_JoinRoomMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_JoinRoomMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.class, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<JoinRoomMessage> PARSER =
-        new com.google.protobuf.AbstractParser<JoinRoomMessage>() {
-      public JoinRoomMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new JoinRoomMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<JoinRoomMessage> getParserForType() {
-      return PARSER;
-    }
-
     private int bitField0_;
     public static final int PLAYERNAME_FIELD_NUMBER = 1;
-    private java.lang.Object playerName_;
+    private volatile java.lang.Object playerName_;
     /**
      * <code>required string playerName = 1;</code>
      */
@@ -2099,9 +2309,6 @@ public final class Proto {
       }
     }
 
-    private void initFields() {
-      playerName_ = "";
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2118,33 +2325,60 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getPlayerNameBytes());
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, playerName_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getPlayerNameBytes());
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, playerName_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage other = (au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage) obj;
+
+      boolean result = true;
+      result = result && (hasPlayerName() == other.hasPlayerName());
+      if (hasPlayerName()) {
+        result = result && getPlayerName()
+            .equals(other.getPlayerName());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasPlayerName()) {
+        hash = (37 * hash) + PLAYERNAME_FIELD_NUMBER;
+        hash = (53 * hash) + getPlayerName().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseFrom(
@@ -2170,46 +2404,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2217,7 +2462,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.JoinRoomMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.JoinRoomMessage)
         au.edu.unimelb.mentalpoker.Proto.JoinRoomMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -2225,7 +2470,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_JoinRoomMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_JoinRoomMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -2238,27 +2483,20 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         playerName_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -2291,6 +2529,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage)other);
@@ -2307,13 +2571,13 @@ public final class Proto {
           playerName_ = other.playerName_;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasPlayerName()) {
-          
           return false;
         }
         return true;
@@ -2328,7 +2592,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -2413,16 +2677,53 @@ public final class Proto {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.JoinRoomMessage)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.JoinRoomMessage)
+    private static final au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage DEFAULT_INSTANCE;
     static {
-      defaultInstance = new JoinRoomMessage(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.JoinRoomMessage)
+    public static au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<JoinRoomMessage>
+        PARSER = new com.google.protobuf.AbstractParser<JoinRoomMessage>() {
+      public JoinRoomMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new JoinRoomMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<JoinRoomMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<JoinRoomMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface NetworkMessageHeaderOrBuilder extends
@@ -2450,37 +2751,29 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.NetworkMessageHeader}
    */
-  public static final class NetworkMessageHeader extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class NetworkMessageHeader extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.NetworkMessageHeader)
       NetworkMessageHeaderOrBuilder {
     // Use NetworkMessageHeader.newBuilder() to construct.
-    private NetworkMessageHeader(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private NetworkMessageHeader(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private NetworkMessageHeader(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final NetworkMessageHeader defaultInstance;
-    public static NetworkMessageHeader getDefaultInstance() {
-      return defaultInstance;
+    private NetworkMessageHeader() {
+      messageId_ = 0;
+      ack_ = false;
     }
 
-    public NetworkMessageHeader getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private NetworkMessageHeader(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -2515,7 +2808,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -2526,26 +2819,11 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.class, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<NetworkMessageHeader> PARSER =
-        new com.google.protobuf.AbstractParser<NetworkMessageHeader>() {
-      public NetworkMessageHeader parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkMessageHeader(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkMessageHeader> getParserForType() {
-      return PARSER;
     }
 
     private int bitField0_;
@@ -2579,10 +2857,6 @@ public final class Proto {
       return ack_;
     }
 
-    private void initFields() {
-      messageId_ = 0;
-      ack_ = false;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2603,19 +2877,17 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, messageId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBool(2, ack_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
@@ -2627,16 +2899,56 @@ public final class Proto {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(2, ack_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader other = (au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader) obj;
+
+      boolean result = true;
+      result = result && (hasMessageId() == other.hasMessageId());
+      if (hasMessageId()) {
+        result = result && (getMessageId()
+            == other.getMessageId());
+      }
+      result = result && (hasAck() == other.hasAck());
+      if (hasAck()) {
+        result = result && (getAck()
+            == other.getAck());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasMessageId()) {
+        hash = (37 * hash) + MESSAGEID_FIELD_NUMBER;
+        hash = (53 * hash) + getMessageId();
+      }
+      if (hasAck()) {
+        hash = (37 * hash) + ACK_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+            getAck());
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
@@ -2662,46 +2974,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2709,7 +3032,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.NetworkMessageHeader}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.NetworkMessageHeader)
         au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -2717,7 +3040,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -2730,18 +3053,15 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         messageId_ = 0;
@@ -2749,10 +3069,6 @@ public final class Proto {
         ack_ = false;
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -2789,6 +3105,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader)other);
@@ -2806,17 +3148,16 @@ public final class Proto {
         if (other.hasAck()) {
           setAck(other.getAck());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasMessageId()) {
-          
           return false;
         }
         if (!hasAck()) {
-          
           return false;
         }
         return true;
@@ -2831,7 +3172,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -2904,16 +3245,53 @@ public final class Proto {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.NetworkMessageHeader)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkMessageHeader)
+    private static final au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader DEFAULT_INSTANCE;
     static {
-      defaultInstance = new NetworkMessageHeader(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkMessageHeader)
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<NetworkMessageHeader>
+        PARSER = new com.google.protobuf.AbstractParser<NetworkMessageHeader>() {
+      public NetworkMessageHeader parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new NetworkMessageHeader(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<NetworkMessageHeader> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkMessageHeader> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface NetworkPacketOrBuilder extends
@@ -2949,37 +3327,27 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.NetworkPacket}
    */
-  public static final class NetworkPacket extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class NetworkPacket extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.NetworkPacket)
       NetworkPacketOrBuilder {
     // Use NetworkPacket.newBuilder() to construct.
-    private NetworkPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private NetworkPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private NetworkPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final NetworkPacket defaultInstance;
-    public static NetworkPacket getDefaultInstance() {
-      return defaultInstance;
+    private NetworkPacket() {
     }
 
-    public NetworkPacket getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private NetworkPacket(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -3030,7 +3398,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3041,26 +3409,11 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.NetworkPacket.class, au.edu.unimelb.mentalpoker.Proto.NetworkPacket.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<NetworkPacket> PARSER =
-        new com.google.protobuf.AbstractParser<NetworkPacket>() {
-      public NetworkPacket parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkPacket(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkPacket> getParserForType() {
-      return PARSER;
     }
 
     private int bitField0_;
@@ -3076,13 +3429,13 @@ public final class Proto {
      * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getNetworkMessageHeader() {
-      return networkMessageHeader_;
+      return networkMessageHeader_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
     }
     /**
      * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder getNetworkMessageHeaderOrBuilder() {
-      return networkMessageHeader_;
+      return networkMessageHeader_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
     }
 
     public static final int NETWORKMESSAGE_FIELD_NUMBER = 2;
@@ -3097,19 +3450,15 @@ public final class Proto {
      * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.NetworkMessage getNetworkMessage() {
-      return networkMessage_;
+      return networkMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
     }
     /**
      * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder getNetworkMessageOrBuilder() {
-      return networkMessage_;
+      return networkMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
     }
 
-    private void initFields() {
-      networkMessageHeader_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance();
-      networkMessage_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance();
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3136,40 +3485,77 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, networkMessageHeader_);
+        output.writeMessage(1, getNetworkMessageHeader());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, networkMessage_);
+        output.writeMessage(2, getNetworkMessage());
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, networkMessageHeader_);
+          .computeMessageSize(1, getNetworkMessageHeader());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, networkMessage_);
+          .computeMessageSize(2, getNetworkMessage());
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.NetworkPacket)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.NetworkPacket other = (au.edu.unimelb.mentalpoker.Proto.NetworkPacket) obj;
+
+      boolean result = true;
+      result = result && (hasNetworkMessageHeader() == other.hasNetworkMessageHeader());
+      if (hasNetworkMessageHeader()) {
+        result = result && getNetworkMessageHeader()
+            .equals(other.getNetworkMessageHeader());
+      }
+      result = result && (hasNetworkMessage() == other.hasNetworkMessage());
+      if (hasNetworkMessage()) {
+        result = result && getNetworkMessage()
+            .equals(other.getNetworkMessage());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasNetworkMessageHeader()) {
+        hash = (37 * hash) + NETWORKMESSAGEHEADER_FIELD_NUMBER;
+        hash = (53 * hash) + getNetworkMessageHeader().hashCode();
+      }
+      if (hasNetworkMessage()) {
+        hash = (37 * hash) + NETWORKMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getNetworkMessage().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
@@ -3195,46 +3581,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkPacket prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkPacket prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3242,7 +3639,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.NetworkPacket}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.NetworkPacket)
         au.edu.unimelb.mentalpoker.Proto.NetworkPacketOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -3250,7 +3647,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkPacket_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -3263,39 +3660,32 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getNetworkMessageHeaderFieldBuilder();
           getNetworkMessageFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         if (networkMessageHeaderBuilder_ == null) {
-          networkMessageHeader_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance();
+          networkMessageHeader_ = null;
         } else {
           networkMessageHeaderBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         if (networkMessageBuilder_ == null) {
-          networkMessage_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance();
+          networkMessage_ = null;
         } else {
           networkMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -3340,6 +3730,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.NetworkPacket) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.NetworkPacket)other);
@@ -3357,22 +3773,20 @@ public final class Proto {
         if (other.hasNetworkMessage()) {
           mergeNetworkMessage(other.getNetworkMessage());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasNetworkMessageHeader()) {
-          
           return false;
         }
         if (!getNetworkMessageHeader().isInitialized()) {
-          
           return false;
         }
         if (hasNetworkMessage()) {
           if (!getNetworkMessage().isInitialized()) {
-            
             return false;
           }
         }
@@ -3388,7 +3802,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.NetworkPacket) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -3398,8 +3812,8 @@ public final class Proto {
       }
       private int bitField0_;
 
-      private au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader networkMessageHeader_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader networkMessageHeader_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder> networkMessageHeaderBuilder_;
       /**
        * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
@@ -3412,7 +3826,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader getNetworkMessageHeader() {
         if (networkMessageHeaderBuilder_ == null) {
-          return networkMessageHeader_;
+          return networkMessageHeader_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
         } else {
           return networkMessageHeaderBuilder_.getMessage();
         }
@@ -3453,6 +3867,7 @@ public final class Proto {
       public Builder mergeNetworkMessageHeader(au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader value) {
         if (networkMessageHeaderBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              networkMessageHeader_ != null &&
               networkMessageHeader_ != au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance()) {
             networkMessageHeader_ =
               au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.newBuilder(networkMessageHeader_).mergeFrom(value).buildPartial();
@@ -3471,7 +3886,7 @@ public final class Proto {
        */
       public Builder clearNetworkMessageHeader() {
         if (networkMessageHeaderBuilder_ == null) {
-          networkMessageHeader_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance();
+          networkMessageHeader_ = null;
           onChanged();
         } else {
           networkMessageHeaderBuilder_.clear();
@@ -3494,17 +3909,18 @@ public final class Proto {
         if (networkMessageHeaderBuilder_ != null) {
           return networkMessageHeaderBuilder_.getMessageOrBuilder();
         } else {
-          return networkMessageHeader_;
+          return networkMessageHeader_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.getDefaultInstance() : networkMessageHeader_;
         }
       }
       /**
        * <code>required .mentalpoker.NetworkMessageHeader networkMessageHeader = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder> 
           getNetworkMessageHeaderFieldBuilder() {
         if (networkMessageHeaderBuilder_ == null) {
-          networkMessageHeaderBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          networkMessageHeaderBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeader.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageHeaderOrBuilder>(
                   getNetworkMessageHeader(),
                   getParentForChildren(),
@@ -3514,8 +3930,8 @@ public final class Proto {
         return networkMessageHeaderBuilder_;
       }
 
-      private au.edu.unimelb.mentalpoker.Proto.NetworkMessage networkMessage_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.NetworkMessage networkMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.NetworkMessage, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder> networkMessageBuilder_;
       /**
        * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
@@ -3528,7 +3944,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.NetworkMessage getNetworkMessage() {
         if (networkMessageBuilder_ == null) {
-          return networkMessage_;
+          return networkMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
         } else {
           return networkMessageBuilder_.getMessage();
         }
@@ -3569,6 +3985,7 @@ public final class Proto {
       public Builder mergeNetworkMessage(au.edu.unimelb.mentalpoker.Proto.NetworkMessage value) {
         if (networkMessageBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              networkMessage_ != null &&
               networkMessage_ != au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance()) {
             networkMessage_ =
               au.edu.unimelb.mentalpoker.Proto.NetworkMessage.newBuilder(networkMessage_).mergeFrom(value).buildPartial();
@@ -3587,7 +4004,7 @@ public final class Proto {
        */
       public Builder clearNetworkMessage() {
         if (networkMessageBuilder_ == null) {
-          networkMessage_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance();
+          networkMessage_ = null;
           onChanged();
         } else {
           networkMessageBuilder_.clear();
@@ -3610,17 +4027,18 @@ public final class Proto {
         if (networkMessageBuilder_ != null) {
           return networkMessageBuilder_.getMessageOrBuilder();
         } else {
-          return networkMessage_;
+          return networkMessage_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.NetworkMessage.getDefaultInstance() : networkMessage_;
         }
       }
       /**
        * <code>optional .mentalpoker.NetworkMessage networkMessage = 2;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.NetworkMessage, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder> 
           getNetworkMessageFieldBuilder() {
         if (networkMessageBuilder_ == null) {
-          networkMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          networkMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.NetworkMessage, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder, au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder>(
                   getNetworkMessage(),
                   getParentForChildren(),
@@ -3629,16 +4047,53 @@ public final class Proto {
         }
         return networkMessageBuilder_;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.NetworkPacket)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkPacket)
+    private static final au.edu.unimelb.mentalpoker.Proto.NetworkPacket DEFAULT_INSTANCE;
     static {
-      defaultInstance = new NetworkPacket(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.NetworkPacket();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkPacket)
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkPacket getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<NetworkPacket>
+        PARSER = new com.google.protobuf.AbstractParser<NetworkPacket>() {
+      public NetworkPacket parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new NetworkPacket(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<NetworkPacket> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkPacket> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.NetworkPacket getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface SraDeckMessageOrBuilder extends
@@ -3648,7 +4103,7 @@ public final class Proto {
     /**
      * <code>repeated string card = 1;</code>
      */
-    com.google.protobuf.ProtocolStringList
+    java.util.List<java.lang.String>
         getCardList();
     /**
      * <code>repeated string card = 1;</code>
@@ -3667,37 +4122,28 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.SraDeckMessage}
    */
-  public static final class SraDeckMessage extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class SraDeckMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.SraDeckMessage)
       SraDeckMessageOrBuilder {
     // Use SraDeckMessage.newBuilder() to construct.
-    private SraDeckMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private SraDeckMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private SraDeckMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final SraDeckMessage defaultInstance;
-    public static SraDeckMessage getDefaultInstance() {
-      return defaultInstance;
+    private SraDeckMessage() {
+      card_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
-    public SraDeckMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private SraDeckMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -3731,7 +4177,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
           card_ = card_.getUnmodifiableView();
@@ -3745,26 +4191,11 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraDeckMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraDeckMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.class, au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<SraDeckMessage> PARSER =
-        new com.google.protobuf.AbstractParser<SraDeckMessage>() {
-      public SraDeckMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SraDeckMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<SraDeckMessage> getParserForType() {
-      return PARSER;
     }
 
     public static final int CARD_FIELD_NUMBER = 1;
@@ -3796,9 +4227,6 @@ public final class Proto {
       return card_.getByteString(index);
     }
 
-    private void initFields() {
-      card_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3811,38 +4239,62 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       for (int i = 0; i < card_.size(); i++) {
-        output.writeBytes(1, card_.getByteString(i));
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, card_.getRaw(i));
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       {
         int dataSize = 0;
         for (int i = 0; i < card_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(card_.getByteString(i));
+          dataSize += computeStringSizeNoTag(card_.getRaw(i));
         }
         size += dataSize;
         size += 1 * getCardList().size();
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.SraDeckMessage)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.SraDeckMessage other = (au.edu.unimelb.mentalpoker.Proto.SraDeckMessage) obj;
+
+      boolean result = true;
+      result = result && getCardList()
+          .equals(other.getCardList());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (getCardCount() > 0) {
+        hash = (37 * hash) + CARD_FIELD_NUMBER;
+        hash = (53 * hash) + getCardList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseFrom(
@@ -3868,46 +4320,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.SraDeckMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.SraDeckMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3915,7 +4378,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.SraDeckMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.SraDeckMessage)
         au.edu.unimelb.mentalpoker.Proto.SraDeckMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -3923,7 +4386,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraDeckMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraDeckMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -3936,27 +4399,20 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         card_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -3988,6 +4444,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.SraDeckMessage) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.SraDeckMessage)other);
@@ -4009,7 +4491,8 @@ public final class Proto {
           }
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
@@ -4026,7 +4509,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.SraDeckMessage) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -4128,16 +4611,53 @@ public final class Proto {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.SraDeckMessage)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.SraDeckMessage)
+    private static final au.edu.unimelb.mentalpoker.Proto.SraDeckMessage DEFAULT_INSTANCE;
     static {
-      defaultInstance = new SraDeckMessage(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.SraDeckMessage();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.SraDeckMessage)
+    public static au.edu.unimelb.mentalpoker.Proto.SraDeckMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<SraDeckMessage>
+        PARSER = new com.google.protobuf.AbstractParser<SraDeckMessage>() {
+      public SraDeckMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new SraDeckMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SraDeckMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SraDeckMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.SraDeckMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface SraCardMessageOrBuilder extends
@@ -4161,37 +4681,28 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.SraCardMessage}
    */
-  public static final class SraCardMessage extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class SraCardMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.SraCardMessage)
       SraCardMessageOrBuilder {
     // Use SraCardMessage.newBuilder() to construct.
-    private SraCardMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private SraCardMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private SraCardMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final SraCardMessage defaultInstance;
-    public static SraCardMessage getDefaultInstance() {
-      return defaultInstance;
+    private SraCardMessage() {
+      card_ = "";
     }
 
-    public SraCardMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private SraCardMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -4222,7 +4733,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -4233,31 +4744,16 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.SraCardMessage.class, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<SraCardMessage> PARSER =
-        new com.google.protobuf.AbstractParser<SraCardMessage>() {
-      public SraCardMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SraCardMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<SraCardMessage> getParserForType() {
-      return PARSER;
-    }
-
     private int bitField0_;
     public static final int CARD_FIELD_NUMBER = 1;
-    private java.lang.Object card_;
+    private volatile java.lang.Object card_;
     /**
      * <code>required string card = 1;</code>
      */
@@ -4298,9 +4794,6 @@ public final class Proto {
       }
     }
 
-    private void initFields() {
-      card_ = "";
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -4317,33 +4810,60 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getCardBytes());
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, card_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getCardBytes());
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, card_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.SraCardMessage)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.SraCardMessage other = (au.edu.unimelb.mentalpoker.Proto.SraCardMessage) obj;
+
+      boolean result = true;
+      result = result && (hasCard() == other.hasCard());
+      if (hasCard()) {
+        result = result && getCard()
+            .equals(other.getCard());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasCard()) {
+        hash = (37 * hash) + CARD_FIELD_NUMBER;
+        hash = (53 * hash) + getCard().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
@@ -4369,46 +4889,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.SraCardMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.SraCardMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -4416,7 +4947,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.SraCardMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.SraCardMessage)
         au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -4424,7 +4955,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_SraCardMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -4437,27 +4968,20 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         card_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -4490,6 +5014,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.SraCardMessage) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.SraCardMessage)other);
@@ -4506,13 +5056,13 @@ public final class Proto {
           card_ = other.card_;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasCard()) {
-          
           return false;
         }
         return true;
@@ -4527,7 +5077,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.SraCardMessage) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -4612,16 +5162,53 @@ public final class Proto {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.SraCardMessage)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.SraCardMessage)
+    private static final au.edu.unimelb.mentalpoker.Proto.SraCardMessage DEFAULT_INSTANCE;
     static {
-      defaultInstance = new SraCardMessage(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.SraCardMessage();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.SraCardMessage)
+    public static au.edu.unimelb.mentalpoker.Proto.SraCardMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<SraCardMessage>
+        PARSER = new com.google.protobuf.AbstractParser<SraCardMessage>() {
+      public SraCardMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new SraCardMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SraCardMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SraCardMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.SraCardMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   public interface NetworkMessageOrBuilder extends
@@ -4692,37 +5279,28 @@ public final class Proto {
   /**
    * Protobuf type {@code mentalpoker.NetworkMessage}
    */
-  public static final class NetworkMessage extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class NetworkMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mentalpoker.NetworkMessage)
       NetworkMessageOrBuilder {
     // Use NetworkMessage.newBuilder() to construct.
-    private NetworkMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private NetworkMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private NetworkMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final NetworkMessage defaultInstance;
-    public static NetworkMessage getDefaultInstance() {
-      return defaultInstance;
+    private NetworkMessage() {
+      type_ = 0;
     }
 
-    public NetworkMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private NetworkMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -4748,7 +5326,7 @@ public final class Proto {
                 unknownFields.mergeVarintField(1, rawValue);
               } else {
                 bitField0_ |= 0x00000001;
-                type_ = value;
+                type_ = rawValue;
               }
               break;
             }
@@ -4810,7 +5388,7 @@ public final class Proto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -4821,26 +5399,11 @@ public final class Proto {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               au.edu.unimelb.mentalpoker.Proto.NetworkMessage.class, au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<NetworkMessage> PARSER =
-        new com.google.protobuf.AbstractParser<NetworkMessage>() {
-      public NetworkMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new NetworkMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<NetworkMessage> getParserForType() {
-      return PARSER;
     }
 
     /**
@@ -4851,31 +5414,31 @@ public final class Proto {
       /**
        * <code>JOIN_ROOM = 0;</code>
        */
-      JOIN_ROOM(0, 0),
+      JOIN_ROOM(0),
       /**
        * <code>PLAYER_READY = 1;</code>
        */
-      PLAYER_READY(1, 1),
+      PLAYER_READY(1),
       /**
        * <code>GAME_STARTED = 2;</code>
        */
-      GAME_STARTED(2, 2),
+      GAME_STARTED(2),
       /**
        * <code>SYNC = 3;</code>
        */
-      SYNC(3, 3),
+      SYNC(3),
       /**
        * <code>SYNC_ACK = 4;</code>
        */
-      SYNC_ACK(4, 4),
+      SYNC_ACK(4),
       /**
        * <code>SRA_DECK = 5;</code>
        */
-      SRA_DECK(5, 5),
+      SRA_DECK(5),
       /**
        * <code>SRA_CARD = 6;</code>
        */
-      SRA_CARD(6, 6),
+      SRA_CARD(6),
       ;
 
       /**
@@ -4908,9 +5471,19 @@ public final class Proto {
       public static final int SRA_CARD_VALUE = 6;
 
 
-      public final int getNumber() { return value; }
+      public final int getNumber() {
+        return value;
+      }
 
+      /**
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
       public static Type valueOf(int value) {
+        return forNumber(value);
+      }
+
+      public static Type forNumber(int value) {
         switch (value) {
           case 0: return JOIN_ROOM;
           case 1: return PLAYER_READY;
@@ -4927,17 +5500,17 @@ public final class Proto {
           internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<Type>
-          internalValueMap =
+      private static final com.google.protobuf.Internal.EnumLiteMap<
+          Type> internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<Type>() {
               public Type findValueByNumber(int number) {
-                return Type.valueOf(number);
+                return Type.forNumber(number);
               }
             };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
           getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
+        return getDescriptor().getValues().get(ordinal());
       }
       public final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptorForType() {
@@ -4959,11 +5532,9 @@ public final class Proto {
         return VALUES[desc.getIndex()];
       }
 
-      private final int index;
       private final int value;
 
-      private Type(int index, int value) {
-        this.index = index;
+      private Type(int value) {
         this.value = value;
       }
 
@@ -4972,7 +5543,7 @@ public final class Proto {
 
     private int bitField0_;
     public static final int TYPE_FIELD_NUMBER = 1;
-    private au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type type_;
+    private int type_;
     /**
      * <code>required .mentalpoker.NetworkMessage.Type type = 1;</code>
      */
@@ -4983,7 +5554,8 @@ public final class Proto {
      * <code>required .mentalpoker.NetworkMessage.Type type = 1;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type getType() {
-      return type_;
+      au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type result = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.valueOf(type_);
+      return result == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM : result;
     }
 
     public static final int JOINROOMMESSAGE_FIELD_NUMBER = 2;
@@ -4998,13 +5570,13 @@ public final class Proto {
      * <code>optional .mentalpoker.JoinRoomMessage joinRoomMessage = 2;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage getJoinRoomMessage() {
-      return joinRoomMessage_;
+      return joinRoomMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance() : joinRoomMessage_;
     }
     /**
      * <code>optional .mentalpoker.JoinRoomMessage joinRoomMessage = 2;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.JoinRoomMessageOrBuilder getJoinRoomMessageOrBuilder() {
-      return joinRoomMessage_;
+      return joinRoomMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance() : joinRoomMessage_;
     }
 
     public static final int GAMESTARTEDMESSAGE_FIELD_NUMBER = 3;
@@ -5019,13 +5591,13 @@ public final class Proto {
      * <code>optional .mentalpoker.GameStartedMessage gameStartedMessage = 3;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.GameStartedMessage getGameStartedMessage() {
-      return gameStartedMessage_;
+      return gameStartedMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance() : gameStartedMessage_;
     }
     /**
      * <code>optional .mentalpoker.GameStartedMessage gameStartedMessage = 3;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.GameStartedMessageOrBuilder getGameStartedMessageOrBuilder() {
-      return gameStartedMessage_;
+      return gameStartedMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance() : gameStartedMessage_;
     }
 
     public static final int SRADECKMESSAGE_FIELD_NUMBER = 4;
@@ -5040,13 +5612,13 @@ public final class Proto {
      * <code>optional .mentalpoker.SraDeckMessage sraDeckMessage = 4;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.SraDeckMessage getSraDeckMessage() {
-      return sraDeckMessage_;
+      return sraDeckMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance() : sraDeckMessage_;
     }
     /**
      * <code>optional .mentalpoker.SraDeckMessage sraDeckMessage = 4;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.SraDeckMessageOrBuilder getSraDeckMessageOrBuilder() {
-      return sraDeckMessage_;
+      return sraDeckMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance() : sraDeckMessage_;
     }
 
     public static final int SRACARDMESSAGE_FIELD_NUMBER = 5;
@@ -5061,22 +5633,15 @@ public final class Proto {
      * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.SraCardMessage getSraCardMessage() {
-      return sraCardMessage_;
+      return sraCardMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance() : sraCardMessage_;
     }
     /**
      * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
      */
     public au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder getSraCardMessageOrBuilder() {
-      return sraCardMessage_;
+      return sraCardMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance() : sraCardMessage_;
     }
 
-    private void initFields() {
-      type_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM;
-      joinRoomMessage_ = au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance();
-      gameStartedMessage_ = au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance();
-      sraDeckMessage_ = au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance();
-      sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -5111,61 +5676,124 @@ public final class Proto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(1, type_.getNumber());
+        output.writeEnum(1, type_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, joinRoomMessage_);
+        output.writeMessage(2, getJoinRoomMessage());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(3, gameStartedMessage_);
+        output.writeMessage(3, getGameStartedMessage());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(4, sraDeckMessage_);
+        output.writeMessage(4, getSraDeckMessage());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(5, sraCardMessage_);
+        output.writeMessage(5, getSraCardMessage());
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, type_.getNumber());
+          .computeEnumSize(1, type_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, joinRoomMessage_);
+          .computeMessageSize(2, getJoinRoomMessage());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, gameStartedMessage_);
+          .computeMessageSize(3, getGameStartedMessage());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, sraDeckMessage_);
+          .computeMessageSize(4, getSraDeckMessage());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, sraCardMessage_);
+          .computeMessageSize(5, getSraCardMessage());
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof au.edu.unimelb.mentalpoker.Proto.NetworkMessage)) {
+        return super.equals(obj);
+      }
+      au.edu.unimelb.mentalpoker.Proto.NetworkMessage other = (au.edu.unimelb.mentalpoker.Proto.NetworkMessage) obj;
+
+      boolean result = true;
+      result = result && (hasType() == other.hasType());
+      if (hasType()) {
+        result = result && type_ == other.type_;
+      }
+      result = result && (hasJoinRoomMessage() == other.hasJoinRoomMessage());
+      if (hasJoinRoomMessage()) {
+        result = result && getJoinRoomMessage()
+            .equals(other.getJoinRoomMessage());
+      }
+      result = result && (hasGameStartedMessage() == other.hasGameStartedMessage());
+      if (hasGameStartedMessage()) {
+        result = result && getGameStartedMessage()
+            .equals(other.getGameStartedMessage());
+      }
+      result = result && (hasSraDeckMessage() == other.hasSraDeckMessage());
+      if (hasSraDeckMessage()) {
+        result = result && getSraDeckMessage()
+            .equals(other.getSraDeckMessage());
+      }
+      result = result && (hasSraCardMessage() == other.hasSraCardMessage());
+      if (hasSraCardMessage()) {
+        result = result && getSraCardMessage()
+            .equals(other.getSraCardMessage());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasType()) {
+        hash = (37 * hash) + TYPE_FIELD_NUMBER;
+        hash = (53 * hash) + type_;
+      }
+      if (hasJoinRoomMessage()) {
+        hash = (37 * hash) + JOINROOMMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getJoinRoomMessage().hashCode();
+      }
+      if (hasGameStartedMessage()) {
+        hash = (37 * hash) + GAMESTARTEDMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getGameStartedMessage().hashCode();
+      }
+      if (hasSraDeckMessage()) {
+        hash = (37 * hash) + SRADECKMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getSraDeckMessage().hashCode();
+      }
+      if (hasSraCardMessage()) {
+        hash = (37 * hash) + SRACARDMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getSraCardMessage().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseFrom(
@@ -5191,46 +5819,57 @@ public final class Proto {
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(au.edu.unimelb.mentalpoker.Proto.NetworkMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -5238,7 +5877,7 @@ public final class Proto {
      * Protobuf type {@code mentalpoker.NetworkMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mentalpoker.NetworkMessage)
         au.edu.unimelb.mentalpoker.Proto.NetworkMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -5246,7 +5885,7 @@ public final class Proto {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return au.edu.unimelb.mentalpoker.Proto.internal_static_mentalpoker_NetworkMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -5259,55 +5898,48 @@ public final class Proto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
           getJoinRoomMessageFieldBuilder();
           getGameStartedMessageFieldBuilder();
           getSraDeckMessageFieldBuilder();
           getSraCardMessageFieldBuilder();
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
-        type_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM;
+        type_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
         if (joinRoomMessageBuilder_ == null) {
-          joinRoomMessage_ = au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance();
+          joinRoomMessage_ = null;
         } else {
           joinRoomMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         if (gameStartedMessageBuilder_ == null) {
-          gameStartedMessage_ = au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance();
+          gameStartedMessage_ = null;
         } else {
           gameStartedMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
         if (sraDeckMessageBuilder_ == null) {
-          sraDeckMessage_ = au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance();
+          sraDeckMessage_ = null;
         } else {
           sraDeckMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
         if (sraCardMessageBuilder_ == null) {
-          sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
+          sraCardMessage_ = null;
         } else {
           sraCardMessageBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -5372,6 +6004,32 @@ public final class Proto {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof au.edu.unimelb.mentalpoker.Proto.NetworkMessage) {
           return mergeFrom((au.edu.unimelb.mentalpoker.Proto.NetworkMessage)other);
@@ -5398,30 +6056,27 @@ public final class Proto {
         if (other.hasSraCardMessage()) {
           mergeSraCardMessage(other.getSraCardMessage());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasType()) {
-          
           return false;
         }
         if (hasJoinRoomMessage()) {
           if (!getJoinRoomMessage().isInitialized()) {
-            
             return false;
           }
         }
         if (hasGameStartedMessage()) {
           if (!getGameStartedMessage().isInitialized()) {
-            
             return false;
           }
         }
         if (hasSraCardMessage()) {
           if (!getSraCardMessage().isInitialized()) {
-            
             return false;
           }
         }
@@ -5437,7 +6092,7 @@ public final class Proto {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (au.edu.unimelb.mentalpoker.Proto.NetworkMessage) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -5447,7 +6102,7 @@ public final class Proto {
       }
       private int bitField0_;
 
-      private au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type type_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM;
+      private int type_ = 0;
       /**
        * <code>required .mentalpoker.NetworkMessage.Type type = 1;</code>
        */
@@ -5458,7 +6113,8 @@ public final class Proto {
        * <code>required .mentalpoker.NetworkMessage.Type type = 1;</code>
        */
       public au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type getType() {
-        return type_;
+        au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type result = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.valueOf(type_);
+        return result == null ? au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM : result;
       }
       /**
        * <code>required .mentalpoker.NetworkMessage.Type type = 1;</code>
@@ -5468,7 +6124,7 @@ public final class Proto {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000001;
-        type_ = value;
+        type_ = value.getNumber();
         onChanged();
         return this;
       }
@@ -5477,13 +6133,13 @@ public final class Proto {
        */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = au.edu.unimelb.mentalpoker.Proto.NetworkMessage.Type.JOIN_ROOM;
+        type_ = 0;
         onChanged();
         return this;
       }
 
-      private au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage joinRoomMessage_ = au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage joinRoomMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.Builder, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessageOrBuilder> joinRoomMessageBuilder_;
       /**
        * <code>optional .mentalpoker.JoinRoomMessage joinRoomMessage = 2;</code>
@@ -5496,7 +6152,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage getJoinRoomMessage() {
         if (joinRoomMessageBuilder_ == null) {
-          return joinRoomMessage_;
+          return joinRoomMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance() : joinRoomMessage_;
         } else {
           return joinRoomMessageBuilder_.getMessage();
         }
@@ -5537,6 +6193,7 @@ public final class Proto {
       public Builder mergeJoinRoomMessage(au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage value) {
         if (joinRoomMessageBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              joinRoomMessage_ != null &&
               joinRoomMessage_ != au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance()) {
             joinRoomMessage_ =
               au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.newBuilder(joinRoomMessage_).mergeFrom(value).buildPartial();
@@ -5555,7 +6212,7 @@ public final class Proto {
        */
       public Builder clearJoinRoomMessage() {
         if (joinRoomMessageBuilder_ == null) {
-          joinRoomMessage_ = au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance();
+          joinRoomMessage_ = null;
           onChanged();
         } else {
           joinRoomMessageBuilder_.clear();
@@ -5578,17 +6235,18 @@ public final class Proto {
         if (joinRoomMessageBuilder_ != null) {
           return joinRoomMessageBuilder_.getMessageOrBuilder();
         } else {
-          return joinRoomMessage_;
+          return joinRoomMessage_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.getDefaultInstance() : joinRoomMessage_;
         }
       }
       /**
        * <code>optional .mentalpoker.JoinRoomMessage joinRoomMessage = 2;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.Builder, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessageOrBuilder> 
           getJoinRoomMessageFieldBuilder() {
         if (joinRoomMessageBuilder_ == null) {
-          joinRoomMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          joinRoomMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessage.Builder, au.edu.unimelb.mentalpoker.Proto.JoinRoomMessageOrBuilder>(
                   getJoinRoomMessage(),
                   getParentForChildren(),
@@ -5598,8 +6256,8 @@ public final class Proto {
         return joinRoomMessageBuilder_;
       }
 
-      private au.edu.unimelb.mentalpoker.Proto.GameStartedMessage gameStartedMessage_ = au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.GameStartedMessage gameStartedMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.GameStartedMessage, au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.Builder, au.edu.unimelb.mentalpoker.Proto.GameStartedMessageOrBuilder> gameStartedMessageBuilder_;
       /**
        * <code>optional .mentalpoker.GameStartedMessage gameStartedMessage = 3;</code>
@@ -5612,7 +6270,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.GameStartedMessage getGameStartedMessage() {
         if (gameStartedMessageBuilder_ == null) {
-          return gameStartedMessage_;
+          return gameStartedMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance() : gameStartedMessage_;
         } else {
           return gameStartedMessageBuilder_.getMessage();
         }
@@ -5653,6 +6311,7 @@ public final class Proto {
       public Builder mergeGameStartedMessage(au.edu.unimelb.mentalpoker.Proto.GameStartedMessage value) {
         if (gameStartedMessageBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              gameStartedMessage_ != null &&
               gameStartedMessage_ != au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance()) {
             gameStartedMessage_ =
               au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.newBuilder(gameStartedMessage_).mergeFrom(value).buildPartial();
@@ -5671,7 +6330,7 @@ public final class Proto {
        */
       public Builder clearGameStartedMessage() {
         if (gameStartedMessageBuilder_ == null) {
-          gameStartedMessage_ = au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance();
+          gameStartedMessage_ = null;
           onChanged();
         } else {
           gameStartedMessageBuilder_.clear();
@@ -5694,17 +6353,18 @@ public final class Proto {
         if (gameStartedMessageBuilder_ != null) {
           return gameStartedMessageBuilder_.getMessageOrBuilder();
         } else {
-          return gameStartedMessage_;
+          return gameStartedMessage_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.getDefaultInstance() : gameStartedMessage_;
         }
       }
       /**
        * <code>optional .mentalpoker.GameStartedMessage gameStartedMessage = 3;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.GameStartedMessage, au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.Builder, au.edu.unimelb.mentalpoker.Proto.GameStartedMessageOrBuilder> 
           getGameStartedMessageFieldBuilder() {
         if (gameStartedMessageBuilder_ == null) {
-          gameStartedMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          gameStartedMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.GameStartedMessage, au.edu.unimelb.mentalpoker.Proto.GameStartedMessage.Builder, au.edu.unimelb.mentalpoker.Proto.GameStartedMessageOrBuilder>(
                   getGameStartedMessage(),
                   getParentForChildren(),
@@ -5714,8 +6374,8 @@ public final class Proto {
         return gameStartedMessageBuilder_;
       }
 
-      private au.edu.unimelb.mentalpoker.Proto.SraDeckMessage sraDeckMessage_ = au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.SraDeckMessage sraDeckMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.SraDeckMessage, au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraDeckMessageOrBuilder> sraDeckMessageBuilder_;
       /**
        * <code>optional .mentalpoker.SraDeckMessage sraDeckMessage = 4;</code>
@@ -5728,7 +6388,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.SraDeckMessage getSraDeckMessage() {
         if (sraDeckMessageBuilder_ == null) {
-          return sraDeckMessage_;
+          return sraDeckMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance() : sraDeckMessage_;
         } else {
           return sraDeckMessageBuilder_.getMessage();
         }
@@ -5769,6 +6429,7 @@ public final class Proto {
       public Builder mergeSraDeckMessage(au.edu.unimelb.mentalpoker.Proto.SraDeckMessage value) {
         if (sraDeckMessageBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              sraDeckMessage_ != null &&
               sraDeckMessage_ != au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance()) {
             sraDeckMessage_ =
               au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.newBuilder(sraDeckMessage_).mergeFrom(value).buildPartial();
@@ -5787,7 +6448,7 @@ public final class Proto {
        */
       public Builder clearSraDeckMessage() {
         if (sraDeckMessageBuilder_ == null) {
-          sraDeckMessage_ = au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance();
+          sraDeckMessage_ = null;
           onChanged();
         } else {
           sraDeckMessageBuilder_.clear();
@@ -5810,17 +6471,18 @@ public final class Proto {
         if (sraDeckMessageBuilder_ != null) {
           return sraDeckMessageBuilder_.getMessageOrBuilder();
         } else {
-          return sraDeckMessage_;
+          return sraDeckMessage_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.getDefaultInstance() : sraDeckMessage_;
         }
       }
       /**
        * <code>optional .mentalpoker.SraDeckMessage sraDeckMessage = 4;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.SraDeckMessage, au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraDeckMessageOrBuilder> 
           getSraDeckMessageFieldBuilder() {
         if (sraDeckMessageBuilder_ == null) {
-          sraDeckMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          sraDeckMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.SraDeckMessage, au.edu.unimelb.mentalpoker.Proto.SraDeckMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraDeckMessageOrBuilder>(
                   getSraDeckMessage(),
                   getParentForChildren(),
@@ -5830,8 +6492,8 @@ public final class Proto {
         return sraDeckMessageBuilder_;
       }
 
-      private au.edu.unimelb.mentalpoker.Proto.SraCardMessage sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      private au.edu.unimelb.mentalpoker.Proto.SraCardMessage sraCardMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.SraCardMessage, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder> sraCardMessageBuilder_;
       /**
        * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
@@ -5844,7 +6506,7 @@ public final class Proto {
        */
       public au.edu.unimelb.mentalpoker.Proto.SraCardMessage getSraCardMessage() {
         if (sraCardMessageBuilder_ == null) {
-          return sraCardMessage_;
+          return sraCardMessage_ == null ? au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance() : sraCardMessage_;
         } else {
           return sraCardMessageBuilder_.getMessage();
         }
@@ -5885,6 +6547,7 @@ public final class Proto {
       public Builder mergeSraCardMessage(au.edu.unimelb.mentalpoker.Proto.SraCardMessage value) {
         if (sraCardMessageBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              sraCardMessage_ != null &&
               sraCardMessage_ != au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance()) {
             sraCardMessage_ =
               au.edu.unimelb.mentalpoker.Proto.SraCardMessage.newBuilder(sraCardMessage_).mergeFrom(value).buildPartial();
@@ -5903,7 +6566,7 @@ public final class Proto {
        */
       public Builder clearSraCardMessage() {
         if (sraCardMessageBuilder_ == null) {
-          sraCardMessage_ = au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance();
+          sraCardMessage_ = null;
           onChanged();
         } else {
           sraCardMessageBuilder_.clear();
@@ -5926,17 +6589,18 @@ public final class Proto {
         if (sraCardMessageBuilder_ != null) {
           return sraCardMessageBuilder_.getMessageOrBuilder();
         } else {
-          return sraCardMessage_;
+          return sraCardMessage_ == null ?
+              au.edu.unimelb.mentalpoker.Proto.SraCardMessage.getDefaultInstance() : sraCardMessage_;
         }
       }
       /**
        * <code>optional .mentalpoker.SraCardMessage sraCardMessage = 5;</code>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      private com.google.protobuf.SingleFieldBuilderV3<
           au.edu.unimelb.mentalpoker.Proto.SraCardMessage, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder> 
           getSraCardMessageFieldBuilder() {
         if (sraCardMessageBuilder_ == null) {
-          sraCardMessageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          sraCardMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               au.edu.unimelb.mentalpoker.Proto.SraCardMessage, au.edu.unimelb.mentalpoker.Proto.SraCardMessage.Builder, au.edu.unimelb.mentalpoker.Proto.SraCardMessageOrBuilder>(
                   getSraCardMessage(),
                   getParentForChildren(),
@@ -5945,69 +6609,106 @@ public final class Proto {
         }
         return sraCardMessageBuilder_;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:mentalpoker.NetworkMessage)
     }
 
+    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkMessage)
+    private static final au.edu.unimelb.mentalpoker.Proto.NetworkMessage DEFAULT_INSTANCE;
     static {
-      defaultInstance = new NetworkMessage(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new au.edu.unimelb.mentalpoker.Proto.NetworkMessage();
     }
 
-    // @@protoc_insertion_point(class_scope:mentalpoker.NetworkMessage)
+    public static au.edu.unimelb.mentalpoker.Proto.NetworkMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<NetworkMessage>
+        PARSER = new com.google.protobuf.AbstractParser<NetworkMessage>() {
+      public NetworkMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new NetworkMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<NetworkMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<NetworkMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public au.edu.unimelb.mentalpoker.Proto.NetworkMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_PeerAddress_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_PeerAddress_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_GameStartedMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_GameStartedMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_Player_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_Player_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_JoinRoomMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_JoinRoomMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_NetworkMessageHeader_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_NetworkPacket_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_NetworkPacket_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_SraDeckMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_SraDeckMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_SraCardMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_SraCardMessage_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_mentalpoker_NetworkMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_mentalpoker_NetworkMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -6051,55 +6752,55 @@ public final class Proto {
     internal_static_mentalpoker_PeerAddress_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_mentalpoker_PeerAddress_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_PeerAddress_descriptor,
         new java.lang.String[] { "Hostname", "Port", });
     internal_static_mentalpoker_GameStartedMessage_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_mentalpoker_GameStartedMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_GameStartedMessage_descriptor,
         new java.lang.String[] { "PlayerId", "Players", });
     internal_static_mentalpoker_Player_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_mentalpoker_Player_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_Player_descriptor,
         new java.lang.String[] { "PlayerId", "Address", });
     internal_static_mentalpoker_JoinRoomMessage_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_mentalpoker_JoinRoomMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_JoinRoomMessage_descriptor,
         new java.lang.String[] { "PlayerName", });
     internal_static_mentalpoker_NetworkMessageHeader_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_mentalpoker_NetworkMessageHeader_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_NetworkMessageHeader_descriptor,
         new java.lang.String[] { "MessageId", "Ack", });
     internal_static_mentalpoker_NetworkPacket_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_mentalpoker_NetworkPacket_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_NetworkPacket_descriptor,
         new java.lang.String[] { "NetworkMessageHeader", "NetworkMessage", });
     internal_static_mentalpoker_SraDeckMessage_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_mentalpoker_SraDeckMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_SraDeckMessage_descriptor,
         new java.lang.String[] { "Card", });
     internal_static_mentalpoker_SraCardMessage_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_mentalpoker_SraCardMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_SraCardMessage_descriptor,
         new java.lang.String[] { "Card", });
     internal_static_mentalpoker_NetworkMessage_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_mentalpoker_NetworkMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mentalpoker_NetworkMessage_descriptor,
         new java.lang.String[] { "Type", "JoinRoomMessage", "GameStartedMessage", "SraDeckMessage", "SraCardMessage", });
   }

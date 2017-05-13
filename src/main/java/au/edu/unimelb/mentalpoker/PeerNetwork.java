@@ -59,6 +59,8 @@ public class PeerNetwork implements Remote.Callbacks {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (InvalidPlayerIdException e) {
+                e.printStackTrace();
             }
         }
         System.out.println("Synced...");
@@ -72,12 +74,19 @@ public class PeerNetwork implements Remote.Callbacks {
     public void broadcast(Proto.NetworkMessage message) {
         for (Integer playerId : this.players.keySet()) {
             if (playerId != getLocalPlayerId()) {
-                send(playerId, message);
+                try {
+                    send(playerId, message);
+                } catch (InvalidPlayerIdException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    public Proto.NetworkMessage receive(int playerId) {
+    public Proto.NetworkMessage receive(int playerId) throws InvalidPlayerIdException {
+        if (!this.players.containsKey(playerId)) {
+            throw new InvalidPlayerIdException();
+        }
         while (queueForPlayer(playerId).isEmpty());
         return queueForPlayer(playerId).remove();
     }
@@ -90,16 +99,20 @@ public class PeerNetwork implements Remote.Callbacks {
         return this.players.size();
     }
 
-    public void send(int playerId, Proto.NetworkMessage message) {
+    public void send(int playerId, Proto.NetworkMessage message) throws InvalidPlayerIdException {
         try {
-            this.remote.send(this.players.get(playerId), message);
+            this.remote.send(lookupPlayerAddress(playerId), message);
         } catch (IOException e) {
             System.out.println("Error: Could not send message to player " + playerId);
         }
     }
 
-    private Address lookupPlayerAddress(int playerId) {
-        return this.players.get(playerId);
+    private Address lookupPlayerAddress(int playerId) throws InvalidPlayerIdException {
+        if (this.players.containsKey(playerId)) {
+            return this.players.get(playerId);
+        } else {
+            throw new InvalidPlayerIdException();
+        }
     }
 
     private int lookupPlayerId(Address address) {
@@ -113,7 +126,11 @@ public class PeerNetwork implements Remote.Callbacks {
             Proto.NetworkMessage syncAckMessage =
                     Proto.NetworkMessage.newBuilder()
                             .setType(Proto.NetworkMessage.Type.SYNC_ACK).build();
-            send(playerId, syncAckMessage);
+            try {
+                send(playerId, syncAckMessage);
+            } catch (InvalidPlayerIdException e) {
+                e.printStackTrace();
+            }
             return;
         }
 
