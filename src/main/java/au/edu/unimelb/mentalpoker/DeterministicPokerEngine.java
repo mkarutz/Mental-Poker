@@ -89,6 +89,7 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
 
     @Override
     public Hand getPlayerHand(int playerId) {
+        final List<Integer> cardIds = new ArrayList<>();
         final List<Card> openCards = new ArrayList<>();
         int size = 0;
 
@@ -103,10 +104,11 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
                 openCards.add(cardList.get(i));
             }
 
+            cardIds.add(i + 1 /* Card identifiers start from 1 */);
             size++;
         }
 
-        return new Hand(size, openCards);
+        return new Hand(size, cardIds, openCards);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
+/** An immutable data structure representing a player's hand as seen by the table. */
 public class Hand {
     private final int size;
     private final ImmutableList<Card> openCards;
@@ -11,8 +12,9 @@ public class Hand {
     /** Identifiers of all the cards in the hand. A card ID is an index into the prepared deck. */
     private final ImmutableList<Integer> cardIds;
 
-    public Hand(int size, List<Card> openCards) {
+    public Hand(int size, List<Integer> cardIds, List<Card> openCards) {
         this.size = size;
+        this.cardIds = ImmutableList.copyOf(cardIds);
         this.openCards = ImmutableList.copyOf(openCards);
     }
 

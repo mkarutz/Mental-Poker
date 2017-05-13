@@ -15,7 +15,8 @@ import static org.mockito.Mockito.*;
 public class DeterministicPokerEngineTest {
     @Mock private PeerNetwork mockPeerNetwork;
 
-    private static final int LOCAL_PLAYER_ID = 0;
+    private static final int LOCAL_PLAYER_ID = 1;
+    private static final int OTHER_PLAYER_ID = 2;
     private static final int NUM_PLAYERS = 3;
 
     private DeterministicPokerEngine poker;
@@ -42,12 +43,14 @@ public class DeterministicPokerEngineTest {
         localPlayerCards = poker.getLocalPlayerCards();
         assertTrue(!localPlayerCards.isEmpty());
 
-        assertEquals(0 /* expected */, poker.getPlayerHand(1).getSize());
-        assertTrue(poker.getPlayerHand(1).getOpenCards().isEmpty());
+        assertEquals(0 /* expected */, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
+        assertTrue(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
 
-        poker.draw(1);
+        poker.draw(OTHER_PLAYER_ID);
 
-        assertEquals(1 /* expected */, poker.getPlayerHand(1).getSize());
-        assertTrue(poker.getPlayerHand(1).getOpenCards().isEmpty());
+        assertEquals(1 /* expected */, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
+        assertTrue(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
+//
+//        poker.open(OTHER_PLAYER_ID, poker.getPlayerHand(OTHER_PLAYER_ID).getCardIds().get(0));
     }
 }
