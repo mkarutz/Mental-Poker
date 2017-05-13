@@ -41,7 +41,7 @@ public class RoomHost implements Remote.Callbacks {
     }
 
     private void requestMyIpAddress(Address address) {
-        //if (!address.getIp().equals("127.0.0.1")) {
+        if (!address.getIp().equals("127.0.0.1")) {
             try {
                 this.remote.send(address,
                         Proto.NetworkMessage.newBuilder()
@@ -49,7 +49,7 @@ public class RoomHost implements Remote.Callbacks {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        //}
+        }
     }
 
     private void handlePlayerReadyMessage(Address remote) {
