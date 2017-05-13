@@ -9,6 +9,7 @@ public class RoomHost implements Remote.Callbacks {
     private Remote remote;
     private GameTable gameTable;
     private Callbacks callbacks;
+    private String ipAddress;
 
     public interface Callbacks {
         void onConnectionFailed(String message);
@@ -21,20 +22,34 @@ public class RoomHost implements Remote.Callbacks {
         this.callbacks = callbacks;
     }
 
-    public void onReceive(Address remote, Proto.NetworkMessage message) {
+    public void onReceive(Address source, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.JOIN_ROOM) {
-            this.gameTable.addPlayerConnection(remote);
+            requestMyIpAddress(source);
+            this.gameTable.addPlayerConnection(source);
             try {
-                this.remote.send(remote, Proto.NetworkMessage.newBuilder()
+                this.remote.send(source, Proto.NetworkMessage.newBuilder()
                         .setType(Proto.NetworkMessage.Type.JOIN_ROOM_ALLOWED).build());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (message.getType() == Proto.NetworkMessage.Type.PLAYER_READY) {
-            handlePlayerReadyMessage(remote);
+            handlePlayerReadyMessage(source);
+        } else if (message.getType() == Proto.NetworkMessage.Type.REQUEST_IP_RESULT) {
+            this.ipAddress = message.getRequestIpResultMessage().getIp();
+            System.out.println("My IP according to someone else is: " + this.ipAddress);
         }
+    }
 
-
+    private void requestMyIpAddress(Address address) {
+        //if (!address.getIp().equals("127.0.0.1")) {
+            try {
+                this.remote.send(address,
+                        Proto.NetworkMessage.newBuilder()
+                                .setType(Proto.NetworkMessage.Type.REQUEST_IP).build());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        //}
     }
 
     private void handlePlayerReadyMessage(Address remote) {

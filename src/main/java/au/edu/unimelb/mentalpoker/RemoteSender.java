@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RemoteSender extends Thread {
     private static int nextMessageId = 0;
 
-    private DatagramSocket socket;
     private IPacketSender packetSender;
     private ConcurrentHashMap<Address, Queue<Proto.NetworkPacket>> outgoing;
     private ConcurrentHashMap<Address, AddressPacketDispatcher> packetDispatchers;
@@ -69,8 +68,7 @@ public class RemoteSender extends Thread {
         }
     }
 
-    public RemoteSender(DatagramSocket socket, IPacketSender packetSender) {
-        this.socket = socket;
+    public RemoteSender(IPacketSender packetSender) {
         this.packetSender = packetSender;
         this.outgoing = new ConcurrentHashMap<>();
         this.packetDispatchers = new ConcurrentHashMap<>();

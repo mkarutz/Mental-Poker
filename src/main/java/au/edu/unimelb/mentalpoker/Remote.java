@@ -35,10 +35,10 @@ public class Remote extends Thread {
         }
         this.running = true;
 
-        this.remoteSender = new RemoteSender(this.socket, new UDPPacketSender(this.socket));
+        this.remoteSender = new RemoteSender(new UDPPacketSender(this.socket));
         this.remoteSender.start();
 
-        this.remoteReceiver = new RemoteReceiver(this.socket, new UDPPacketReceiver(this.socket), this);
+        this.remoteReceiver = new RemoteReceiver(new UDPPacketReceiver(this.socket), this);
         this.remoteReceiver.start();
     }
 
@@ -54,6 +54,7 @@ public class Remote extends Thread {
                 if (this.listener != null) {
                     this.listener.onReceive(sourceAddress, message);
                 }
+                System.out.println(this.socket.getLocalAddress());
             }
         }
     }

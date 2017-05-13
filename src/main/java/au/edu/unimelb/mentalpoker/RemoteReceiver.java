@@ -16,15 +16,13 @@ public class RemoteReceiver extends Thread {
 
     private Remote remote;
     private IPacketReceiver packetReceiver;
-    private DatagramSocket socket;
     private ConcurrentHashMap<Address, Queue<Proto.NetworkPacket>> incoming;
     private ConcurrentHashMap<Address, HashSet<Integer>> alreadyReceivedMessageIds;
     private boolean closed = false;
 
-    public RemoteReceiver(DatagramSocket socket, IPacketReceiver packetReceiver, Remote remote) {
+    public RemoteReceiver(IPacketReceiver packetReceiver, Remote remote) {
         this.packetReceiver = packetReceiver;
         this.remote = remote;
-        this.socket = socket;
         this.incoming = new ConcurrentHashMap<>();
         this.alreadyReceivedMessageIds = new ConcurrentHashMap<>();
     }

@@ -34,6 +34,10 @@ message NetworkPacket {
     optional NetworkMessage networkMessage = 2;
 }
 
+message RequestIpResultMessage {
+    required string ip = 1;
+}
+
 message SraDeckMessage {
     repeated string card = 1;
 }
@@ -48,22 +52,25 @@ message SraSecretMessage {
 
 message NetworkMessage {
     enum Type {
-        JOIN_ROOM = 0;
-        JOIN_ROOM_ALLOWED = 1;
-        PLAYER_READY = 2;
-        GAME_STARTED = 3;
-        SYNC = 4;
-        SYNC_ACK = 5;
-        SRA_DECK = 6;
-        SRA_CARD = 7;
-        SRA_SECRET = 8;
+        REQUEST_IP = 0;
+        REQUEST_IP_RESULT = 1;
+        JOIN_ROOM = 2;
+        JOIN_ROOM_ALLOWED = 3;
+        PLAYER_READY = 4;
+        GAME_STARTED = 5;
+        SYNC = 6;
+        SYNC_ACK = 7;
+        SRA_DECK = 8;
+        SRA_CARD = 9;
+        SRA_SECRET = 10;
     };
 
     required Type type = 1;
 
-    optional JoinRoomMessage joinRoomMessage = 2;
-    optional GameStartedMessage gameStartedMessage = 3;
-    optional SraDeckMessage sraDeckMessage = 4;
-    optional SraCardMessage sraCardMessage = 5;
-    optional SraSecretMessage sraSecretMessage = 6;
+    optional RequestIpResultMessage requestIpResultMessage = 2;
+    optional JoinRoomMessage joinRoomMessage = 3;
+    optional GameStartedMessage gameStartedMessage = 4;
+    optional SraDeckMessage sraDeckMessage = 5;
+    optional SraCardMessage sraCardMessage = 6;
+    optional SraSecretMessage sraSecretMessage = 7;
 }

@@ -34,7 +34,7 @@ public class RoomClient implements Remote.Callbacks {
         }
     }
 
-    public void onReceive(Address remote, Proto.NetworkMessage message) {
+    public void onReceive(Address source, Proto.NetworkMessage message) {
         if (message.getType() == Proto.NetworkMessage.Type.JOIN_ROOM_ALLOWED) {
             System.out.println("...you have been accepted into the poker dungeon.");
 
@@ -44,9 +44,22 @@ public class RoomClient implements Remote.Callbacks {
             ready();
             System.out.println("You are ready. Waiting for other players...");
 
-        } if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
+        } else if (message.getType() == Proto.NetworkMessage.Type.GAME_STARTED) {
             this.gameStarted = true;
             this.gameStartedMessage = message.getGameStartedMessage();
+
+        } else if (message.getType() == Proto.NetworkMessage.Type.REQUEST_IP) {
+            Proto.NetworkMessage reply = Proto.NetworkMessage.newBuilder()
+                    .setType(Proto.NetworkMessage.Type.REQUEST_IP_RESULT)
+                    .setRequestIpResultMessage(
+                            Proto.RequestIpResultMessage.newBuilder()
+                                    .setIp(source.getIp()))
+                    .build();
+            try {
+                this.remote.send(source, reply);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
