@@ -9,7 +9,7 @@ public class RoomHost implements Remote.Callbacks {
     private Remote remote;
     private GameTable gameTable;
     private Callbacks callbacks;
-    private String ipAddress;
+    private String ipAddress = null;
 
     public interface Callbacks {
         void onConnectionFailed(String message);
@@ -66,8 +66,12 @@ public class RoomHost implements Remote.Callbacks {
         Proto.GameStartedMessage.Builder gameStartedMessage = Proto.GameStartedMessage.newBuilder();
         int playerId = 1;
         for (Address address : this.gameTable.getPlayers()) {
+            String ip = address.getIp();
+            if (this.ipAddress != null && ip.equals("127.0.0.1")) {
+                ip = this.ipAddress;
+            }
             Proto.PeerAddress.Builder peerAddress = Proto.PeerAddress.newBuilder()
-                    .setHostname(address.getIp())
+                    .setHostname(ip)
                     .setPort(address.getPort());
 
             Proto.Player.Builder player = Proto.Player.newBuilder().setPlayerId(playerId).setAddress(peerAddress);
