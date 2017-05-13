@@ -54,7 +54,6 @@ public class Remote extends Thread {
                 if (this.listener != null) {
                     this.listener.onReceive(sourceAddress, message);
                 }
-                System.out.println(this.socket.getLocalAddress());
             }
         }
     }

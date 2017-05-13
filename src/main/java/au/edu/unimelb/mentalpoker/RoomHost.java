@@ -36,7 +36,6 @@ public class RoomHost implements Remote.Callbacks {
             handlePlayerReadyMessage(source);
         } else if (message.getType() == Proto.NetworkMessage.Type.REQUEST_IP_RESULT) {
             this.ipAddress = message.getRequestIpResultMessage().getIp();
-            System.out.println("My IP according to someone else is: " + this.ipAddress);
         }
     }
 
