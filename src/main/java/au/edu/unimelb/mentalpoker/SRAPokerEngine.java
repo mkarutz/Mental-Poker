@@ -104,7 +104,6 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private void broadcastDeck(List<BigInteger> deck) {
-        System.out.printf("Broadcasting deck\n");
         Proto.NetworkMessage msg = buildDeckMessage(deck);
         network.broadcast(msg);
     }
@@ -123,13 +122,11 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private void sendDeck(List<BigInteger> deck, int playerId) {
-        System.out.printf("Sending deck to player %d\n", playerId);
         Proto.NetworkMessage msg = buildDeckMessage(deck);
         network.send(playerId, msg);
     }
 
     private List<BigInteger> receiveDeck(int playerId) {
-        System.out.printf("Receiving deck from player %d\n", playerId);
         Proto.NetworkMessage msg = network.receive(playerId);
         return deckFromMessage(msg.getSraDeckMessage());
     }
