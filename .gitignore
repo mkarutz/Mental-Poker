@@ -20,4 +20,4 @@ gradle-app.setting
 /gradlew
 /gradlew.bat
 
-src/main/java/au/edu/unimelb/mentalpoker/MentalPokerProtos.java
+src/main/java/au/edu/unimelb/mentalpoker/Proto.java
