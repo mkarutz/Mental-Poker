@@ -17,6 +17,7 @@ public class PeerNetwork implements Remote.Callbacks {
     private Remote remote;
     private HashMap<Integer, Queue<Proto.NetworkMessage>> playerMessages;
     private HashSet<Integer> playersNotSynced;
+    boolean syncPhase = false;
 
     public PeerNetwork(Proto.GameStartedMessage gameInfo,int listenPort) {
         this.players = HashBiMap.create();
@@ -45,15 +46,16 @@ public class PeerNetwork implements Remote.Callbacks {
     }
 
     public void synchronize() {
+        this.syncPhase = true;
         //System.out.println("Peer Network id ="+Thread.currentThread().getId());
         //resetSyncMap();
         Proto.NetworkMessage syncMessage =
                 Proto.NetworkMessage.newBuilder()
                     .setType(Proto.NetworkMessage.Type.SYNC).build();
-        System.out.println("this not synced size ="+this.playersNotSynced.size());
         while (!this.playersNotSynced.isEmpty()) {
+            System.out.println("this not synced size ="+this.playersNotSynced.size());
             try {
-                broadcast(syncMessage);
+                multicast(syncMessage,this.playersNotSynced);
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -64,6 +66,14 @@ public class PeerNetwork implements Remote.Callbacks {
 
     private void resetSyncMap() {
         this.playersNotSynced.clear();
+    }
+
+    public void multicast(Proto.NetworkMessage message, HashSet<Integer> playerIDs){
+        for (Integer playerId : playerIDs)
+        {
+            System.out.println("sending SYNC to:"+this.players.get(playerId));
+            send(playerId, message);
+        }
     }
 
     public void broadcast(Proto.NetworkMessage message) {
@@ -96,21 +106,27 @@ public class PeerNetwork implements Remote.Callbacks {
     }
 
     public synchronized void onReceive(Address remote, Proto.NetworkMessage message) {
-        if (message.getType() == Proto.NetworkMessage.Type.SYNC) {
-            System.out.println("Received SYNC ="+remote.port);
-            Proto.NetworkMessage syncAckMessage =
-                    Proto.NetworkMessage.newBuilder()
-                            .setType(Proto.NetworkMessage.Type.SYNC_ACK).build();
-            send(this.players.inverse().get(remote),syncAckMessage);
-            return;
+        if(this.syncPhase){
+            if (message.getType() == Proto.NetworkMessage.Type.SYNC) {
+                //System.out.println("Received SYNC ="+remote.port);
+                Proto.NetworkMessage syncAckMessage =
+                        Proto.NetworkMessage.newBuilder()
+                                .setType(Proto.NetworkMessage.Type.SYNC_ACK).build();
+                send(this.players.inverse().get(remote),syncAckMessage);
+                return;
+            }
+            if (message.getType() == Proto.NetworkMessage.Type.SYNC_ACK) {
+                System.out.println("Received SYNC_ACK ="+remote.port);
+                this.playersNotSynced.remove(this.players.inverse().get(remote));
+                return;
+            }
         }
-        if (message.getType() == Proto.NetworkMessage.Type.SYNC_ACK) {
-            System.out.println("Received SYNC_ACK ="+remote.port);
-            this.playersNotSynced.remove(this.players.inverse().get(remote));
-            return;
+        if(message.getType() != Proto.NetworkMessage.Type.SYNC || message.getType() != Proto.NetworkMessage.Type.SYNC_ACK){
+            int playerId = this.players.inverse().get(remote);
+            queueForPlayer(playerId).add(message);
         }
-        int playerId = this.players.inverse().get(remote);
-        queueForPlayer(playerId).add(message);
+
+
     }
 
     private Queue<Proto.NetworkMessage> queueForPlayer(int playerId) {
