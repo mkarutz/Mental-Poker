@@ -46,10 +46,7 @@ public class MentalPoker {
         Remote remote = new Remote(listenPort, null);
         remote.start();
 
-        RoomClient client =
-                new RoomClient(
-                        new Address(remoteIP, remotePort),
-                        remote);
+        RoomClient client = new RoomClient(new Address(remoteIP, remotePort), remote);
 
         while (!client.isGameStarted()) {
             try {
