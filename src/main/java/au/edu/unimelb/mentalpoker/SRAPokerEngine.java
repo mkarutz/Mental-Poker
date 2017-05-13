@@ -245,8 +245,26 @@ public class SRAPokerEngine implements MentalPokerEngine {
     @Override
     public void drawPublic() {
         final int cardId = nextCard();
-        final int playerId = CardInfo.PUBLIC;
-        // TODO
+
+        BigInteger card;
+        if (getLocalPlayerId() == 1) {
+            card = deck.get(cardId);
+        } else {
+            card = receiveCard(getLocalPlayerId() - 1);
+        }
+
+        card = decrypt(card);
+
+        if (getLocalPlayerId() == getNumPlayers()) {
+            broadcastCard(card);
+        } else {
+            sendCard(card, getLocalPlayerId() + 1);
+            card = receiveCard(getNumPlayers());
+        }
+
+        cardInfoList.get(cardId).ownerId = CardInfo.PUBLIC;
+        cardInfoList.get(cardId).value = card;
+        cardInfoList.get(cardId).isOpen = true;
     }
 
     @Override
@@ -361,8 +379,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     @Override
     public ImmutableList<Card> getPublicCards() {
-        // TODO
-        return null;
+        return getPlayerHand(CardInfo.PUBLIC).getOpenCards();
     }
 
     @Override
