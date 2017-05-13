@@ -16,10 +16,12 @@ public class MentalPoker {
         Scanner scanner = new Scanner(System.in);
         String c = scanner.nextLine();
 
+        String remoteIP;
         int remotePort;
         int listenPort = Math.abs((new Random().nextInt() % 30000)) + 5000;
 
         if (c.equals("s")) {
+            remoteIP = "127.0.0.1";
             System.out.println("Enter the port for the new dungeon: ");
             remotePort = scanner.nextInt();
             scanner.nextLine();
@@ -31,6 +33,8 @@ public class MentalPoker {
                 }
             });
         } else {
+            System.out.println("Enter the IP for the existing dungeon: ");
+            remoteIP = scanner.next();
             System.out.println("Enter the port for the existing dungeon: ");
             remotePort = scanner.nextInt();
             scanner.nextLine();
@@ -41,7 +45,7 @@ public class MentalPoker {
 
         RoomClient client =
                 new RoomClient(
-                        new Address("127.0.0.1", remotePort),
+                        new Address(remoteIP, remotePort),
                         remote);
 
         while (!client.isGameStarted()) {
