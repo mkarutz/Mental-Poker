@@ -34,7 +34,10 @@ public class MentalPoker {
             });
         } else {
             System.out.println("Enter the IP for the existing dungeon: ");
-            remoteIP = scanner.next();
+            remoteIP = scanner.nextLine();
+            if(remoteIP.equals("")){
+                remoteIP = "127.0.0.1";
+            }
             System.out.println("Enter the port for the existing dungeon: ");
             remotePort = scanner.nextInt();
             scanner.nextLine();
