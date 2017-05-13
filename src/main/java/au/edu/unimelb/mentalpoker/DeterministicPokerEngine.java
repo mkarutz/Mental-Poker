@@ -63,16 +63,21 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
     public void drawPublic() {
         final int playerId = CardInfo.PUBLIC;
         final int cardId = _draw(playerId);
-        open(playerId, cardId);
+        _open(playerId, cardId);
     }
 
     @Override
-    public void open(int playerId, int cardId) {
-        final CardInfo cardInfo = cardInfoList.get(cardId);
-        if (cardInfo.ownerId != playerId) {
-            throw new IllegalArgumentException("The card to be opened must have been previously dealt to the player.");
+    public void open(int playerId) {
+        for (int i = 0; i < cardInfoList.size(); i++) {
+            final CardInfo cardInfo = cardInfoList.get(i);
+            if (cardInfo.ownerId == playerId && !cardInfo.isOpen) {
+                _open(playerId, i);
+            }
         }
-        cardInfo.isOpen = true;
+    }
+
+    private void _open(int playerId, int cardId) {
+        cardInfoList.get(cardId).isOpen = true;
     }
 
     @Override
@@ -89,7 +94,6 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
 
     @Override
     public Hand getPlayerHand(int playerId) {
-        final List<Integer> cardIds = new ArrayList<>();
         final List<Card> openCards = new ArrayList<>();
         int size = 0;
 
@@ -104,16 +108,15 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
                 openCards.add(cardList.get(i));
             }
 
-            cardIds.add(i + 1 /* Card identifiers start from 1 */);
             size++;
         }
 
-        return new Hand(size, cardIds, openCards);
+        return new Hand(size, openCards);
     }
 
     @Override
-    public Hand getPublicCards() {
-        return getPlayerHand(CardInfo.PUBLIC);
+    public ImmutableList<Card> getPublicCards() {
+        return getPlayerHand(CardInfo.PUBLIC).getOpenCards();
     }
 
     @Override

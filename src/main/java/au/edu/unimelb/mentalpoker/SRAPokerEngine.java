@@ -129,7 +129,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public void open(int playerId, int cardId) {
+    public void open(int playerId) {
 
     }
 
@@ -149,7 +149,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public Hand getPublicCards() {
+    public ImmutableList<Card> getPublicCards() {
         return null;
     }
 

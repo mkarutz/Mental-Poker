@@ -1,15 +1,12 @@
 package au.edu.unimelb.mentalpoker;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /** Test for {@link DeterministicPokerEngine}. */
 public class DeterministicPokerEngineTest {
@@ -33,24 +30,49 @@ public class DeterministicPokerEngineTest {
 
     @Test
     public void testLifecycle() {
-        poker.init();
+        testInit();
+        testDraw();
+        testDrawPublic();
+        testOpen();
+        testRake();
+    }
 
-        List<Card> localPlayerCards = poker.getLocalPlayerCards();
-        assertTrue(localPlayerCards.isEmpty());
+    private void testInit() {
+        poker.init();
+    }
+
+    private void testDraw() {
+        assertTrue(poker.getLocalPlayerCards().isEmpty());
+        assertTrue(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
+        assertEquals(0, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
 
         poker.draw(LOCAL_PLAYER_ID);
 
-        localPlayerCards = poker.getLocalPlayerCards();
-        assertTrue(!localPlayerCards.isEmpty());
-
-        assertEquals(0 /* expected */, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
-        assertTrue(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
+        assertFalse(poker.getLocalPlayerCards().isEmpty());
+        assertEquals(0, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
 
         poker.draw(OTHER_PLAYER_ID);
 
-        assertEquals(1 /* expected */, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
+        assertEquals(1, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
         assertTrue(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
-//
-//        poker.open(OTHER_PLAYER_ID, poker.getPlayerHand(OTHER_PLAYER_ID).getCardIds().get(0));
+    }
+
+    private void testDrawPublic() {
+        assertTrue(poker.getPublicCards().isEmpty());
+        poker.drawPublic();
+        assertFalse(poker.getPublicCards().isEmpty());
+    }
+
+    private void testOpen() {
+        assertTrue(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
+        poker.open(OTHER_PLAYER_ID);
+        assertFalse(poker.getPlayerHand(OTHER_PLAYER_ID).getOpenCards().isEmpty());
+    }
+
+    private void testRake() {
+        poker.rake();
+        assertEquals(0, poker.getPlayerHand(OTHER_PLAYER_ID).getSize());
+        assertEquals(0, poker.getPlayerHand(LOCAL_PLAYER_ID).getSize());
+        assertTrue(poker.getLocalPlayerCards().isEmpty());
     }
 }

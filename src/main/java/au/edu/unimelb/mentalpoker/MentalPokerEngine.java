@@ -16,11 +16,8 @@ public interface MentalPokerEngine {
     /** Deals a face-up card to the table. */
     void drawPublic();
 
-    /**
-     * Reveals the face value of a card. The card with ID {@code cardId} must have been previously dealt to the player
-     * with ID {@code playerId} with a call to {@link MentalPokerEngine#draw(int)}.
-     */
-    void open(int playerId, int cardId);
+    /** Reveals the face value of all the cards in a players hand. */
+    void open(int playerId);
 
     /** Clears the hands of all players. */
     void rake();
@@ -32,7 +29,7 @@ public interface MentalPokerEngine {
     Hand getPlayerHand(int playerId);
 
     /** Gets the cards dealt to the table. */
-    Hand getPublicCards();
+    ImmutableList<Card> getPublicCards();
 
     /** Gets a list of the cards in the local player's hand. */
     ImmutableList<Card> getLocalPlayerCards();

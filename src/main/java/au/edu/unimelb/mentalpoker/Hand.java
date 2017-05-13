@@ -9,12 +9,8 @@ public class Hand {
     private final int size;
     private final ImmutableList<Card> openCards;
 
-    /** Identifiers of all the cards in the hand. A card ID is an index into the prepared deck. */
-    private final ImmutableList<Integer> cardIds;
-
-    public Hand(int size, List<Integer> cardIds, List<Card> openCards) {
+    public Hand(int size, List<Card> openCards) {
         this.size = size;
-        this.cardIds = ImmutableList.copyOf(cardIds);
         this.openCards = ImmutableList.copyOf(openCards);
     }
 
@@ -24,10 +20,6 @@ public class Hand {
 
     public int getNumClosedCards() {
         return size - openCards.size();
-    }
-
-    public ImmutableList<Integer> getCardIds() {
-        return cardIds;
     }
 
     public ImmutableList<Card> getOpenCards() {
