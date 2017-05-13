@@ -44,11 +44,6 @@ public class MentalPoker {
                         new Address("127.0.0.1", remotePort),
                         remote);
 
-        System.out.println("Press any key when you are ready to play");
-        scanner.nextLine();
-        client.Ready();
-        System.out.println("You are ready. Waiting for other players...");
-
         while (!client.isGameStarted()) {
             try {
                 sleep(50);

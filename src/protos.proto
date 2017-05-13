@@ -49,13 +49,14 @@ message SraSecretMessage {
 message NetworkMessage {
     enum Type {
         JOIN_ROOM = 0;
-        PLAYER_READY = 1;
-        GAME_STARTED = 2;
-        SYNC = 3;
-        SYNC_ACK = 4;
-        SRA_DECK = 5;
-        SRA_CARD = 6;
-        SRA_SECRET = 7;
+        JOIN_ROOM_ALLOWED = 1;
+        PLAYER_READY = 2;
+        GAME_STARTED = 3;
+        SYNC = 4;
+        SYNC_ACK = 5;
+        SRA_DECK = 6;
+        SRA_CARD = 7;
+        SRA_SECRET = 8;
     };
 
     required Type type = 1;
