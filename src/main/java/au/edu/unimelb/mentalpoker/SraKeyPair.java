@@ -1,7 +1,11 @@
 package au.edu.unimelb.mentalpoker;
 
+import com.google.common.base.Preconditions;
+
 import java.math.BigInteger;
 import java.util.Random;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class SraKeyPair {
     private static final int DEFAULT_NUM_BITS = 10;
@@ -16,17 +20,21 @@ public class SraKeyPair {
         this.d = d;
     }
 
+    public static SraKeyPair create(BigInteger prime, BigInteger secret) {
+        checkArgument(secret.gcd(prime.subtract(BigInteger.ONE)).equals(BigInteger.ONE));
+        final BigInteger d = secret.modInverse(prime.subtract(BigInteger.ONE));
+        return new SraKeyPair(prime, secret, d);
+    }
+
     public static SraKeyPair create(BigInteger q) {
         return create(q, new Random());
     }
 
-    public static SraKeyPair create(BigInteger q, Random random) {
-        return create(DEFAULT_NUM_BITS, q, random);
+    public static SraKeyPair create(BigInteger p, Random random) {
+        return create(DEFAULT_NUM_BITS, p, random);
     }
 
-    public static SraKeyPair create(int numBits, BigInteger q, Random random) {
-        final BigInteger p = q.shiftLeft(1).add(BigInteger.ONE);
-
+    public static SraKeyPair create(int numBits, BigInteger p, Random random) {
         final BigInteger k = generateEncryptionKey(p, numBits, random);
         final BigInteger d = k.modInverse(p.subtract(BigInteger.ONE));
 
@@ -51,5 +59,9 @@ public class SraKeyPair {
 
     public BigInteger decrypt(BigInteger cypher) {
         return cypher.modPow(d, p);
+    }
+
+    public BigInteger getSecret() {
+        return k;
     }
 }

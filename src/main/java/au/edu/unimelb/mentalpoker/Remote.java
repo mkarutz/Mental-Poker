@@ -35,7 +35,7 @@ public class Remote extends Thread {
         }
         this.running = true;
 
-        this.remoteSender = new RemoteSender(this.socket, new UnreliablePacketSender(0, new UDPPacketSender(this.socket)));
+        this.remoteSender = new RemoteSender(this.socket, new UDPPacketSender(this.socket));
         this.remoteSender.start();
 
         this.remoteReceiver = new RemoteReceiver(this.socket, new UDPPacketReceiver(this.socket), this);

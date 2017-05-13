@@ -63,16 +63,5 @@ public class MentalPoker {
         PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), remote);
         PokerGame poker = new PokerGame(network, new SRAPokerEngine(network));
         poker.start();
-//        int id = network.getLocalPlayerId();
-//        System.out.println("My id is: " + id);
-//        if (id != 1) {
-//            System.out.println("Waiting for received from: " + (id - 1));
-//            Proto.NetworkMessage m = network.receive(id - 1);
-//            System.out.println("Received from: " + (id - 1));
-//        }
-//        if (id < network.numPlayers()) {
-//            System.out.println("Sending to: " + (id + 1));
-//            network.send(id + 1, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.JOIN_ROOM).build());
-//        }
     }
 }

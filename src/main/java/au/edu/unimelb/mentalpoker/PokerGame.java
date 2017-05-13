@@ -15,7 +15,12 @@ public class PokerGame extends Thread {
     public void run() {
         poker.init();
         playHand();
-        poker.finish();
+        try {
+            poker.finish();
+            System.out.println("Game finished successfully.");
+        } catch (CheatingDetectedException e) {
+            System.out.println("Cheating detected.");
+        }
     }
 
     private void playHand() {
@@ -28,6 +33,13 @@ public class PokerGame extends Thread {
 
         // Print my cards
         displayHand();
+
+        for (int playerId = 1; playerId <= poker.getNumPlayers(); playerId++) {
+            poker.open(playerId);
+            System.out.println("Player " + playerId + " had:");
+            poker.getPlayerHand(playerId).display();
+            System.out.println();
+        }
     }
 
     private void displayHand() {

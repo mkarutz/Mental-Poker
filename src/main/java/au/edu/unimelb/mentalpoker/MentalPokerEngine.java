@@ -23,7 +23,7 @@ public interface MentalPokerEngine {
     void rake();
 
     /** Completes the game, performing any necessary validity verification. */
-    void finish();
+    void finish() throws CheatingDetectedException;
 
     /** Gets the Hand of the player with ID {@code playerId}. */
     Hand getPlayerHand(int playerId);

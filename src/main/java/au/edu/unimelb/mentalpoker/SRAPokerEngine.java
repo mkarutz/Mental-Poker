@@ -4,17 +4,23 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.util.*;
 
 public class SRAPokerEngine implements MentalPokerEngine {
+    private static final int CARD_OFFSET = 123;
     private final PeerNetwork network;
 
     /** The un-shuffled, unencrypted list of cards used for playing the game. */
-    private final ImmutableList<Card> cardList = ImmutableList.copyOf(Card.standardDeck());
+    private static final ImmutableList<Card> CARD_LIST = ImmutableList.copyOf(Card.standardDeck());
 
+    /** Map from unencrypted card representations to Card values */
     private final Map<BigInteger, Card> cardMap = new HashMap<>();
 
+    /** The agreed un-shuffled deck representation */
     private List<BigInteger> initialDeck;
+
+    /** The shuffled deck */
     private List<BigInteger> deck;
 
     private BigInteger p;
@@ -47,7 +53,8 @@ public class SRAPokerEngine implements MentalPokerEngine {
     @Override
     public void init() {
         // Agree on large prime
-        p = BigInteger.valueOf(100012421);
+        BigInteger q = new BigInteger("16158503035655503650357438344334975980222051334857742016065172713762327569433945446598600705761456731844358980460949009747059779575245460547544076193224141560315438683650498045875098875194826053398028819192033784138396109321309878080919047169238085235290822926018152521443787945770532904303776199561965192760957166694834171210342487393282284747428088017663161029038902829665513096354230157075129296432088558362971801859230928678799175576150822952201848806616643615613562842355410104862578550863465661734839271290328348967522998634176499319107762583194718667771801067716614802322659239302476074096777926805529926544251");
+        p = q.shiftLeft(1).add(BigInteger.ONE);
 
         // Generate private key
         keyPair = SraKeyPair.create(p);
@@ -58,10 +65,10 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private void initializeDeck() {
-        List<BigInteger> cardRepresentations = new ArrayList<>(cardList.size());
-        for (int i = 1; i <= cardList.size(); i++) {
-            cardRepresentations.add(BigInteger.valueOf(i*i));
-            cardMap.put(cardRepresentations.get(i - 1), cardList.get(i - 1));
+        List<BigInteger> cardRepresentations = new ArrayList<>(CARD_LIST.size());
+        for (int i = 0; i < CARD_LIST.size(); i++) {
+            cardRepresentations.add(BigInteger.valueOf((CARD_OFFSET + i)*(CARD_OFFSET+i)));
+            cardMap.put(cardRepresentations.get(i), CARD_LIST.get(i));
         }
         initialDeck = ImmutableList.copyOf(cardRepresentations);
     }
@@ -97,29 +104,32 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private void broadcastDeck(List<BigInteger> deck) {
-        Proto.NetworkMessage msg = buildDeckMessage();
+        System.out.printf("Broadcasting deck\n");
+        Proto.NetworkMessage msg = buildDeckMessage(deck);
         network.broadcast(msg);
     }
 
-    private Proto.NetworkMessage buildDeckMessage() {
+    private Proto.NetworkMessage buildDeckMessage(List<BigInteger> deck) {
         return Proto.NetworkMessage.newBuilder()
                 .setType(Proto.NetworkMessage.Type.SRA_DECK)
                 .setSraDeckMessage(
                         Proto.SraDeckMessage.newBuilder()
-                                .addAllCard(buildDeck()))
+                                .addAllCard(buildDeck(deck)))
                 .build();
     }
 
-    private Iterable<String> buildDeck() {
+    private Iterable<String> buildDeck(List<BigInteger> deck) {
         return Iterables.transform(deck, BigInteger::toString);
     }
 
     private void sendDeck(List<BigInteger> deck, int playerId) {
-        Proto.NetworkMessage msg = buildDeckMessage();
+        System.out.printf("Sending deck to player %d\n", playerId);
+        Proto.NetworkMessage msg = buildDeckMessage(deck);
         network.send(playerId, msg);
     }
 
     private List<BigInteger> receiveDeck(int playerId) {
+        System.out.printf("Receiving deck from player %d\n", playerId);
         Proto.NetworkMessage msg = network.receive(playerId);
         return deckFromMessage(msg.getSraDeckMessage());
     }
@@ -133,6 +143,17 @@ public class SRAPokerEngine implements MentalPokerEngine {
                                         .setCard(card.toString()))
                         .build();
         network.send(playerId, msg);
+    }
+
+    private void broadcastCard(BigInteger card) {
+        Proto.NetworkMessage msg =
+                Proto.NetworkMessage.newBuilder()
+                        .setType(Proto.NetworkMessage.Type.SRA_CARD)
+                        .setSraCardMessage(
+                                Proto.SraCardMessage.newBuilder()
+                                        .setCard(card.toString()))
+                        .build();
+        network.broadcast(msg);
     }
 
     private BigInteger receiveCard(int playerId) {
@@ -211,6 +232,8 @@ public class SRAPokerEngine implements MentalPokerEngine {
             card = decrypt(card);
             cardInfoList.get(cardId).value = card;
         }
+
+        cardInfoList.get(cardId).ownerId = playerId;
     }
 
     public int nextCard() {
@@ -230,22 +253,109 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     @Override
     public void open(int playerId) {
+        for (int i = 0; i < cardInfoList.size(); i++) {
+            final CardInfo cardInfo = cardInfoList.get(i);
+            if (cardInfo.ownerId != playerId) {
+                continue;
+            }
 
+            if (getLocalPlayerId() == playerId) {
+                broadcastCard(cardInfo.value);
+            } else {
+                cardInfo.value = receiveCard(playerId);
+            }
+
+            cardInfo.isOpen = true;
+        }
     }
 
     @Override
     public void rake() {
-
+        for (CardInfo cardInfo : cardInfoList) {
+            cardInfo.ownerId = CardInfo.BURNT;
+        }
     }
 
     @Override
-    public void finish() {
+    public void finish() throws CheatingDetectedException {
+        broadcastKey();
 
+        List<BigInteger> keys = receiveKeys();
+
+        for (int i = 0; i < cardInfoList.size(); i++) {
+            final CardInfo cardInfo = cardInfoList.get(i);
+            if (cardInfo.ownerId == CardInfo.NO_OWNER) {
+                // No need to check un-dealt cards
+                continue;
+            }
+            if (cardInfo.ownerId == getLocalPlayerId()) {
+                // No need to check my own cards
+                continue;
+            }
+            if (!cardInfo.isOpen) {
+                // No need to check cards that were never revealed
+                continue;
+            }
+
+            final BigInteger claimedValue = cardInfo.value;
+            BigInteger value = deck.get(i);
+            for (BigInteger key : keys) {
+                SraKeyPair keyPair = SraKeyPair.create(p, key);
+                value = keyPair.decrypt(value);
+            }
+
+            if (!value.equals(claimedValue)) {
+                throw new CheatingDetectedException();
+            }
+        }
+    }
+
+    private void broadcastKey() {
+        Proto.NetworkMessage msg =
+                Proto.NetworkMessage.newBuilder()
+                        .setType(Proto.NetworkMessage.Type.SRA_SECRET)
+                        .setSraSecretMessage(
+                                Proto.SraSecretMessage.newBuilder().setSecret(keyPair.getSecret().toString()))
+                        .build();
+        network.broadcast(msg);
+    }
+
+    private List<BigInteger> receiveKeys() {
+        List<BigInteger> result = new ArrayList<>(getNumPlayers());
+        for (int playerId = 1; playerId <= getNumPlayers(); playerId++) {
+            if (playerId == getLocalPlayerId()) {
+                result.add(keyPair.getSecret());
+            } else {
+                result.add(receiveKey(playerId));
+            }
+        }
+        return result;
+    }
+
+    private BigInteger receiveKey(int playerId) {
+        return new BigInteger(network.receive(playerId).getSraSecretMessage().getSecret());
     }
 
     @Override
     public Hand getPlayerHand(int playerId) {
-        return null;
+        final List<Card> openCards = new ArrayList<>();
+        int size = 0;
+
+        for (int i = 0; i < cardInfoList.size(); i++) {
+            final CardInfo cardInfo = cardInfoList.get(i);
+
+            if (cardInfo.ownerId != playerId) {
+                continue;
+            }
+
+            if (cardInfo.isOpen) {
+                openCards.add(cardMap.get(cardInfo.value));
+            }
+
+            size++;
+        }
+
+        return new Hand(size, openCards);
     }
 
     @Override
@@ -268,6 +378,6 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     @Override
     public int getNumPlayers() {
-        return 0;
+        return network.getNumPlayers();
     }
 }
