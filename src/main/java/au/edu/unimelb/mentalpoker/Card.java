@@ -75,8 +75,37 @@ public class Card {
 
     public int getRawRank()
     {
-        return this.rank;
+        int rank = -1;
+        if(!this.rank.toString().contains("ATJQK"))
+        {
+            return Integer.parseInt(this.rank.toString());
+        }
+        else
+        {
+            if(this.rank.toString().equals("A"))
+            {
+                return 1;
+            }
+            if(this.rank.toString().equals("T"))
+            {
+                return 10;
+            }
+            if(this.rank.toString().equals("J"))
+            {
+                return 11;
+            }
+            if(this.rank.toString().equals("Q"))
+            {
+                return 12;
+            }
+            if(this.rank.toString().equals("K"))
+            {
+                return 13;
+            }
+        }
+        return rank;
     }
+
     public String getSuit()
     {
         return this.suit.symbol;
