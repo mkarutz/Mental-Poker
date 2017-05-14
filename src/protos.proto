@@ -50,6 +50,17 @@ message SraSecretMessage {
     required string secret = 1;
 }
 
+message PlayerActionMessage {
+    enum Type {
+        BET = 0;
+        CHECK = 1;
+        FOLD = 2;
+    }
+
+    required Type type = 1;
+    optional int32 betAmount = 2;
+}
+
 message NetworkMessage {
     enum Type {
         REQUEST_IP = 0;
@@ -63,6 +74,7 @@ message NetworkMessage {
         SRA_DECK = 8;
         SRA_CARD = 9;
         SRA_SECRET = 10;
+        PLAYER_ACTION = 11;
     };
 
     required Type type = 1;
@@ -73,4 +85,5 @@ message NetworkMessage {
     optional SraDeckMessage sraDeckMessage = 5;
     optional SraCardMessage sraCardMessage = 6;
     optional SraSecretMessage sraSecretMessage = 7;
+    optional PlayerActionMessage playerActionMessage = 8;
 }
