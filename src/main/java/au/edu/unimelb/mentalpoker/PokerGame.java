@@ -7,6 +7,7 @@ import java.util.Scanner;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.BET;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.CHECK;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.FOLD;
+import static java.lang.Math.min;
 
 public class PokerGame extends Thread {
     private static final int INITIAL_BALANCE = 1000000;
@@ -43,6 +44,9 @@ public class PokerGame extends Thread {
     }
 
     public static class PlayerAction {
+        private static final PlayerAction FOLD = new PlayerAction(Type.FOLD, 0);
+        private static final PlayerAction CHECK = new PlayerAction(Type.CHECK, 0);
+
         private final Type actionType;
         private final int betAmount;
 
@@ -62,11 +66,11 @@ public class PokerGame extends Thread {
         }
 
         public static PlayerAction check() {
-            return new PlayerAction(CHECK, 0);
+            return CHECK;
         }
 
         public static PlayerAction fold() {
-            return new PlayerAction(FOLD, 0);
+            return FOLD;
         }
 
         public Type getActionType() {
@@ -106,52 +110,64 @@ public class PokerGame extends Thread {
     }
 
     private void playHand() {
-        potAmount = 0;
+        resetHand();
         doDealing();
 
+        display();
         doBetting();
 
-        if (maybePayWinnings()) {
-            return;
-        }
+        poker.drawPublic();
+        poker.drawPublic();
+        poker.drawPublic();
 
-        poker.drawPublic();
-        poker.drawPublic();
-        poker.drawPublic();
+        display();
         doBetting();
 
-        if (maybePayWinnings()) {
-            return;
-        }
-
         poker.drawPublic();
+
+        display();
         doBetting();
 
-        if (maybePayWinnings()) {
-            return;
-        }
-
         poker.drawPublic();
-        doBetting();
 
-        if (maybePayWinnings()) {
-            return;
-        }
+        display();
+        doBetting();
 
 //        checkWinner();
     }
 
-    private boolean maybePayWinnings() {
-        int numPlayersPlaying = 0;
+    private void resetHand() {
         for (PlayerInfo playerInfo : playerInfoList) {
-            if (!playerInfo.isFolded()) {
-                numPlayersPlaying++;
-            }
+            playerInfo.stake = 0;
+            playerInfo.isFolded = false;
         }
+        potAmount = 0;
+    }
 
-//        if (numPlayersPlaying)
+    private void display() {
+        System.out.println("Pot amount is $" + potAmount);
+        displayPlayerHand();
+        displayPublicCards();
+    }
 
-        return false;
+    private void displayPlayerHand() {
+        final List<Card> playerHand = poker.getLocalPlayerCards();
+        final StringBuilder sb = new StringBuilder("Your cards: ");
+        for (Card card : playerHand) {
+            sb.append(card);
+            sb.append(" ");
+        }
+        System.out.println(sb);
+    }
+
+    private void displayPublicCards() {
+        final List<Card> cards = poker.getPublicCards();
+        final StringBuilder sb = new StringBuilder("Table cards: ");
+        for (Card card : cards) {
+            sb.append(card);
+            sb.append(" ");
+        }
+        System.out.println(sb);
     }
 
     private void doDealing() {
@@ -182,11 +198,10 @@ public class PokerGame extends Thread {
 
             PlayerAction action;
             if (playerId == network.getLocalPlayerId()) {
-                action = getPlayerAction(minBet);
-//                sendPlayerAction(action);
+                action = getActionFromUser(minBet);
+                broadcastPlayerAction(action);
             } else {
-//                action = receivePlayerAction(playerId);
-                return;
+                action = receivePlayerAction(playerId);
             }
 
             if (action.getActionType() == BET) {
@@ -197,11 +212,96 @@ public class PokerGame extends Thread {
                 assert(minBet == 0);
             } else if (action.getActionType() == FOLD) {
                 playerInfo.isFolded = true;
+                maybePayWinner();
             }
         }
     }
 
-    private PlayerAction getPlayerAction(int minBet) {
+    private void maybePayWinner() {
+        if (getNumPlayersStillIn() == 1) {
+            payWinner(getWinner());
+        }
+    }
+
+    private void payWinner(final int winnerIndex) {
+        final PlayerInfo winnerInfo = playerInfoList.get(winnerIndex);
+
+        for (int i = 0; i < playerInfoList.size(); i++) {
+            if (i == winnerIndex) {
+                continue;
+            }
+
+            final PlayerInfo playerInfo = playerInfoList.get(i);
+            final int winnerTakings = min(winnerInfo.stake, playerInfo.stake);
+            winnerInfo.balance += winnerTakings;
+            playerInfo.balance += playerInfo.stake - winnerTakings;
+            playerInfo.stake = 0;
+        }
+
+        winnerInfo.balance += winnerInfo.stake;
+        winnerInfo.stake = 0;
+    }
+
+    /**
+     * Gets the index of the last player still in the hand.
+     *
+     * <p> This method should only be called after it has been determined that all players except one have folded.
+     */
+    private int getWinner() {
+        for (int i = 0; i < playerInfoList.size(); i++) {
+            if (!playerInfoList.get(i).isFolded) {
+                return i;
+            }
+        }
+        throw new RuntimeException();
+    }
+
+    private int getNumPlayersStillIn() {
+        int result = 0;
+        for (PlayerInfo playerInfo : playerInfoList) {
+            if (!playerInfo.isFolded()) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private void broadcastPlayerAction(PlayerAction playerAction) {
+        Proto.PlayerActionMessage.Type actionType;
+        if (playerAction.getActionType() == BET) {
+            actionType = Proto.PlayerActionMessage.Type.BET;
+        } else if (playerAction.getActionType() == CHECK) {
+            actionType = Proto.PlayerActionMessage.Type.CHECK;
+        } else {
+            actionType = Proto.PlayerActionMessage.Type.FOLD;
+        }
+
+        Proto.NetworkMessage msg =
+                Proto.NetworkMessage.newBuilder()
+                        .setType(Proto.NetworkMessage.Type.PLAYER_ACTION)
+                        .setPlayerActionMessage(
+                                Proto.PlayerActionMessage.newBuilder()
+                                        .setType(actionType)
+                                        .setBetAmount(playerAction.getBetAmount()))
+                        .build();
+
+        network.broadcast(msg);
+    }
+
+    private PlayerAction receivePlayerAction(int playerId) {
+        Proto.NetworkMessage msg = network.receive(playerId);
+        Proto.PlayerActionMessage actionMessage = msg.getPlayerActionMessage();
+
+        if (actionMessage.getType() == Proto.PlayerActionMessage.Type.BET) {
+            return PlayerAction.bet(actionMessage.getBetAmount());
+        } else if (actionMessage.getType() == Proto.PlayerActionMessage.Type.CHECK) {
+            return PlayerAction.check();
+        } else {
+            return PlayerAction.fold();
+        }
+    }
+
+    private PlayerAction getActionFromUser(int minBet) {
         final Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -247,14 +347,5 @@ public class PokerGame extends Thread {
 
     private int getLocalPlayerBalance() {
         return playerInfoList.get(network.getLocalPlayerId() - 1).balance;
-    }
-
-    private void displayHand() {
-        final StringBuilder sb = new StringBuilder("Your hand: ");
-        for (Card card : poker.getLocalPlayerCards()) {
-            sb.append(card);
-            sb.append(" ");
-        }
-        System.out.println(sb);
     }
 }
