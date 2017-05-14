@@ -1,6 +1,7 @@
 package au.edu.unimelb.mentalpoker;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Card {
@@ -63,4 +64,21 @@ public class Card {
             return Integer.toString(rank);
         }
     }
+
+    public int getRawRank()
+    {
+        return this.rank;
+    }
+    public String getSuit()
+    {
+        return this.suit.symbol;
+    }
+
+    public static Comparator<Card> CompareByRank = new Comparator<Card>() {
+        @Override
+        public int compare(Card c1, Card c2) {
+            return c1.getRawRank()<c2.getRawRank()?-1:c1.getRawRank()>c2.getRawRank()?+1:0;
+        }
+    } ;
+
 }
