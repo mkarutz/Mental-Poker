@@ -65,6 +65,9 @@ public class MentalPoker {
         // Create a new Poker peer client and start game.
 
         PeerNetwork network = new PeerNetwork(client.getGameStartedMessage(), remote);
+        network.setDaemon(true);
+        network.start();
+
         PokerGame poker = new PokerGame(network, new SRAPokerEngine(network));
         poker.start();
     }
