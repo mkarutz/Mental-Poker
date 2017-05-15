@@ -103,7 +103,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         return network.getLocalPlayerId();
     }
 
-    private void broadcastDeck(List<BigInteger> deck) {
+    private void broadcastDeck(List<BigInteger> deck) throws TimeoutException {
         Proto.NetworkMessage msg = buildDeckMessage(deck);
         network.broadcast(msg);
     }
@@ -121,7 +121,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         return Iterables.transform(deck, BigInteger::toString);
     }
 
-    private void sendDeck(List<BigInteger> deck, int playerId) {
+    private void sendDeck(List<BigInteger> deck, int playerId) throws TimeoutException {
         Proto.NetworkMessage msg = buildDeckMessage(deck);
         network.send(playerId, msg);
     }
@@ -131,7 +131,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         return deckFromMessage(msg.getSraDeckMessage());
     }
 
-    private void sendCard(BigInteger card, int playerId) {
+    private void sendCard(BigInteger card, int playerId) throws TimeoutException {
         Proto.NetworkMessage msg =
                 Proto.NetworkMessage.newBuilder()
                         .setType(Proto.NetworkMessage.Type.SRA_CARD)
@@ -142,7 +142,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         network.send(playerId, msg);
     }
 
-    private void broadcastCard(BigInteger card) {
+    private void broadcastCard(BigInteger card) throws TimeoutException {
         Proto.NetworkMessage msg =
                 Proto.NetworkMessage.newBuilder()
                         .setType(Proto.NetworkMessage.Type.SRA_CARD)
@@ -333,7 +333,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         }
     }
 
-    private void broadcastKey() {
+    private void broadcastKey() throws TimeoutException {
         Proto.NetworkMessage msg =
                 Proto.NetworkMessage.newBuilder()
                         .setType(Proto.NetworkMessage.Type.SRA_SECRET)

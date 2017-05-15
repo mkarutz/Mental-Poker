@@ -351,7 +351,7 @@ public class PokerGame extends Thread {
         return result;
     }
 
-    private void broadcastPlayerAction(PlayerAction playerAction) {
+    private void broadcastPlayerAction(PlayerAction playerAction) throws TimeoutException {
         Proto.PlayerActionMessage.Type actionType;
         if (playerAction.getActionType() == BET) {
             actionType = Proto.PlayerActionMessage.Type.BET;
