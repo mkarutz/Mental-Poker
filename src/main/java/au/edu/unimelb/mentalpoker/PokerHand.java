@@ -2,6 +2,7 @@ package au.edu.unimelb.mentalpoker;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class PokerHand implements Comparable<PokerHand> {
 
     public PokerHand(Type type, List<Card> cards) {
         checkArgument(cards.size() == POKER_HAND_SIZE);
-        Collections.sort(cards, Card.ACE_HIGH.reversed());
+        cards = new ArrayList<>(cards);
+        cards.sort(Card.ACE_HIGH.reversed());
         this.type = type;
         this.cards = ImmutableList.copyOf(cards);
     }
