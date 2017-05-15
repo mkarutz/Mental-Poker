@@ -67,7 +67,7 @@ public class PokerUtils {
         }
         return finalCombinations;
     }
-
+    
     
     //just to check for special case of straight
     private static boolean isRoyal(List<Card> cards){
