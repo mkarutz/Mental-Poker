@@ -67,8 +67,52 @@ public class PokerUtils {
         }
         return finalCombinations;
     }
-    
-    
+
+    public static PokerHand.Type getHandType(List<Card> playerHand){
+        if(isRoyalFlush(playerHand)){
+            return PokerHand.Type.STRAIGHT_FLUSH;
+        }
+        if(isStraightFlush(playerHand)){
+            return PokerHand.Type.STRAIGHT_FLUSH;
+        }
+        if(isQuad(playerHand)){
+            return PokerHand.Type.QUAD;
+        }
+        if(isFullHouse(playerHand)){
+            return PokerHand.Type.FULL_HOUSE;
+        }
+        if(isFlush(playerHand)){
+            return PokerHand.Type.FLUSH;
+        }
+        if(isStraight(playerHand)){
+            return PokerHand.Type.STRAIGHT;
+        }
+        if(isTriple(playerHand)){
+            return PokerHand.Type.TRIPLE;
+        }
+        if(isDoublePair(playerHand)){
+            return PokerHand.Type.TWO_PAIR;
+        }
+        if(isPair(playerHand)){
+            return PokerHand.Type.PAIR;
+        }
+        return PokerHand.Type.HIGH_CARD;
+    }
+
+    public static PokerHand getBestHand(List<List<Card>> hands){
+        List<PokerHand> pokerHands = new ArrayList<>();
+        for(List<Card> hand:hands){
+            pokerHands.add(new PokerHand(getHandType(hand),hand));
+        }
+        return Collections.max(pokerHands);
+    }
+
+    public static PokerHand getPlayerBestHand(List<Card> playerHand, List<Card> tableCards){
+        List<List<Card>> tableCardCombination = findCombinations(tableCards,POKER_HAND_SIZE-playerHand.size());
+        List<List<Card>> playerHandCombinations = getAllPossiblePlayerHand(playerHand,tableCardCombination);
+        return getBestHand(playerHandCombinations);
+    }
+
     //just to check for special case of straight
     private static boolean isRoyal(List<Card> cards){
         boolean check = true;
@@ -121,14 +165,14 @@ public class PokerUtils {
     private static boolean isFullHouse(List<Card> cards) {
         if (cards.get(0).getRawRank() == cards.get(1).getRawRank()
                 && cards.get(0).getRawRank() == cards.get(2).getRawRank()) {
-            return isPair(cards.subList(4, cards.size()));
+            return isPair(cards.subList(3, cards.size()));
         }
 
         if (cards.get(0).getRawRank() == cards.get(1).getRawRank()) {
-            return isTriple(cards.subList(3, cards.size()));
+            return isTriple(cards.subList(2, cards.size()));
         }
 
-        return isFullHouse(cards.subList(1, cards.size()));
+        return false;
     }
 
     private static boolean isQuad(List<Card> cards) {
