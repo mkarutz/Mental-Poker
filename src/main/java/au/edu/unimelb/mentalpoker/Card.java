@@ -1,18 +1,18 @@
 package au.edu.unimelb.mentalpoker;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Card {
     private final Suit suit;
-    private final int rank;
+    private final Rank rank;
 
-    /** An enum representing the suit of a card. */
-    private enum Suit {
-        SPADES("S"),
+    public enum Suit {
         DIAMONDS("D"),
         CLUBS("C"),
-        HEARTS("H");
+        HEARTS("H"),
+        SPADES("S");
 
         private String symbol;
 
@@ -26,19 +26,42 @@ public class Card {
         }
     }
 
-    public Card(Suit suit, int rank) {
-        if (rank < 1 || rank > 13) {
-            throw new IllegalArgumentException("Rank out of range.");
+    public enum Rank {
+        TWO("2"),
+        THREE("3"),
+        FOUR("4"),
+        FIVE("5"),
+        SIX("6"),
+        SEVEN("7"),
+        EIGHT("8"),
+        NINE("9"),
+        TEN("T"),
+        JACK("J"),
+        QUEEN("Q"),
+        KING("K"),
+        ACE("A");
+
+        private String symbol;
+
+        Rank(String symbol) {
+            this.symbol = symbol;
         }
 
+        @Override
+        public String toString() {
+            return symbol;
+        }
+    }
+
+    public Card(Suit suit, Rank rank) {
         this.suit = suit;
         this.rank = rank;
     }
 
     public static List<Card> standardDeck() {
         final List<Card> result = new ArrayList<>(52);
-        for (Suit suit : Suit.values()) {
-            for (int rank = 1; rank <= 13; rank++) {
+        for (Rank rank : Rank.values()) {
+            for (Suit suit : Suit.values()) {
                 result.add(new Card(suit, rank));
             }
         }
@@ -47,20 +70,52 @@ public class Card {
 
     @Override
     public String toString() {
-        return getRank() + suit.toString();
+        return rank.toString() + suit.toString();
     }
 
-    private String getRank() {
-        if (rank == 1) {
-            return "A";
-        } else if (rank == 11) {
-            return "J";
-        } else if (rank == 12) {
-            return "Q";
-        } else if (rank == 13) {
-            return "K";
-        } else {
-            return Integer.toString(rank);
+    public int getRawRank()
+    {
+        int rank = -1;
+        if(!this.rank.toString().contains("ATJQK"))
+        {
+            return Integer.parseInt(this.rank.toString());
         }
+        else
+        {
+            if(this.rank.toString().equals("A"))
+            {
+                return 1;
+            }
+            if(this.rank.toString().equals("T"))
+            {
+                return 10;
+            }
+            if(this.rank.toString().equals("J"))
+            {
+                return 11;
+            }
+            if(this.rank.toString().equals("Q"))
+            {
+                return 12;
+            }
+            if(this.rank.toString().equals("K"))
+            {
+                return 13;
+            }
+        }
+        return rank;
     }
+
+    public String getSuit()
+    {
+        return this.suit.symbol;
+    }
+
+    public static Comparator<Card> CompareByRank = new Comparator<Card>() {
+        @Override
+        public int compare(Card c1, Card c2) {
+            return c1.getRawRank()<c2.getRawRank()?-1:c1.getRawRank()>c2.getRawRank()?+1:0;
+        }
+    } ;
+
 }

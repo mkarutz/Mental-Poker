@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import java.math.BigInteger;
-import java.security.KeyPair;
-import java.sql.Time;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
@@ -16,13 +14,13 @@ public class SRAPokerEngine implements MentalPokerEngine {
     /** The un-shuffled, unencrypted list of cards used for playing the game. */
     private static final ImmutableList<Card> CARD_LIST = ImmutableList.copyOf(Card.standardDeck());
 
-    /** Map from unencrypted card representations to Card values */
+    /** Map from unencrypted card representations to Card values. */
     private final Map<BigInteger, Card> cardMap = new HashMap<>();
 
-    /** The agreed un-shuffled deck representation */
+    /** The agreed un-shuffled deck representation. */
     private List<BigInteger> initialDeck;
 
-    /** The shuffled deck */
+    /** The shuffled deck. */
     private List<BigInteger> deck;
 
     private BigInteger p;
@@ -246,8 +244,28 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public void drawPublic() {
+    public void drawPublic() throws TimeoutException {
+        final int cardId = nextCard();
 
+        BigInteger card;
+        if (getLocalPlayerId() == 1) {
+            card = deck.get(cardId);
+        } else {
+            card = receiveCard(getLocalPlayerId() - 1);
+        }
+
+        card = decrypt(card);
+
+        if (getLocalPlayerId() == getNumPlayers()) {
+            broadcastCard(card);
+        } else {
+            sendCard(card, getLocalPlayerId() + 1);
+            card = receiveCard(getNumPlayers());
+        }
+
+        cardInfoList.get(cardId).ownerId = CardInfo.PUBLIC;
+        cardInfoList.get(cardId).value = card;
+        cardInfoList.get(cardId).isOpen = true;
     }
 
     @Override
@@ -255,6 +273,9 @@ public class SRAPokerEngine implements MentalPokerEngine {
         for (int i = 0; i < cardInfoList.size(); i++) {
             final CardInfo cardInfo = cardInfoList.get(i);
             if (cardInfo.ownerId != playerId) {
+                continue;
+            }
+            if (cardInfo.isOpen) {
                 continue;
             }
 
@@ -271,6 +292,9 @@ public class SRAPokerEngine implements MentalPokerEngine {
     @Override
     public void rake() {
         for (CardInfo cardInfo : cardInfoList) {
+            if (cardInfo.ownerId == CardInfo.NO_OWNER) {
+                continue;
+            }
             cardInfo.ownerId = CardInfo.BURNT;
         }
     }
@@ -359,7 +383,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     @Override
     public ImmutableList<Card> getPublicCards() {
-        return null;
+        return getPlayerHand(CardInfo.PUBLIC).getOpenCards();
     }
 
     @Override

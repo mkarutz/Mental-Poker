@@ -16,7 +16,7 @@ public interface MentalPokerEngine {
     void draw(int playerId) throws TimeoutException;
 
     /** Deals a face-up card to the table. */
-    void drawPublic();
+    void drawPublic() throws TimeoutException;
 
     /** Reveals the face value of all the cards in a players hand. */
     void open(int playerId) throws TimeoutException;

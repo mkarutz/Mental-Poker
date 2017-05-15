@@ -41,7 +41,7 @@ task test1(type: Exec, dependsOn: build) {
 }
 
 build.dependsOn fatJar
-build.dependsOn protoc
+compileJava.dependsOn protoc
 run.dependsOn build
 
 run {
