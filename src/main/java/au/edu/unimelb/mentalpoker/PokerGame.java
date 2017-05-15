@@ -8,6 +8,7 @@ import java.util.Scanner;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.BET;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.CHECK;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.FOLD;
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 
@@ -18,7 +19,6 @@ public class PokerGame extends Thread {
     private final MentalPokerEngine poker;
     private final PeerNetwork network;
 
-    private int potAmount = 0;
     private List<PlayerInfo> playerInfoList;
 
     private static class PlayerInfo {
@@ -91,10 +91,11 @@ public class PokerGame extends Thread {
 
     @Override
     public void run() {
-        poker.init();
-
         init();
-        playHand();
+
+        for (int i = 0; i < 3; i++) {
+            playHand();
+        }
 
         try {
             poker.finish();
@@ -105,6 +106,9 @@ public class PokerGame extends Thread {
     }
 
     private void init() {
+        System.out.println("Shuffling...");
+        poker.init();
+
         playerInfoList = new ArrayList<>(poker.getNumPlayers());
         for (int i = 0; i < poker.getNumPlayers(); i++) {
             playerInfoList.add(new PlayerInfo(INITIAL_BALANCE));
@@ -116,26 +120,40 @@ public class PokerGame extends Thread {
         doDealing();
 
         display();
-        doBetting();
+        if (doBetting()) {
+            poker.rake();
+            return;
+        }
 
         poker.drawPublic();
         poker.drawPublic();
         poker.drawPublic();
 
         display();
-        doBetting();
+        if (doBetting()) {
+            poker.rake();
+            return;
+        }
 
         poker.drawPublic();
 
         display();
-        doBetting();
+        if (doBetting()) {
+            poker.rake();
+            return;
+        }
 
         poker.drawPublic();
 
         display();
-        doBetting();
+        if (doBetting()) {
+            poker.rake();
+            return;
+        }
 
 //        checkWinner();
+
+        poker.rake();
     }
 
     private void resetHand() {
@@ -143,11 +161,18 @@ public class PokerGame extends Thread {
             playerInfo.stake = 0;
             playerInfo.isFolded = false;
         }
-        potAmount = 0;
+    }
+
+    private int getPotAmount() {
+        int result = 0;
+        for (PlayerInfo playerInfo : playerInfoList) {
+            result += playerInfo.stake;
+        }
+        return result;
     }
 
     private void display() {
-        System.out.println("Pot amount is $" + potAmount);
+        System.out.println("Pot amount is $" + getPotAmount());
         displayPlayerHand();
         displayPublicCards();
     }
@@ -187,46 +212,75 @@ public class PokerGame extends Thread {
         }
     }
 
-    private void doBetting() {
-        int minBet = 0;
+    private boolean doBetting() {
+        boolean allCalledOrFolded = false;
 
-        for (int i = 0; i < poker.getNumPlayers(); i++) {
-            final PlayerInfo playerInfo = playerInfoList.get(i);
-            final int playerId = i + 1;
+        while (!allCalledOrFolded) {
+            boolean anyRaised = false;
 
-            if (playerInfo.isFolded()) {
-                continue;
+            for (int i = 0; i < poker.getNumPlayers(); i++) {
+                final PlayerInfo playerInfo = playerInfoList.get(i);
+                final int playerId = i + 1;
+                final int minBet = max(0, getMaxStake() - playerInfo.stake);
+
+                if (playerInfo.isFolded()) {
+                    continue;
+                }
+
+                PlayerAction action;
+                if (playerId == network.getLocalPlayerId()) {
+                    System.out.println("YOUR TURN:");
+                    action = getActionFromUser(minBet);
+                    broadcastPlayerAction(action);
+                } else {
+                    action = receivePlayerAction(playerId);
+                }
+
+                if (action.getActionType() == BET) {
+                    System.out.printf("Player %d bet $%d\n", i + 1, action.getBetAmount());
+                    playerInfo.balance -= action.getBetAmount();
+                    playerInfo.stake += action.getBetAmount();
+
+                    if (action.getBetAmount() > minBet) {
+                        anyRaised = true;
+                    }
+                } else if (action.getActionType() == CHECK) {
+                    System.out.printf("Player %d checked\n", i + 1);
+                    assert(minBet == 0);
+                } else if (action.getActionType() == FOLD) {
+                    System.out.printf("Player %d folded\n", i + 1);
+                    playerInfo.isFolded = true;
+                    if (maybePayWinner()) {
+                        return true;
+                    }
+                }
             }
 
-            PlayerAction action;
-            if (playerId == network.getLocalPlayerId()) {
-                action = getActionFromUser(minBet);
-                broadcastPlayerAction(action);
-            } else {
-                action = receivePlayerAction(playerId);
-            }
-
-            if (action.getActionType() == BET) {
-                playerInfo.balance -= action.getBetAmount();
-                playerInfo.stake += action.getBetAmount();
-                minBet = action.getBetAmount();
-            } else if (action.getActionType() == CHECK) {
-                assert(minBet == 0);
-            } else if (action.getActionType() == FOLD) {
-                playerInfo.isFolded = true;
-                maybePayWinner();
-            }
+            allCalledOrFolded = !anyRaised;
         }
+
+        return false;
     }
 
-    private void maybePayWinner() {
+    private int getMaxStake() {
+        int result = 0;
+        for (PlayerInfo playerInfo : playerInfoList) {
+            result = max(result, playerInfo.stake);
+        }
+        return result;
+    }
+
+    private boolean maybePayWinner() {
         if (getNumPlayersStillIn() == 1) {
             payWinner(getWinner());
+            return true;
         }
+        return false;
     }
 
     private void payWinner(final int winnerIndex) {
         final PlayerInfo winnerInfo = playerInfoList.get(winnerIndex);
+        int totalWinnerTakings = 0;
 
         for (int i = 0; i < playerInfoList.size(); i++) {
             if (i == winnerIndex) {
@@ -235,13 +289,16 @@ public class PokerGame extends Thread {
 
             final PlayerInfo playerInfo = playerInfoList.get(i);
             final int winnerTakings = min(winnerInfo.stake, playerInfo.stake);
-            winnerInfo.balance += winnerTakings;
+            totalWinnerTakings += winnerTakings;
             playerInfo.balance += playerInfo.stake - winnerTakings;
             playerInfo.stake = 0;
         }
 
+        winnerInfo.balance += totalWinnerTakings;
         winnerInfo.balance += winnerInfo.stake;
         winnerInfo.stake = 0;
+
+        System.out.printf("Player %d won $%d\n", winnerIndex + 1, totalWinnerTakings);
     }
 
     /**
@@ -338,7 +395,7 @@ public class PokerGame extends Thread {
 
             try {
                 int amount = Integer.parseInt(scanner.nextLine());
-                if (amount == balance || amount >= minBet && amount <= balance) {
+                if (amount > 0 && amount == balance || amount >= minBet && amount <= balance) {
                     return amount;
                 }
             } catch (NumberFormatException e) {

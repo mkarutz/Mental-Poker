@@ -291,6 +291,9 @@ public class SRAPokerEngine implements MentalPokerEngine {
     @Override
     public void rake() {
         for (CardInfo cardInfo : cardInfoList) {
+            if (cardInfo.ownerId == CardInfo.NO_OWNER) {
+                continue;
+            }
             cardInfo.ownerId = CardInfo.BURNT;
         }
     }
