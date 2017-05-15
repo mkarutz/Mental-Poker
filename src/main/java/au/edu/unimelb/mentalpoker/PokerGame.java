@@ -13,7 +13,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 
-public class PokerGame extends Thread {
+public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     private static final int INITIAL_BALANCE = 1000000;
     private static final int CARDS_PER_HAND = 2;
 
@@ -21,6 +21,12 @@ public class PokerGame extends Thread {
     private final PeerNetwork network;
 
     private List<PlayerInfo> playerInfoList;
+
+    @Override
+    public void onTimeOut(int playerId) {
+        System.out.println("\n\nError: Timed out reaching player " + playerId);
+        System.exit(1);
+    }
 
     private static class PlayerInfo {
         boolean isFolded;
@@ -87,6 +93,7 @@ public class PokerGame extends Thread {
 
     public PokerGame(PeerNetwork network, MentalPokerEngine poker) {
         this.network = network;
+        this.network.setListener(this);
         this.poker = poker;
     }
 

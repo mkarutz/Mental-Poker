@@ -154,7 +154,8 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private BigInteger receiveCard(int playerId) throws TimeoutException {
-        return new BigInteger(network.receive(playerId).getSraCardMessage().getCard());
+        Proto.NetworkMessage msg = network.receive(playerId);
+        return new BigInteger(msg.getSraCardMessage().getCard());
     }
 
     private List<BigInteger> deckFromMessage(Proto.SraDeckMessage msg) {

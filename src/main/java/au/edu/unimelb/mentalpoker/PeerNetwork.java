@@ -12,14 +12,20 @@ import java.util.concurrent.TimeoutException;
  */
 public class PeerNetwork extends Thread implements Remote.Callbacks {
     private static final long PING_INTERVAL = 2000;
-    private static final long DEFAULT_TIMEOUT = 15000;
+    private static final long DEFAULT_TIMEOUT = 10000;
 
+    private PeerNetwork.Callbacks callbacks;
     private BiMap<Integer, Address> players;
     private int localId;
     private Remote remote;
     private HashMap<Integer, Queue<Proto.NetworkMessage>> playerMessages;
     private HashMap<Integer, Long> lastPingTime;
     private HashSet<Integer> playersNotSynced;
+
+    /** Interface for callbacks. */
+    public interface Callbacks {
+        void onTimeOut(int playerId);
+    }
 
     public PeerNetwork(Proto.GameStartedMessage gameInfo, Remote remote) {
         this.players = HashBiMap.create();
@@ -40,13 +46,20 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
         synchronize();
     }
 
+    public void setListener(PeerNetwork.Callbacks listener) {
+        this.callbacks = listener;
+    }
+
     @Override
     public void run() {
         for (Integer playerId : this.players.keySet()) {
-            this.lastPingTime.put(playerId, System.currentTimeMillis());
+            if (playerId != getLocalPlayerId()) {
+                this.lastPingTime.put(playerId, System.currentTimeMillis());
+            }
         }
         while (true) {
             pingPeers();
+            checkPeers();
             try {
                 Thread.sleep(PeerNetwork.PING_INTERVAL);
             } catch (InterruptedException e) {
@@ -58,7 +71,7 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
     private void verifyPlayerConnection(int playerId) throws TimeoutException {
         if (this.lastPingTime.containsKey(playerId))
             if (System.currentTimeMillis() - this.lastPingTime.get(playerId) > PeerNetwork.DEFAULT_TIMEOUT)
-                throw new TimeoutException("Error: Timed out reaching player " + playerId);
+                throw new TimeoutException("\nError: Timed out reaching player " + playerId);
     }
 
     private void pingPeers() {
@@ -69,6 +82,16 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
             broadcast(message);
         } catch (TimeoutException e) {
             // Internal method, no need to handle
+        }
+    }
+
+    private void checkPeers() {
+        for (HashMap.Entry<Integer, Long> entry : this.lastPingTime.entrySet()) {
+            if (System.currentTimeMillis() - entry.getValue() > PeerNetwork.DEFAULT_TIMEOUT) {
+                if (this.callbacks != null) {
+                    this.callbacks.onTimeOut(entry.getKey());
+                }
+            }
         }
     }
 
@@ -85,7 +108,8 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
                 Proto.NetworkMessage.newBuilder()
                     .setType(Proto.NetworkMessage.Type.SYNC).build();
 
-        while (!this.playersNotSynced.isEmpty()) {
+        long startTime = System.currentTimeMillis();
+        while (!this.playersNotSynced.isEmpty() && System.currentTimeMillis() - startTime < DEFAULT_TIMEOUT) {
             try {
                 for (Integer playerId : this.playersNotSynced) {
                     send(playerId, syncMessage);
@@ -141,8 +165,8 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
     public void send(int playerId, Proto.NetworkMessage message) throws
             InvalidPlayerIdException, TimeoutException
     {
-        this.remote.send(lookupPlayerAddress(playerId), message);
         verifyPlayerConnection(playerId);
+        this.remote.send(lookupPlayerAddress(playerId), message);
     }
 
     private Address lookupPlayerAddress(int playerId) throws InvalidPlayerIdException {
@@ -162,6 +186,8 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
 
         if (message.getType() == Proto.NetworkMessage.Type.PING) {
             this.lastPingTime.put(playerId, System.currentTimeMillis());
+            //System.out.println("PING " + playerId);
+            return;
         }
 
         if (message.getType() == Proto.NetworkMessage.Type.SYNC) {
@@ -188,8 +214,7 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
 
     @Override
     public void onSendFailed(Address destination) {
-        System.out.println("Error: Failed to send message to " + destination);
-        System.exit(1);
+        this.lastPingTime.put(lookupPlayerId(destination), 0L);
     }
 
     private Queue<Proto.NetworkMessage> queueForPlayer(int playerId) {
