@@ -1,24 +1,17 @@
 package au.edu.unimelb.mentalpoker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-/**
- * Created by brandon on 13/05/17.
- */
+/** Created by brandon on 13/05/17. */
 public class PokerUtils {
+    private static final int POKER_HAND_SIZE = 5;
 
-    //Find combination of tablecards and add hand
-    //number represents the number of cards used from table cards -- usually 3
-    public static List<List<Card>> findCombinations(List<Card> playerCards, List<Card> tableCards)
-    {
-        return findCombinations(playerCards,tableCards,3);
-    }
-
-    public static List<List<Card>> findCombinations(List<Card> playerCards, List<Card> tableCards, int number)
-    {
+    /** Returns a list of all possible hand combination for the given player hand. */
+    public static List<List<Card>> getAllHands(List<Card> playerCards, List<Card> tableCards) {
         List<List<Card>> result = new ArrayList<>();
-        for(List<Card> tableCardCombination: findCombinations(tableCards, number))
-        {
+        for (List<Card> tableCardCombination : findCombinations(tableCards, POKER_HAND_SIZE - playerCards.size())) {
             List<Card> tempResult = new ArrayList<>();
             tempResult.addAll(playerCards);
             tempResult.addAll(tableCardCombination);
@@ -27,33 +20,25 @@ public class PokerUtils {
         return result;
     }
 
-    //find combination of table cards
-    public static List<List<Card>> findCombinations(List<Card> tableCards, int number)
-    {
+    /** Enumerates a list of all combination from table cards of size number. */
+    private static List<List<Card>> findCombinations(List<Card> tableCards, int number) {
         List<List<Card>> finalResultTemp = new ArrayList<>();
         List<List<Card>> finalResult = new ArrayList<>();
 
-        if (number == 0 || tableCards.isEmpty())
-        {
+        if (number == 0 || tableCards.isEmpty()) {
             return finalResult;
         }
 
-        for(Card card: tableCards)
-        {
-            List<Card> tempTableCards = tableCards.subList(tableCards.indexOf(card)+1,tableCards.size());
+        for (Card card : tableCards) {
+            List<Card> tempTableCards = tableCards.subList(tableCards.indexOf(card) + 1, tableCards.size());
+            List<List<Card>> tempList = findCombinations(tempTableCards, number - 1);
 
-            List<List<Card>> tempList = findCombinations(tempTableCards,number-1);
-
-            if(tempList.isEmpty())
-            {
+            if (tempList.isEmpty()) {
                 List<Card> result = new ArrayList<>();
                 result.add(card);
                 finalResultTemp.add(result);
-            }
-            else
-            {
-                for(List<Card> subSet : tempList)
-                {
+            } else {
+                for (List<Card> subSet : tempList) {
                     List<Card> result = new ArrayList<>();
                     result.add(card);
                     result.addAll(subSet);
@@ -62,187 +47,116 @@ public class PokerUtils {
             }
         }
 
-        for(List<Card> lc : finalResultTemp)
-        {
-                if(lc.size()==number)
-                {
-                    finalResult.add(lc);
-                }
+        for (List<Card> lc : finalResultTemp) {
+            if (lc.size() == number) {
+                finalResult.add(lc);
+            }
         }
+
         return finalResult;
     }
 
-    //just to check for special case of straight
-    public static boolean isRoyal(List<Card> cards){
-        boolean check = true;
-        Collections.sort(cards,Card.CompareByRank);
-
-        //check if first card is 'Ace'
-        if(cards.get(0).getRawRank() != 1)
-        {
+    /**
+     * Checks for special case of 10,J,Q,K,A straight.
+     */
+    private static boolean isRoyal(List<Card> cards) {
+        if (cards.get(0).getRank() != Card.Rank.ACE) {
             return false;
         }
 
-        //check if second card is '10'
-        if(cards.get(1).getRawRank() != 10)
-        {
+        if (cards.get(1).getRank() != Card.Rank.TEN) {
             return false;
         }
 
-        for(int i =1 ; i<cards.size()-1;i++)
-        {
-
-            if(cards.get(i).getRawRank() != cards.get(i+1).getRawRank()-1)
-            {
-                check = false;
-                break;
-            }
-        }
-        return check;
+        return isStraight(cards.subList(2, cards.size()));
     }
 
-    public static boolean isStraight(List<Card> cards){
-        boolean check = true;
-        Collections.sort(cards,Card.CompareByRank);
-
-        if(isRoyal(cards)){
+    private static boolean isStraight(List<Card> cards) {
+        if (isRoyal(cards)) {
             return true;
         }
 
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-
-            if(cards.get(i).getRawRank() != cards.get(i+1).getRawRank()-1)
-            {
-                    check = false;
-                    break;
+        for (int i = 0; i < cards.size() - 1; i++) {
+            if (cards.get(i).getRawRank() != cards.get(i + 1).getRawRank() - 1) {
+                return false;
             }
         }
-        return check;
+
+        return true;
     }
 
-    public static boolean isFlush(List<Card> cards){
-        boolean check =true;
-
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-            if(!cards.get(i).getSuit().equals(cards.get(i+1).getSuit()))
-            {
-                check = false;
-                break;
+    private static boolean isFlush(List<Card> cards) {
+        for (int i = 0; i < cards.size() - 1; i++) {
+            if (!cards.get(i).getSuit().equals(cards.get(i + 1).getSuit())) {
+                return false;
             }
         }
-        return check;
+        return true;
     }
 
-    public static boolean isStraightFlush(List<Card> cards){
-        return (isFlush(cards) && isStraight(cards));
+    private static boolean isStraightFlush(List<Card> cards) {
+        return isFlush(cards) && isStraight(cards);
     }
 
-    public static boolean isRoyalFlush(List<Card> cards){
-        return (isRoyal(cards) && isFlush(cards));
+    private static boolean isRoyalFlush(List<Card> cards) {
+        return isRoyal(cards) && isFlush(cards);
     }
 
-    public static boolean isFullHouse(List<Card> cards){
-        boolean check = false;
-        Collections.sort(cards,Card.CompareByRank);
+    private static boolean isFullHouse(List<Card> cards) {
+        if (cards.get(0).getRawRank() == cards.get(1).getRawRank()
+                && cards.get(0).getRawRank() == cards.get(2).getRawRank()) {
+            return isPair(cards.subList(4, cards.size()));
+        }
 
-        int count = 0;
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-            if(cards.get(i).getRawRank() == cards.get(i+1).getRawRank())
-            {
-                count++;
-            }
-            else
-            {
-                if(count == 1)
-                {
-                    check = isTriple(cards.subList(i+1,cards.size()));
-                }
-                if(count == 2)
-                {
-                    check =isPair(cards.subList(i+1,cards.size()));
-                }
+        if (cards.get(0).getRawRank() == cards.get(1).getRawRank()) {
+            return isTriple(cards.subList(3, cards.size()));
+        }
+
+        return isFullHouse(cards.subList(1, cards.size()));
+    }
+
+    private static boolean isQuad(List<Card> cards) {
+        for (int i = 0; i < cards.size() - 2; i++) {
+            if (cards.get(i).getRawRank() == cards.get(i + 1).getRawRank()
+                    && cards.get(i).getRawRank() == cards.get(i + 2).getRawRank()
+                    && cards.get(i).getRawRank() == cards.get(i + 3).getRawRank()) {
+                return true;
             }
         }
-        return check;
+
+        return false;
     }
 
-    public static boolean isQuad(List<Card> cards){
-        boolean check = false;
-        Collections.sort(cards,Card.CompareByRank);
-
-        int count =0;
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-            if(cards.get(i).getRawRank() == cards.get(i+1).getRawRank())
-            {
-                count++;
-                if(count == 3)
-                {
-                    check = true;
-                    break;
-                }
+    private static boolean isTriple(List<Card> cards) {
+        for (int i = 0; i < cards.size() - 2; i++) {
+            if (cards.get(i).getRawRank() == cards.get(i + 1).getRawRank()
+                    && cards.get(i).getRawRank() == cards.get(i + 2).getRawRank()) {
+                return true;
             }
         }
-        return check;
+        return false;
     }
 
-    public static boolean isTriple(List<Card> cards){
-        boolean check = false;
-        Collections.sort(cards,Card.CompareByRank);
-
-        int count =0;
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-            if(cards.get(i).getRawRank() == cards.get(i+1).getRawRank())
-            {
-                count++;
-                if(count == 2)
-                {
-                    check = true;
-                    break;
-                }
+    private static boolean isPair(List<Card> cards) {
+        for (int i = 0; i < cards.size() - 1; i++) {
+            if (cards.get(i).getRawRank() == cards.get(i + 1).getRawRank()) {
+                return true;
             }
         }
-        return check;
+        return false;
     }
 
-    public static boolean isPair(List<Card> cards){
-        boolean check = false;
-        Collections.sort(cards,Card.CompareByRank);
-
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-            if(cards.get(i).getRawRank() == cards.get(i+1).getRawRank())
-            {
-                check = true;
-                break;
+    private static boolean isDoublePair(List<Card> cards) {
+        int pairCount = 0;
+        int i = 0;
+        while (i < cards.size() - 1) {
+            if (cards.get(i).getRawRank() == cards.get(i + 1).getRawRank()) {
+                pairCount++;
+                i += 2;
+            } else {
+                i++;
             }
         }
-        return check;
-    }
-
-    public static boolean isDoublePair(List<Card> cards){
-        boolean check = false;
-        Collections.sort(cards,Card.CompareByRank);
-
-        int count = 0;
-        for(int i =0 ; i<cards.size()-1;i++)
-        {
-            if(cards.get(i).getRawRank() == cards.get(i+1).getRawRank())
-            {
-                count++;
-            }
-            else
-            {
-                if(count == 1)
-                {
-                    check = isPair(cards.subList(i+1,cards.size()));
-                }
-            }
-        }
-        return check;
+        return pairCount == 2;
     }
 }
