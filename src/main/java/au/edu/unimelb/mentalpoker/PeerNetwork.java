@@ -186,7 +186,7 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
 
         if (message.getType() == Proto.NetworkMessage.Type.PING) {
             this.lastPingTime.put(playerId, System.currentTimeMillis());
-            //System.out.println("PING " + playerId);
+            System.out.println("PING " + playerId);
             return;
         }
 
