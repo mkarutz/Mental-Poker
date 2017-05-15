@@ -1,7 +1,11 @@
 package au.edu.unimelb.mentalpoker;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -152,5 +156,19 @@ public class PokerHandTest {
 
     private void assertGreaterThan(PokerHand a, PokerHand b) {
         assertTrue(a.compareTo(b) > 0);
+    }
+
+    @Test
+    public void sort() {
+        List<PokerHand> handList =
+                Lists.newArrayList(
+                        FLUSH_HIGH,
+                        FLUSH_LOW,
+                        PAIR_LOW,
+                        PAIR_HIGH,
+                        STRAIGHT_HIGH,
+                        STRAIGHT_LOW);
+
+        assertEquals(FLUSH_HIGH, Collections.max(handList));
     }
 }
