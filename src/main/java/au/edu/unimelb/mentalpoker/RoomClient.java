@@ -16,6 +16,7 @@ public class RoomClient implements Remote.Callbacks {
     public RoomClient(Address hostAddress, Remote remote) throws IOException {
         this.remote = remote;
         this.remote.setListener(this);
+        this.remote.setTimeOutInterval(5000);
         this.gameStarted = false;
 
         this.hostAddress = hostAddress;
