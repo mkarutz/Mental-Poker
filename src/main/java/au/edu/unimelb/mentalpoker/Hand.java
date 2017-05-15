@@ -9,6 +9,10 @@ public class Hand {
     private final int size;
     private final ImmutableList<Card> openCards;
 
+    public Hand(List<Card> cards) {
+        this(cards.size(), cards);
+    }
+
     public Hand(int size, List<Card> openCards) {
         this.size = size;
         this.openCards = ImmutableList.copyOf(openCards);
