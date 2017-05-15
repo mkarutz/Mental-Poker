@@ -84,6 +84,38 @@ public class PokerHand implements Comparable<PokerHand> {
         }
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(type);
+        sb.append(" (");
+        for (Card card : cards) {
+            sb.append(card);
+            sb.append(" ");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PokerHand pokerHand = (PokerHand) o;
+
+        if (type != pokerHand.type) return false;
+        return cards.equals(pokerHand.cards);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + cards.hashCode();
+        return result;
+    }
+
     private static int compareHighCards(List<Card> a, List<Card> b) {
         for (int i = 0; i < a.size(); i++) {
             final int cmp = a.get(i).getRank().compareTo(b.get(i).getRank());
