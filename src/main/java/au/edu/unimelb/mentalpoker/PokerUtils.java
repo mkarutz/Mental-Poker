@@ -1,6 +1,7 @@
 package au.edu.unimelb.mentalpoker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -56,11 +57,26 @@ public class PokerUtils {
         return finalResult;
     }
 
-    /**
-     * Checks for special case of 10,J,Q,K,A straight.
-     */
-    private static boolean isRoyal(List<Card> cards) {
-        if (cards.get(0).getRank() != Card.Rank.ACE) {
+
+    public static List<List<Card>> getAllPossiblePlayerHand(List<Card> playerCards, List<List<Card>> tableCardCombinations){
+        List<List<Card>> finalCombinations = new ArrayList<>();
+        for(List<Card> tableCombination: tableCardCombinations){
+            List<Card> result = tableCombination;
+            result.addAll(playerCards);
+            finalCombinations.add(result);
+        }
+        return finalCombinations;
+    }
+
+    
+    //just to check for special case of straight
+    private static boolean isRoyal(List<Card> cards){
+        boolean check = true;
+        Collections.sort(cards,Card.COMPARE_BY_RANK);
+
+        //check if first card is 'Ace'
+        if(cards.get(0).getRawRank() != 1)
+        {
             return false;
         }
 
