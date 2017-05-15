@@ -156,9 +156,30 @@ public class PokerGame extends Thread {
             return;
         }
 
-//        checkWinner();
+        checkWinner();
 
         poker.rake();
+    }
+
+    private void checkWinner() {
+        int winnerIndex = 0;
+        for (int i = 0; i < playerInfoList.size(); i++) {
+            if (!playerInfoList.get(i).isFolded) {
+                winnerIndex = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < playerInfoList.size(); i++) {
+            if (!playerInfoList.get(i).isFolded) {
+                // Compare player hand with winner hand
+
+
+                // update winner
+            }
+        }
+
+        payWinner(winnerIndex);
     }
 
     private void resetHand() {

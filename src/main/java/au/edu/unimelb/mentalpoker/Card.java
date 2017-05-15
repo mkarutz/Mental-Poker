@@ -58,6 +58,10 @@ public class Card {
         this.rank = rank;
     }
 
+    public Rank getRank() {
+        return rank;
+    }
+
     public static List<Card> standardDeck() {
         final List<Card> result = new ArrayList<>(52);
         for (Rank rank : Rank.values()) {
@@ -73,49 +77,28 @@ public class Card {
         return rank.toString() + suit.toString();
     }
 
-    public int getRawRank()
-    {
-        int rank = -1;
-        if(!this.rank.toString().contains("ATJQK"))
-        {
-            return Integer.parseInt(this.rank.toString());
+    public int getRawRank() {
+        if (rank == Rank.ACE) {
+            return 1;
         }
-        else
-        {
-            if(this.rank.toString().equals("A"))
-            {
-                return 1;
-            }
-            if(this.rank.toString().equals("T"))
-            {
-                return 10;
-            }
-            if(this.rank.toString().equals("J"))
-            {
-                return 11;
-            }
-            if(this.rank.toString().equals("Q"))
-            {
-                return 12;
-            }
-            if(this.rank.toString().equals("K"))
-            {
-                return 13;
-            }
-        }
-        return rank;
+        return rank.ordinal() + 2;
     }
 
-    public String getSuit()
-    {
-        return this.suit.symbol;
+    public String getSuit() {
+        return suit.symbol;
     }
 
-    public static Comparator<Card> CompareByRank = new Comparator<Card>() {
+    public static Comparator<Card> COMPARE_BY_RANK = new Comparator<Card>() {
         @Override
         public int compare(Card c1, Card c2) {
-            return c1.getRawRank()<c2.getRawRank()?-1:c1.getRawRank()>c2.getRawRank()?+1:0;
+            return c1.getRawRank() - c2.getRawRank();
         }
-    } ;
+    };
 
+    public static Comparator<Card> ACE_HIGH = new Comparator<Card>() {
+        @Override
+        public int compare(Card o1, Card o2) {
+            return o1.rank.compareTo(o2.rank);
+        }
+    };
 }
