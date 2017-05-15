@@ -48,10 +48,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "ip='" + ip + '\'' +
-                ", port=" + port +
-                '}';
+        return "" + this.getIp() + ":" + this.getPort();
     }
 
     @Override

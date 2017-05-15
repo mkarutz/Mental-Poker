@@ -26,7 +26,11 @@ public class MentalPoker {
             remotePort = scanner.nextInt();
             scanner.nextLine();
 
-            RoomHost r = new RoomHost(remotePort, new RoomHost.Callbacks() {
+            Remote hostRemote = new Remote(remotePort, null);
+            hostRemote.setDaemon(true);
+            hostRemote.start();
+
+            RoomHost r = new RoomHost(hostRemote, new RoomHost.Callbacks() {
                 @Override
                 public void onConnectionFailed(String message) {
                     System.exit(1);
@@ -44,6 +48,7 @@ public class MentalPoker {
         }
 
         Remote remote = new Remote(listenPort, null);
+        remote.setDaemon(true);
         remote.start();
 
         RoomClient client =

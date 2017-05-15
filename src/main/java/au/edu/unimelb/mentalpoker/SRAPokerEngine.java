@@ -5,7 +5,9 @@ import com.google.common.collect.Iterables;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
+import java.sql.Time;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 public class SRAPokerEngine implements MentalPokerEngine {
     private static final int CARD_OFFSET = 123;
@@ -51,7 +53,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public void init() {
+    public void init() throws TimeoutException {
         // Agree on large prime
         BigInteger q = new BigInteger("16158503035655503650357438344334975980222051334857742016065172713762327569433945446598600705761456731844358980460949009747059779575245460547544076193224141560315438683650498045875098875194826053398028819192033784138396109321309878080919047169238085235290822926018152521443787945770532904303776199561965192760957166694834171210342487393282284747428088017663161029038902829665513096354230157075129296432088558362971801859230928678799175576150822952201848806616643615613562842355410104862578550863465661734839271290328348967522998634176499319107762583194718667771801067716614802322659239302476074096777926805529926544251");
         p = q.shiftLeft(1).add(BigInteger.ONE);
@@ -73,7 +75,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         initialDeck = ImmutableList.copyOf(cardRepresentations);
     }
 
-    private void shuffle() {
+    private void shuffle() throws TimeoutException {
         List<BigInteger> prevDeck;
 
         // Get previous deck
@@ -126,7 +128,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         network.send(playerId, msg);
     }
 
-    private List<BigInteger> receiveDeck(int playerId) {
+    private List<BigInteger> receiveDeck(int playerId) throws TimeoutException {
         Proto.NetworkMessage msg = network.receive(playerId);
         return deckFromMessage(msg.getSraDeckMessage());
     }
@@ -153,7 +155,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         network.broadcast(msg);
     }
 
-    private BigInteger receiveCard(int playerId) {
+    private BigInteger receiveCard(int playerId) throws TimeoutException {
         return new BigInteger(network.receive(playerId).getSraCardMessage().getCard());
     }
 
@@ -204,7 +206,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public void draw(int playerId) {
+    public void draw(int playerId) throws TimeoutException {
         int cardId = nextCard();
 
         BigInteger card;
@@ -249,7 +251,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public void open(int playerId) {
+    public void open(int playerId) throws TimeoutException {
         for (int i = 0; i < cardInfoList.size(); i++) {
             final CardInfo cardInfo = cardInfoList.get(i);
             if (cardInfo.ownerId != playerId) {
@@ -274,7 +276,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     @Override
-    public void finish() throws CheatingDetectedException {
+    public void finish() throws CheatingDetectedException, TimeoutException {
         broadcastKey();
 
         List<BigInteger> keys = receiveKeys();
@@ -317,7 +319,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         network.broadcast(msg);
     }
 
-    private List<BigInteger> receiveKeys() {
+    private List<BigInteger> receiveKeys() throws TimeoutException {
         List<BigInteger> result = new ArrayList<>(getNumPlayers());
         for (int playerId = 1; playerId <= getNumPlayers(); playerId++) {
             if (playerId == getLocalPlayerId()) {
@@ -329,7 +331,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
         return result;
     }
 
-    private BigInteger receiveKey(int playerId) {
+    private BigInteger receiveKey(int playerId) throws TimeoutException {
         return new BigInteger(network.receive(playerId).getSraSecretMessage().getSecret());
     }
 

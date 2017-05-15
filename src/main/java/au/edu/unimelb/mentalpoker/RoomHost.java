@@ -15,10 +15,10 @@ public class RoomHost implements Remote.Callbacks {
         void onConnectionFailed(String message);
     }
 
-    public RoomHost(int port, Callbacks callbacks) {
+    public RoomHost(Remote remote, Callbacks callbacks) {
         this.gameTable = new GameTable();
-        this.remote = new Remote(port, this);
-        this.remote.start();
+        this.remote = remote;
+        this.remote.setListener(this);
         this.callbacks = callbacks;
     }
 
@@ -26,12 +26,8 @@ public class RoomHost implements Remote.Callbacks {
         if (message.getType() == Proto.NetworkMessage.Type.JOIN_ROOM) {
             requestMyIpAddress(source);
             this.gameTable.addPlayerConnection(source);
-            try {
-                this.remote.send(source, Proto.NetworkMessage.newBuilder()
-                        .setType(Proto.NetworkMessage.Type.JOIN_ROOM_ALLOWED).build());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.remote.send(source, Proto.NetworkMessage.newBuilder()
+                    .setType(Proto.NetworkMessage.Type.JOIN_ROOM_ALLOWED).build());
         } else if (message.getType() == Proto.NetworkMessage.Type.PLAYER_READY) {
             handlePlayerReadyMessage(source);
         } else if (message.getType() == Proto.NetworkMessage.Type.REQUEST_IP_RESULT) {
@@ -39,15 +35,16 @@ public class RoomHost implements Remote.Callbacks {
         }
     }
 
+    @Override
+    public void onSendFailed(Address destination) {
+        System.out.println("Error: Could not send message to: " + destination);
+    }
+
     private void requestMyIpAddress(Address address) {
         if (!address.getIp().equals("127.0.0.1")) {
-            try {
-                this.remote.send(address,
-                        Proto.NetworkMessage.newBuilder()
-                                .setType(Proto.NetworkMessage.Type.REQUEST_IP).build());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.remote.send(address,
+                    Proto.NetworkMessage.newBuilder()
+                            .setType(Proto.NetworkMessage.Type.REQUEST_IP).build());
         }
     }
 
@@ -82,14 +79,10 @@ public class RoomHost implements Remote.Callbacks {
         playerId = 1;
         for (Address address : this.gameTable.getPlayers()) {
             gameStartedMessage.setPlayerId(playerId);
-            try {
-                this.remote.send(address, Proto.NetworkMessage.newBuilder()
-                        .setType(Proto.NetworkMessage.Type.GAME_STARTED)
-                        .setGameStartedMessage(gameStartedMessage)
-                        .build());
-            } catch (IOException e) {
-                callbacks.onConnectionFailed("Failed to establish connections with players.");
-            }
+            this.remote.send(address, Proto.NetworkMessage.newBuilder()
+                    .setType(Proto.NetworkMessage.Type.GAME_STARTED)
+                    .setGameStartedMessage(gameStartedMessage)
+                    .build());
             playerId++;
         }
 

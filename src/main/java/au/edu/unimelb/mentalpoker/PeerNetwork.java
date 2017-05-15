@@ -6,11 +6,13 @@ import com.google.common.collect.HashBiMap;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by azable on 10/05/17.
  */
 public class PeerNetwork implements Remote.Callbacks {
+    private static final long DEFAULT_RECV_TIMEOUT = 15000;
 
     private BiMap<Integer, Address> players;
     private int localId;
@@ -29,8 +31,6 @@ public class PeerNetwork implements Remote.Callbacks {
                             peerAddress.getPort()));
         }
         this.localId = gameInfo.getPlayerId();
-        //this.remote = new Remote(listeningPort, this);
-        //this.remote.start();
         this.remote = remote;
         this.remote.setListener(this);
         this.playersNotSynced = new HashSet<>();
@@ -83,11 +83,18 @@ public class PeerNetwork implements Remote.Callbacks {
         }
     }
 
-    public Proto.NetworkMessage receive(int playerId) throws InvalidPlayerIdException {
+    public Proto.NetworkMessage receive(int playerId)
+            throws InvalidPlayerIdException, TimeoutException
+    {
         if (!this.players.containsKey(playerId)) {
             throw new InvalidPlayerIdException();
         }
-        while (queueForPlayer(playerId).isEmpty());
+        long startTime = System.currentTimeMillis();
+        while (queueForPlayer(playerId).isEmpty()) {
+            if (System.currentTimeMillis() - startTime > PeerNetwork.DEFAULT_RECV_TIMEOUT) {
+                throw new TimeoutException("Error: Timed out waiting for message from player " + playerId);
+            }
+        }
         return queueForPlayer(playerId).remove();
     }
 
@@ -100,11 +107,7 @@ public class PeerNetwork implements Remote.Callbacks {
     }
 
     public void send(int playerId, Proto.NetworkMessage message) throws InvalidPlayerIdException {
-        try {
-            this.remote.send(lookupPlayerAddress(playerId), message);
-        } catch (IOException e) {
-            System.out.println("Error: Could not send message to player " + playerId);
-        }
+        this.remote.send(lookupPlayerAddress(playerId), message);
     }
 
     private Address lookupPlayerAddress(int playerId) throws InvalidPlayerIdException {
@@ -140,6 +143,12 @@ public class PeerNetwork implements Remote.Callbacks {
         }
 
         queueForPlayer(playerId).add(message);
+    }
+
+    @Override
+    public void onSendFailed(Address destination) {
+        System.out.println("Error: Failed to send message to " + destination);
+        System.exit(1);
     }
 
     private Queue<Proto.NetworkMessage> queueForPlayer(int playerId) {

@@ -1,5 +1,7 @@
 package au.edu.unimelb.mentalpoker;
 
+import java.util.concurrent.TimeoutException;
+
 public class PokerGame extends Thread {
     private static final int CARDS_PER_HAND = 2;
 
@@ -13,17 +15,21 @@ public class PokerGame extends Thread {
 
     @Override
     public void run() {
-        poker.init();
-        playHand();
         try {
-            poker.finish();
-            System.out.println("Game finished successfully.");
-        } catch (CheatingDetectedException e) {
-            System.out.println("Cheating detected.");
+            poker.init();
+            playHand();
+            try {
+                poker.finish();
+                System.out.println("Game finished successfully.");
+            } catch (CheatingDetectedException e) {
+                System.out.println("Cheating detected.");
+            }
+        } catch (TimeoutException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    private void playHand() {
+    private void playHand() throws TimeoutException {
         // Deal hands
         for (int playerId = 1; playerId <= poker.getNumPlayers(); playerId++) {
             for (int i = 0; i < CARDS_PER_HAND; i++) {

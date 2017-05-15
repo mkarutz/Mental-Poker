@@ -22,6 +22,7 @@ public class Remote extends Thread {
     /** Interface for callbacks. */
     public interface Callbacks {
         void onReceive(Address source, Proto.NetworkMessage message);
+        void onSendFailed(Address destination);
     }
 
     public Remote(int listeningPort, Callbacks listener) {
@@ -34,12 +35,19 @@ public class Remote extends Thread {
             e.printStackTrace();
         }
         this.running = true;
+    }
 
+    @Override
+    public void start() {
         this.remoteSender = new RemoteSender(new UDPPacketSender(this.socket));
+        this.remoteSender.setDaemon(true);
         this.remoteSender.start();
 
         this.remoteReceiver = new RemoteReceiver(new UDPPacketReceiver(this.socket), this);
+        this.remoteReceiver.setDaemon(true);
         this.remoteReceiver.start();
+
+        super.start();
     }
 
     public void setListener(Callbacks listener) {
@@ -48,12 +56,18 @@ public class Remote extends Thread {
 
     public void run() {
         while (this.running) {
+            // Check for incoming messages
             Address sourceAddress = new Address();
             Proto.NetworkMessage message = this.remoteReceiver.pop(sourceAddress);
             if (message != null) {
                 if (this.listener != null) {
                     this.listener.onReceive(sourceAddress, message);
                 }
+            }
+            // Check for timeouts
+            Address possibleTimeoutAddress = this.remoteSender.checkTimeOut();
+            if (possibleTimeoutAddress != null) {
+                this.listener.onSendFailed(possibleTimeoutAddress);
             }
         }
     }
@@ -74,7 +88,7 @@ public class Remote extends Thread {
     }
 
     /** Sends a message reliably to the given destination address */
-    public void send(Address destination, Proto.NetworkMessage message) throws IOException {
+    public void send(Address destination, Proto.NetworkMessage message) {
         this.remoteSender.push(destination, message);
     }
 

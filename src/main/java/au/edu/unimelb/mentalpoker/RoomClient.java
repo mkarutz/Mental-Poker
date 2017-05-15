@@ -27,11 +27,7 @@ public class RoomClient implements Remote.Callbacks {
     }
 
     public void ready() {
-        try {
-            this.remote.send(this.hostAddress, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.PLAYER_READY).build());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.remote.send(this.hostAddress, Proto.NetworkMessage.newBuilder().setType(Proto.NetworkMessage.Type.PLAYER_READY).build());
     }
 
     public void onReceive(Address source, Proto.NetworkMessage message) {
@@ -55,12 +51,13 @@ public class RoomClient implements Remote.Callbacks {
                             Proto.RequestIpResultMessage.newBuilder()
                                     .setIp(source.getIp()))
                     .build();
-            try {
-                this.remote.send(source, reply);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.remote.send(source, reply);
         }
+    }
+
+    @Override
+    public void onSendFailed(Address destination) {
+        System.out.println("Error: Could not send message to: " + destination);
     }
 
     public boolean isGameStarted() {

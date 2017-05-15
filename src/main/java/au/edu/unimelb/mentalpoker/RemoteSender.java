@@ -12,11 +12,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by azable on 12/05/17.
  */
 public class RemoteSender extends Thread {
+    private static final long RETRY_TIME = 100;
+    private static final long CONNECTION_TIMEOUT = 15000;
+
     private static int nextMessageId = 0;
 
     private IPacketSender packetSender;
     private ConcurrentHashMap<Address, Queue<Proto.NetworkPacket>> outgoing;
     private ConcurrentHashMap<Address, AddressPacketDispatcher> packetDispatchers;
+    private Queue<Address> timeouts;
     private boolean closed = false;
 
     private class AddressPacketDispatcher {
@@ -24,6 +28,8 @@ public class RemoteSender extends Thread {
         private Proto.NetworkPacket packetToDispatch;
         private Address destination;
         private long lastTryTime;
+        private long startDispatchTime;
+        private boolean timedOut;
 
         public AddressPacketDispatcher(Address destination) {
             this.destination = destination;
@@ -35,6 +41,7 @@ public class RemoteSender extends Thread {
                 if (ackMessageId == this.packetToDispatch.getNetworkMessageHeader().getMessageId()) {
                     this.slotFree = true;
                     this.lastTryTime = 0;
+                    this.timedOut = false;
                 }
             }
         }
@@ -47,14 +54,25 @@ public class RemoteSender extends Thread {
             if (isSlotFree()) {
                 this.packetToDispatch = packet;
                 this.slotFree = false;
+                this.lastTryTime = 0;
+                this.startDispatchTime = System.currentTimeMillis();
             }
         }
 
-        public void tryDispatch() {
-            if (!isSlotFree() && this.packetToDispatch != null && lastTryMilliseconds() >= 100) {
+        public boolean tryDispatch() {
+            if (this.timedOut == true) {
+                return true;
+            }
+            if (!isSlotFree() && this.packetToDispatch != null && lastTryMilliseconds() >= RemoteSender.RETRY_TIME) {
                 sendPacket(this.destination, this.packetToDispatch);
                 this.lastTryTime = System.currentTimeMillis();
+                long retryTimeElapsed = System.currentTimeMillis() - this.startDispatchTime;
+                if (retryTimeElapsed > RemoteSender.CONNECTION_TIMEOUT && this.timedOut == false) {
+                    this.timedOut = true;
+                    return false; // Return time-out result once
+                }
             }
+            return true;
         }
 
         private long lastTryMilliseconds() {
@@ -62,6 +80,7 @@ public class RemoteSender extends Thread {
         }
 
         private void reset() {
+            this.timedOut = false;
             this.slotFree = true;
             this.packetToDispatch = null;
             this.lastTryTime = 0;
@@ -72,6 +91,7 @@ public class RemoteSender extends Thread {
         this.packetSender = packetSender;
         this.outgoing = new ConcurrentHashMap<>();
         this.packetDispatchers = new ConcurrentHashMap<>();
+        this.timeouts = new ArrayDeque<>();
     }
 
     public synchronized void push(Address destination, Proto.NetworkMessage message) {
@@ -108,8 +128,18 @@ public class RemoteSender extends Thread {
 
         // Try executing dispatchers
         for (Map.Entry<Address, AddressPacketDispatcher> dispatcherEntry : this.packetDispatchers.entrySet()) {
-            dispatcherEntry.getValue().tryDispatch();
+            boolean timedOut = !dispatcherEntry.getValue().tryDispatch();
+            if (timedOut) {
+                this.timeouts.add(dispatcherEntry.getKey());
+            }
         }
+    }
+
+    public Address checkTimeOut() {
+        if (this.timeouts.size() > 0) {
+            return this.timeouts.remove();
+        }
+        return null;
     }
 
     private void ensureOutgoingQueueForAddressExists(Address address) {

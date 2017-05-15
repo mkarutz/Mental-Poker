@@ -53,7 +53,7 @@ public class UnreliablePacketSender implements IPacketSender {
     @Override
     public void sendPacket(Address destination, Proto.NetworkPacket packet) {
         EvilDispatcher d = new EvilDispatcher(destination, packet);
-        d.SetLevelsOfMalevolence(0.8, 0.5, 500);
+        d.SetLevelsOfMalevolence(0.4, 0.5, 500);
         d.start();
     }
 }
