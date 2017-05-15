@@ -44,6 +44,8 @@ public class PokerGameTest {
                             new Card(Card.Suit.SPADES, Card.Rank.KING),
                             new Card(Card.Suit.DIAMONDS, Card.Rank.KING)));
 
+    private final Hand HIDDEN_HAND = new Hand(2, Lists.newArrayList());
+
     private final ImmutableList<Card> PUBLIC_CARDS =
             ImmutableList.of(
                     new Card(Card.Suit.SPADES, Card.Rank.THREE),
@@ -62,7 +64,7 @@ public class PokerGameTest {
     }
 
     @Test
-    public void distribute() {
+    public void splitPot() {
         when(mockPokerEngine.getNumPlayers()).thenReturn(NUM_PLAYERS);
         when(mockPokerEngine.getPlayerHand(1)).thenReturn(PLAYER_ONE_HAND);
         when(mockPokerEngine.getPlayerHand(2)).thenReturn(PLAYER_TWO_HAND);
@@ -74,6 +76,27 @@ public class PokerGameTest {
                         new PokerGame.PlayerInfo(1, false, 0, PLAYER_ONE_STAKE),
                         new PokerGame.PlayerInfo(2, false, 0, PLAYER_TWO_STAKE),
                         new PokerGame.PlayerInfo(3, false, 0, PLAYER_THREE_STAKE));
+
+        pokerGame.distribute();
+
+        assertEquals(PLAYER_ONE_RESULT, pokerGame.playerInfoList.get(0).balance);
+        assertEquals(PLAYER_TWO_RESULT, pokerGame.playerInfoList.get(1).balance);
+        assertEquals(PLAYER_THREE_RESULT, pokerGame.playerInfoList.get(2).balance);
+    }
+
+    @Test
+    public void playersFolded() {
+        when(mockPokerEngine.getNumPlayers()).thenReturn(NUM_PLAYERS);
+        when(mockPokerEngine.getPlayerHand(1)).thenReturn(HIDDEN_HAND);
+        when(mockPokerEngine.getPlayerHand(2)).thenReturn(HIDDEN_HAND);
+        when(mockPokerEngine.getPlayerHand(3)).thenReturn(HIDDEN_HAND);
+        when(mockPokerEngine.getPublicCards()).thenReturn(PUBLIC_CARDS);
+
+        pokerGame.playerInfoList =
+                Lists.newArrayList(
+                        new PokerGame.PlayerInfo(1, false, 0, PLAYER_ONE_STAKE),
+                        new PokerGame.PlayerInfo(2, true, 0, PLAYER_TWO_STAKE),
+                        new PokerGame.PlayerInfo(3, true, 0, PLAYER_THREE_STAKE));
 
         pokerGame.distribute();
 
