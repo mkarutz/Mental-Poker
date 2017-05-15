@@ -15,6 +15,7 @@ public class Remote extends Thread {
     private Callbacks listener;
     private DatagramSocket socket;
     private boolean running;
+    private long timeOutInterval;
 
     private RemoteSender remoteSender;
     private RemoteReceiver remoteReceiver;
@@ -52,6 +53,10 @@ public class Remote extends Thread {
 
     public void setListener(Callbacks listener) {
         this.listener = listener;
+    }
+
+    public void setTimeOutInterval(long timeOutInterval) {
+        this.remoteSender.setTimeOutInterval(timeOutInterval);
     }
 
     public void run() {

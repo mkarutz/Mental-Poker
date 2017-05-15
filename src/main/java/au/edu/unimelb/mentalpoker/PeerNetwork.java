@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class PeerNetwork extends Thread implements Remote.Callbacks {
     private static final long PING_INTERVAL = 2000;
-    private static final long DEFAULT_TIMEOUT = 10000;
+    private static final long DEFAULT_TIMEOUT = 30000;
 
     private PeerNetwork.Callbacks callbacks;
     private BiMap<Integer, Address> players;
@@ -40,6 +40,7 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
         this.localId = gameInfo.getPlayerId();
         this.remote = remote;
         this.remote.setListener(this);
+        this.remote.setTimeOutInterval(30000);
         this.lastPingTime = new HashMap<>();
         this.playersNotSynced = new HashSet<>();
         initPlayerMessagesHashMap();
@@ -186,7 +187,7 @@ public class PeerNetwork extends Thread implements Remote.Callbacks {
 
         if (message.getType() == Proto.NetworkMessage.Type.PING) {
             this.lastPingTime.put(playerId, System.currentTimeMillis());
-            System.out.println("PING " + playerId);
+            //System.out.println("PING " + playerId);
             return;
         }
 

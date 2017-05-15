@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by azable on 12/05/17.
  */
 public class RemoteSender extends Thread {
-    private static final long RETRY_TIME = 100;
-    private static final long CONNECTION_TIMEOUT = 15000;
+    private static final long RETRY_TIME = 300;
+    private static final long CONNECTION_TIMEOUT = 30000;
 
     private static int nextMessageId = 0;
 
@@ -21,6 +21,7 @@ public class RemoteSender extends Thread {
     private ConcurrentHashMap<Address, Queue<Proto.NetworkPacket>> outgoing;
     private ConcurrentHashMap<Address, AddressPacketDispatcher> packetDispatchers;
     private Queue<Address> timeouts;
+    private long timeOutInterval;
     private boolean closed = false;
 
     private class AddressPacketDispatcher {
@@ -67,7 +68,7 @@ public class RemoteSender extends Thread {
                 sendPacket(this.destination, this.packetToDispatch);
                 this.lastTryTime = System.currentTimeMillis();
                 long retryTimeElapsed = System.currentTimeMillis() - this.startDispatchTime;
-                if (retryTimeElapsed > RemoteSender.CONNECTION_TIMEOUT && this.timedOut == false) {
+                if (retryTimeElapsed > timeOutInterval && this.timedOut == false) {
                     this.timedOut = true;
                     return false; // Return time-out result once
                 }
@@ -92,6 +93,7 @@ public class RemoteSender extends Thread {
         this.outgoing = new ConcurrentHashMap<>();
         this.packetDispatchers = new ConcurrentHashMap<>();
         this.timeouts = new ArrayDeque<>();
+        this.timeOutInterval = CONNECTION_TIMEOUT;
     }
 
     public synchronized void push(Address destination, Proto.NetworkMessage message) {
@@ -108,6 +110,10 @@ public class RemoteSender extends Thread {
 
     public void close() {
         this.closed = true;
+    }
+
+    public void setTimeOutInterval(long timeOutInterval) {
+        this.timeOutInterval = timeOutInterval;
     }
 
     private void processQueue() {
