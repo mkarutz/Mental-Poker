@@ -180,9 +180,21 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
             return;
         }
 
+        openCards();
         distribute();
 
         poker.rake();
+    }
+
+    private void openCards() throws TimeoutException {
+        for (PlayerInfo player : playerInfoList) {
+            if (player.isFolded) {
+                continue;
+            }
+
+            poker.open(player.playerId);
+            System.out.println("Player " + player.playerId + " had: " + getPlayerHand(player).toString());
+        }
     }
 
     //    def distribute(pot, players):
@@ -213,15 +225,22 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
             final int minStake = getMinStake(players);
             final int pot = minStake * players.size();
 
-            final List<PlayerInfo> playersNotFolders = Lists.newArrayList(filter(players, p -> !p.isFolded));
-            final List<PokerHand> hands = Lists.newArrayList(transform(playersNotFolders, this::getPlayerHand));
-            final PokerHand bestHand = Collections.max(hands);
+            final List<PlayerInfo> playersNotFolded = Lists.newArrayList(filter(players, p -> !p.isFolded));
 
-            final List<PlayerInfo> winners =
-                    Lists.newArrayList(filter(playersNotFolders, p -> getPlayerHand(p).compareTo(bestHand) == 0));
+            List<PlayerInfo> winners;
+            if (playersNotFolded.size() == 1) {
+                winners = playersNotFolded;
+            } else if (playersNotFolded.isEmpty()) {
+                winners = players;
+            } else {
+                final List<PokerHand> hands = Lists.newArrayList(transform(playersNotFolded, this::getPlayerHand));
+                final PokerHand bestHand = Collections.max(hands);
+                winners = Lists.newArrayList(filter(playersNotFolded, p -> getPlayerHand(p).compareTo(bestHand) == 0));
+            }
 
             for (PlayerInfo winner : winners) {
                 winner.balance += pot / winners.size();
+                System.out.printf("Player %d gets $%d\n", winner.playerId, pot / winners.size());
             }
 
             for (PlayerInfo playerInfo : players) {
@@ -315,6 +334,10 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
                     continue;
                 }
 
+                if (playerInfo.balance == 0) {
+                    continue;
+                }
+
                 PlayerAction action;
                 if (playerId == network.getLocalPlayerId()) {
                     System.out.println("YOUR TURN:");
@@ -372,33 +395,10 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
 
     private boolean maybePayWinner() {
         if (getNumPlayersStillIn() == 1) {
-            payWinner(getWinner());
+            distribute();
             return true;
         }
         return false;
-    }
-
-    private void payWinner(final int winnerIndex) {
-        final PlayerInfo winnerInfo = playerInfoList.get(winnerIndex);
-        int totalWinnerTakings = 0;
-
-        for (int i = 0; i < playerInfoList.size(); i++) {
-            if (i == winnerIndex) {
-                continue;
-            }
-
-            final PlayerInfo playerInfo = playerInfoList.get(i);
-            final int winnerTakings = min(winnerInfo.stake, playerInfo.stake);
-            totalWinnerTakings += winnerTakings;
-            playerInfo.balance += playerInfo.stake - winnerTakings;
-            playerInfo.stake = 0;
-        }
-
-        winnerInfo.balance += totalWinnerTakings;
-        winnerInfo.balance += winnerInfo.stake;
-        winnerInfo.stake = 0;
-
-        System.out.printf("Player %d won $%d\n", winnerIndex + 1, totalWinnerTakings);
     }
 
     /**

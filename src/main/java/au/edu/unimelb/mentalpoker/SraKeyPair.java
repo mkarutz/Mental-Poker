@@ -6,7 +6,8 @@ import java.util.Random;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class SraKeyPair {
-    private static final int DEFAULT_NUM_BITS = 2048;
+//    private static final int DEFAULT_NUM_BITS = 2048;
+    private static final int DEFAULT_NUM_BITS = 32;
 
     private final BigInteger prime;
     private final BigInteger secret;
