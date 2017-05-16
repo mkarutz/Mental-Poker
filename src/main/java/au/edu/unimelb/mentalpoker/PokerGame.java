@@ -14,7 +14,6 @@ import static com.google.common.collect.Iterables.transform;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-
 public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     private static final int INITIAL_BALANCE = 1000000;
     private static final int CARDS_PER_HAND = 2;
