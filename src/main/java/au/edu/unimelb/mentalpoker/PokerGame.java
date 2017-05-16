@@ -210,6 +210,7 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
         poker.rake();
     }
 
+    /** Re-shuffles the deck if there are not enough cards left to play the next hand. */
     private void maybeReshuffle() throws TimeoutException, CheatingDetectedException {
         if (poker.getNumCardsLeft() < 2 * poker.getNumPlayers() + 5) {
             poker.finish();
@@ -491,7 +492,7 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     private int getNumPlayersStillIn() {
         int result = 0;
         for (PlayerInfo playerInfo : playerInfoList) {
-            if (!playerInfo.isFolded()) {
+            if (!playerInfo.isBankrupt() && !playerInfo.isFolded()) {
                 result++;
             }
         }
