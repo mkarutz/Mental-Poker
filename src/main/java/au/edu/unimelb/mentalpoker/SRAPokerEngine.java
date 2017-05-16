@@ -12,7 +12,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     private final PeerNetwork network;
 
     /** The un-shuffled, unencrypted list of cards used for playing the game. */
-    private static final ImmutableList<Card> CARD_LIST = ImmutableList.copyOf(Card.standardDeck().subList(0, 20));
+    private static final ImmutableList<Card> CARD_LIST = ImmutableList.copyOf(Card.standardDeck());
 
     /** Map from unencrypted card representations to Card values. */
     private final Map<BigInteger, Card> cardMap = new HashMap<>();
@@ -68,6 +68,8 @@ public class SRAPokerEngine implements MentalPokerEngine {
     private void initializeDeck() {
         cardMap.clear();
         cardInfoList.clear();
+        initialDeck = null;
+        deck = null;
 
         List<BigInteger> cardRepresentations = new ArrayList<>(CARD_LIST.size());
         for (int i = 0; i < CARD_LIST.size(); i++) {
