@@ -175,7 +175,6 @@ public class PokerHandTest {
                             new Card(Card.Suit.DIAMONDS, Card.Rank.THREE),
                             new Card(Card.Suit.CLUBS, Card.Rank.TWO)));
 
-
     private static final PokerHand QUAD_HIGH =
             new PokerHand(
                     PokerHand.Type.QUAD,
