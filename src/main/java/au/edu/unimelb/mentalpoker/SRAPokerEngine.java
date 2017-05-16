@@ -12,7 +12,7 @@ public class SRAPokerEngine implements MentalPokerEngine {
     private final PeerNetwork network;
 
     /** The un-shuffled, unencrypted list of cards used for playing the game. */
-    private static final ImmutableList<Card> CARD_LIST = ImmutableList.copyOf(Card.standardDeck());
+    private static final ImmutableList<Card> CARD_LIST = ImmutableList.copyOf(Card.standardDeck().subList(0, 20));
 
     /** Map from unencrypted card representations to Card values. */
     private final Map<BigInteger, Card> cardMap = new HashMap<>();
@@ -66,6 +66,9 @@ public class SRAPokerEngine implements MentalPokerEngine {
     }
 
     private void initializeDeck() {
+        cardMap.clear();
+        cardInfoList.clear();
+
         List<BigInteger> cardRepresentations = new ArrayList<>(CARD_LIST.size());
         for (int i = 0; i < CARD_LIST.size(); i++) {
             cardRepresentations.add(BigInteger.valueOf((CARD_OFFSET + i)*(CARD_OFFSET+i)));
@@ -102,6 +105,17 @@ public class SRAPokerEngine implements MentalPokerEngine {
 
     private int getLocalPlayerId() {
         return network.getLocalPlayerId();
+    }
+
+    @Override
+    public int getNumCardsLeft() {
+        int result = 0;
+        for (CardInfo card : cardInfoList) {
+            if (card.ownerId == CardInfo.NO_OWNER) {
+                result++;
+            }
+        }
+        return result;
     }
 
     private void broadcastDeck(List<BigInteger> deck) throws TimeoutException {

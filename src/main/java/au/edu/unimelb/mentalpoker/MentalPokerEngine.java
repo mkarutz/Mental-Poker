@@ -12,6 +12,9 @@ public interface MentalPokerEngine {
     /** Initialises the Mental Poker engine ready for dealing. */
     void init() throws TimeoutException;
 
+    /** Gets the number of cards left in the deck to be dealt. */
+    int getNumCardsLeft();
+
     /** Deals a secret card to the player with ID {@code playerId}. */
     void draw(int playerId) throws TimeoutException;
 

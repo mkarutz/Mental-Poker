@@ -121,13 +121,11 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
                 playHand();
             }
 
-            try {
-                poker.finish();
-                System.out.println("Game finished successfully.");
-                System.out.println("Player " + getGameWinner().getPlayerId() + " wins.");
-            } catch (CheatingDetectedException e) {
-                System.out.println("Cheating detected.");
-            }
+            poker.finish();
+            System.out.println("Game finished successfully.");
+            System.out.println("Player " + getGameWinner().getPlayerId() + " wins.");
+        } catch (CheatingDetectedException e) {
+            System.out.println("Cheating detected.");
         } catch (TimeoutException e) {
             System.out.println(e.getMessage());
         }
@@ -153,17 +151,25 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     }
 
     private void init() throws TimeoutException {
+        shuffleCards();
+        initPlayers();
+    }
+
+    private void shuffleCards() throws TimeoutException {
         System.out.println("Shuffling...");
         poker.init();
+    }
 
+    private void initPlayers() {
         playerInfoList = new ArrayList<>(poker.getNumPlayers());
         for (int i = 0; i < poker.getNumPlayers(); i++) {
             playerInfoList.add(new PlayerInfo(i + 1 /* playerId */, INITIAL_BALANCE));
         }
     }
 
-    private void playHand() throws TimeoutException {
+    private void playHand() throws TimeoutException, CheatingDetectedException {
         resetHand();
+        maybeReshuffle();
         doDealing();
 
         display();
@@ -202,6 +208,13 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
         distribute();
 
         poker.rake();
+    }
+
+    private void maybeReshuffle() throws TimeoutException, CheatingDetectedException {
+        if (poker.getNumCardsLeft() < 2 * poker.getNumPlayers() + 5) {
+            poker.finish();
+            poker.init();
+        }
     }
 
     private void openCards() throws TimeoutException {

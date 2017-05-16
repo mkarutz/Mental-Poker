@@ -116,6 +116,17 @@ public class DeterministicPokerEngine implements MentalPokerEngine {
     }
 
     @Override
+    public int getNumCardsLeft() {
+        int result = 0;
+        for (CardInfo card : cardInfoList) {
+            if (card.ownerId == CardInfo.NO_OWNER) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    @Override
     public ImmutableList<Card> getPublicCards() {
         return getPlayerHand(CardInfo.PUBLIC).getOpenCards();
     }
