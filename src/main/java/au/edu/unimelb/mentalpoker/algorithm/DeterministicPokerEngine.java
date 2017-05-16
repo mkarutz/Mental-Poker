@@ -1,5 +1,8 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.algorithm;
 
+import au.edu.unimelb.mentalpoker.poker.Card;
+import au.edu.unimelb.mentalpoker.Hand;
+import au.edu.unimelb.mentalpoker.net.PeerNetwork;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;

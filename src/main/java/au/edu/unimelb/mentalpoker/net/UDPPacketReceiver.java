@@ -1,5 +1,6 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
+import au.edu.unimelb.mentalpoker.Proto;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.io.IOException;
@@ -7,12 +8,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Arrays;
 
-/**
- * Created by azable on 12/05/17.
- */
 public class UDPPacketReceiver implements IPacketReceiver {
-
-    private DatagramSocket socket;
+    private final DatagramSocket socket;
 
     public UDPPacketReceiver(DatagramSocket socket) {
         this.socket = socket;

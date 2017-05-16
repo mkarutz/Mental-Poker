@@ -1,4 +1,6 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
+
+import au.edu.unimelb.mentalpoker.Proto;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,12 +8,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-/**
- * Created by azable on 12/05/17.
- */
 public class UDPPacketSender implements IPacketSender {
-
-    private DatagramSocket socket;
+    private final DatagramSocket socket;
 
     public UDPPacketSender(DatagramSocket socket) {
         this.socket = socket;

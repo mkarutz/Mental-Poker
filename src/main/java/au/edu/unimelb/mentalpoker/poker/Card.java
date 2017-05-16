@@ -1,4 +1,4 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.poker;
 
 import java.util.ArrayList;
 import java.util.Comparator;

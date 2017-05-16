@@ -1,17 +1,12 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
-import com.google.protobuf.InvalidProtocolBufferException;
+import au.edu.unimelb.mentalpoker.Proto;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by azable on 12/05/17.
- */
 public class RemoteReceiver extends Thread {
 
     private Remote remote;

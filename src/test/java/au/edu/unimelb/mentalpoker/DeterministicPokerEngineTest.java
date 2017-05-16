@@ -1,5 +1,7 @@
 package au.edu.unimelb.mentalpoker;
 
+import au.edu.unimelb.mentalpoker.algorithm.DeterministicPokerEngine;
+import au.edu.unimelb.mentalpoker.net.PeerNetwork;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

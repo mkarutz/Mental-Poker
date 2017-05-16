@@ -1,6 +1,5 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.poker;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 

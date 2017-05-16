@@ -1,5 +1,6 @@
 package au.edu.unimelb.mentalpoker;
 
+import au.edu.unimelb.mentalpoker.poker.Card;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;

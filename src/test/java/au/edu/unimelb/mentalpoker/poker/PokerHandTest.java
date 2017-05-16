@@ -1,10 +1,7 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.poker;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.Collections;

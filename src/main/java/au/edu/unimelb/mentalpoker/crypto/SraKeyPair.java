@@ -1,4 +1,4 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.crypto;
 
 import java.math.BigInteger;
 import java.util.Random;

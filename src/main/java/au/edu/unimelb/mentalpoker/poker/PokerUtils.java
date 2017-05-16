@@ -1,12 +1,9 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.poker;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by brandon on 13/05/17.
- */
 public class PokerUtils {
     private static final int POKER_HAND_SIZE = 5;
 

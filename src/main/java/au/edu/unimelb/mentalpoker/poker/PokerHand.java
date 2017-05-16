@@ -1,9 +1,8 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.poker;
 
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;

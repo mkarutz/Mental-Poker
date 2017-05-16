@@ -1,12 +1,9 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-/**
- * Created by azable on 10/05/17.
- */
 public class Address {
     private String ip;
     private int port;

@@ -1,4 +1,6 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
+
+import au.edu.unimelb.mentalpoker.Proto;
 
 import java.io.IOException;
 import java.util.Scanner;

@@ -1,12 +1,11 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
+
+import au.edu.unimelb.mentalpoker.Proto;
 
 import java.util.Random;
 
-/**
- * Created by azable on 12/05/17.
- */
+/** A {@link IPacketReceiver} that simulates network latency, packet drop, and reordering, used for testing. */
 public class UnreliablePacketSender implements IPacketSender {
-
     private Random random;
     private IPacketSender sender;
 

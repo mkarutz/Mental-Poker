@@ -1,12 +1,8 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
-import com.google.protobuf.InvalidProtocolBufferException;
+import au.edu.unimelb.mentalpoker.Proto;
 
-import java.io.IOException;
 import java.net.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Queue;
 
 /** This class provides an interface for reliable message delivery. */
 public class Remote extends Thread {

@@ -1,10 +1,7 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
-import java.io.IOException;
+import au.edu.unimelb.mentalpoker.Proto;
 
-/**
- * Created by azable on 10/05/17.
- */
 public class RoomHost implements Remote.Callbacks {
     private Remote remote;
     private GameTable gameTable;
