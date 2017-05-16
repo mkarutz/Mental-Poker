@@ -5,10 +5,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.BET;
@@ -60,12 +57,16 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
             return isFolded;
         }
 
-        public boolean isLive() {
-            return !isFolded;
+        public boolean isAllIn() {
+            return stake > 0 && balance == 0;
         }
 
         public boolean canPlay() {
             return balance > 0;
+        }
+
+        public boolean isBankrupt() {
+            return stake == 0 && balance == 0;
         }
     }
 
@@ -320,57 +321,137 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     }
 
     private boolean doBetting() throws TimeoutException {
-        boolean allCalledOrFolded = false;
+        for (PlayerInfo player : playerInfoList) {
+            if (player.isFolded()) {
+                continue;
+            }
 
-        while (!allCalledOrFolded) {
-            boolean anyRaised = false;
+            if (player.isBankrupt()) {
+                continue;
+            }
 
-            for (int i = 0; i < poker.getNumPlayers(); i++) {
-                final PlayerInfo playerInfo = playerInfoList.get(i);
-                final int playerId = i + 1;
-                final int minBet = max(0, getMaxStake() - playerInfo.stake);
+            PlayerAction action = getBetCheckFoldAction(player);
 
-                if (playerInfo.isFolded()) {
-                    continue;
-                }
-
-                if (playerInfo.balance == 0) {
-                    continue;
-                }
-
-                PlayerAction action;
-                if (playerId == network.getLocalPlayerId()) {
-                    System.out.println("YOUR TURN:");
-                    action = getActionFromUser(minBet);
-                    broadcastPlayerAction(action);
-                } else {
-                    action = receivePlayerAction(playerId);
-                }
-
-                if (action.getActionType() == BET) {
-                    System.out.printf("Player %d bet $%d\n", i + 1, action.getBetAmount());
-                    playerInfo.balance -= action.getBetAmount();
-                    playerInfo.stake += action.getBetAmount();
-
-                    if (action.getBetAmount() > minBet) {
-                        anyRaised = true;
-                    }
-                } else if (action.getActionType() == CHECK) {
-                    System.out.printf("Player %d checked\n", i + 1);
-                    assert(minBet == 0);
-                } else if (action.getActionType() == FOLD) {
-                    System.out.printf("Player %d folded\n", i + 1);
-                    playerInfo.isFolded = true;
+            switch (action.getActionType()) {
+                case BET:
+                    System.out.printf("Player %d bet $%d\n", player.getPlayerId(), action.getBetAmount());
+                    player.balance -= action.getBetAmount();
+                    player.stake += action.getBetAmount();
+                    break;
+                case CHECK:
+                    System.out.printf("Player %d checked\n", player.getPlayerId());
+                    break;
+                case FOLD:
+                    System.out.printf("Player %d folded\n", player.getPlayerId());
+                    player.isFolded = true;
                     if (maybePayWinner()) {
                         return true;
                     }
-                }
+                    break;
+            }
+        }
+
+        for (PlayerInfo player : playerInfoList) {
+            if (player.stake == getMaxStake()) {
+                break;
             }
 
-            allCalledOrFolded = !anyRaised;
+            if (player.isFolded()) {
+                continue;
+            }
+
+            if (player.isAllIn()) {
+                continue;
+            }
+
+            PlayerAction action = getCallFoldAction(player);
+
+            switch (action.getActionType()) {
+                case BET:
+                    System.out.printf("Player %d called\n", player.getPlayerId());
+                    player.balance -= action.getBetAmount();
+                    player.stake += action.getBetAmount();
+                    break;
+                case FOLD:
+                    System.out.printf("Player %d folded\n", player.getPlayerId());
+                    player.isFolded = true;
+                    if (maybePayWinner()) {
+                        return true;
+                    }
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
         }
 
         return false;
+    }
+
+    private PlayerAction getBetCheckFoldAction(PlayerInfo player) throws TimeoutException {
+        final int minBet = max(0, getMaxStake() - player.stake);
+        PlayerAction action;
+        if (player.getPlayerId() == network.getLocalPlayerId()) {
+            System.out.println("It's your turn:");
+            action = promptUserBetCheckFold(minBet);
+            broadcastPlayerAction(action);
+        } else {
+            action = receivePlayerAction(player.getPlayerId());
+        }
+        return action;
+    }
+
+    private PlayerAction promptUserBetCheckFold(int minBet) {
+        final Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            if (minBet == 0) {
+                System.out.printf("Bet, Check or Fold (b/c/f)? ");
+                System.out.flush();
+            } else {
+                System.out.printf("$%d to call. Bet or Fold (b/f)? ", minBet);
+                System.out.flush();
+            }
+
+            String cmd = scanner.nextLine();
+            if ("b".equals(cmd)) {
+                return PlayerAction.bet(getBetAmount(minBet));
+            } else if ("c".equals(cmd)) {
+                if (minBet == 0) {
+                    return PlayerAction.check();
+                }
+            } else if ("f".equals(cmd)) {
+                return PlayerAction.fold();
+            }
+        }
+    }
+
+    private PlayerAction getCallFoldAction(PlayerInfo player) throws TimeoutException {
+        final int amountToCall = max(0, getMaxStake() - player.stake);
+        PlayerAction action;
+        if (player.getPlayerId() == network.getLocalPlayerId()) {
+            System.out.println("It's your turn:");
+            action = promptUserCallFoldAction(amountToCall);
+            broadcastPlayerAction(action);
+        } else {
+            action = receivePlayerAction(player.getPlayerId());
+        }
+        return action;
+    }
+
+    private PlayerAction promptUserCallFoldAction(int amountToCall) {
+        final Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.printf("$%d to call. Call or Fold (c/f)? ", amountToCall);
+            System.out.flush();
+
+            String cmd = scanner.nextLine();
+            if ("c".equals(cmd)) {
+                return PlayerAction.bet(amountToCall);
+            } else if ("f".equals(cmd)) {
+                return PlayerAction.fold();
+            }
+        }
     }
 
     private int getMaxStake() {
@@ -457,31 +538,6 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
             return PlayerAction.check();
         } else {
             return PlayerAction.fold();
-        }
-    }
-
-    private PlayerAction getActionFromUser(int minBet) {
-        final Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            if (minBet == 0) {
-                System.out.printf("Bet, Check or Fold (b/c/f)? ");
-                System.out.flush();
-            } else {
-                System.out.printf("Min bet is $%d. Bet or Fold (b/f)? ", minBet);
-                System.out.flush();
-            }
-
-            String cmd = scanner.nextLine();
-            if ("b".equals(cmd)) {
-                return PlayerAction.bet(getBetAmount(minBet));
-            } else if ("c".equals(cmd)) {
-                if (minBet == 0) {
-                    return PlayerAction.check();
-                }
-            } else if ("f".equals(cmd)) {
-                return PlayerAction.fold();
-            }
         }
     }
 

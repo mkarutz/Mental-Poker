@@ -93,6 +93,7 @@ public class PokerHand implements Comparable<PokerHand> {
             sb.append(card);
             sb.append(" ");
         }
+        sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
         return sb.toString();
     }
