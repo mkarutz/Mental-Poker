@@ -29,7 +29,7 @@ The source code is organized as follows:
  - __protos.proto__ contains protocol buffer definitions of network messages.
  - Source files in the __test/java/au/edu/unimelb/mentalpoker/__ directory contain unit tests.
  
-## Running the code
+## Running the application
 Executing the following command will run unit tests, compile and run the Mental Poker application:
 ```
 > gradle run
