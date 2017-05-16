@@ -1,5 +1,11 @@
 # Mental Poker
 Distributed Algorithms (COMP90020) Project 2017.
+ 
+## Running the application
+Executing the following command will run unit tests, compile and run the Mental Poker application:
+```
+> gradle -q run
+```
 
 ## Source File Structure
 ```
@@ -28,9 +34,4 @@ The source code is organized as follows:
  - __PokerGame.java__ contains the main game loop which handles betting, game-logic and makes use of a MentalPokerEngine for secure dealing of cards.
  - __protos.proto__ contains protocol buffer definitions of network messages.
  - Source files in the __test/java/au/edu/unimelb/mentalpoker/__ directory contain unit tests.
- 
-## Running the application
-Executing the following command will run unit tests, compile and run the Mental Poker application:
-```
-> gradle run
-```
+
