@@ -14,6 +14,7 @@ Distributed Algorithms (COMP90020) Project 2017.
 |   |   +-- MentalPoker.java
 |   |   +-- PokerGame.java
 |   +-- test/java/au/edu/unimelb/mentalpoker/
+|   +-- protos.proto
 +-- tests/
 ```
 
@@ -25,4 +26,6 @@ The source code is organized as follows:
  - The __poker__ package provides utilities for representing and evaluating poker hands.
  - __MentalPoker.java__ is the main entry point to the application.
  - __PokerGame.java__ contains the main game loop which handles betting, game-logic and makes use of a MentalPokerEngine for secure dealing of cards.
+ - __protos.proto__ contains protocol buffer definitions of network messages.
+ - Source files in the __test/java/au/edu/unimelb/mentalpoker/__ directory contain unit tests.
  
