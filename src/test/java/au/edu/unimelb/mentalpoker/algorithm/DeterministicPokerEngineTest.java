@@ -1,4 +1,4 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.algorithm;
 
 import au.edu.unimelb.mentalpoker.algorithm.DeterministicPokerEngine;
 import au.edu.unimelb.mentalpoker.net.PeerNetwork;
