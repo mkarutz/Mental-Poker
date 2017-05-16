@@ -2,7 +2,6 @@ package au.edu.unimelb.mentalpoker;
 
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import java.util.*;
@@ -10,7 +9,6 @@ import java.util.concurrent.TimeoutException;
 
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.BET;
 import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.CHECK;
-import static au.edu.unimelb.mentalpoker.PokerGame.PlayerAction.Type.FOLD;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static java.lang.Math.max;
@@ -120,19 +118,39 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
         try {
             init();
 
-            for (int i = 0; i < 3; i++) {
+            while (!gameOver()) {
                 playHand();
             }
 
             try {
                 poker.finish();
                 System.out.println("Game finished successfully.");
+                System.out.println("Player " + getGameWinner().getPlayerId() + " wins.");
             } catch (CheatingDetectedException e) {
                 System.out.println("Cheating detected.");
             }
         } catch (TimeoutException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private boolean gameOver() {
+        int numPositiveBalance = 0;
+        for (PlayerInfo player : playerInfoList) {
+            if (!player.isBankrupt()) {
+                numPositiveBalance++;
+            }
+        }
+        return numPositiveBalance <= 1;
+    }
+
+    private PlayerInfo getGameWinner() {
+        for (PlayerInfo player : playerInfoList) {
+            if (!player.isBankrupt()) {
+                return player;
+            }
+        }
+        throw new RuntimeException();
     }
 
     private void init() throws TimeoutException {
@@ -198,27 +216,11 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
         }
     }
 
-    //    def distribute(pot, players):
-    //     for p in players:
-    //         p.result= -p.invested # invested money is lost originally
-
-    //     # while there are still players with money
-    //     # we build a side-pot matching the lowest stack and distribute money to winners
-    //     while len(players)>1 :
-    //         min_stack = min([p.invested for p in players])
-    //         pot += min_stack * len(players)
-    //         for p in players:
-    //             p.invested -= min_stack
-    //         max_hand = max([p.hand_strength for p in players if p.live])
-    //         winners = [p for p in players if p.hand_strength == max_hand if p.live]
-    //         for p in winners:
-    //             p.result += pot / len(winners)
-    //         players = [p for p in players if p.invested > 0]
-    //         pot = 0
-    //     if len(players) == 1:
-    //         p = players[0]
-    //         # return uncalled bet
-    //         p.result += p.invested
+    /**
+     * Distributes chips to players at the end of a hand.
+     *
+     * <p>Handles split pots, side pots, all-in situations, hand comparison and folded players.
+     */
     @VisibleForTesting void distribute() {
         List<PlayerInfo> players = Lists.newArrayList(filter(playerInfoList, p -> p.stake > 0));
 
@@ -321,12 +323,9 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     }
 
     private boolean doBetting() throws TimeoutException {
+        // Get initial player bets
         for (PlayerInfo player : playerInfoList) {
-            if (player.isFolded()) {
-                continue;
-            }
-
-            if (player.isBankrupt()) {
+            if (player.isFolded() || player.isBankrupt() || player.isAllIn()) {
                 continue;
             }
 
@@ -351,16 +350,13 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
             }
         }
 
+        // Allow players to call max bet if needed.
         for (PlayerInfo player : playerInfoList) {
             if (player.stake == getMaxStake()) {
                 break;
             }
 
-            if (player.isFolded()) {
-                continue;
-            }
-
-            if (player.isAllIn()) {
+            if (player.isFolded() || player.isBankrupt() || player.isAllIn()) {
                 continue;
             }
 
@@ -388,11 +384,11 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     }
 
     private PlayerAction getBetCheckFoldAction(PlayerInfo player) throws TimeoutException {
-        final int minBet = max(0, getMaxStake() - player.stake);
+        final int amountToCall = min(player.balance, max(0, getMaxStake() - player.stake));
         PlayerAction action;
         if (player.getPlayerId() == network.getLocalPlayerId()) {
             System.out.println("It's your turn:");
-            action = promptUserBetCheckFold(minBet);
+            action = promptUserBetCheckFold(amountToCall);
             broadcastPlayerAction(action);
         } else {
             action = receivePlayerAction(player.getPlayerId());
@@ -400,23 +396,25 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
         return action;
     }
 
-    private PlayerAction promptUserBetCheckFold(int minBet) {
+    private PlayerAction promptUserBetCheckFold(int amountToCall) {
         final Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            if (minBet == 0) {
+            if (amountToCall == 0) {
+                // No bets yet
                 System.out.printf("Bet, Check or Fold (b/c/f)? ");
                 System.out.flush();
             } else {
-                System.out.printf("$%d to call. Bet or Fold (b/f)? ", minBet);
+                // Player must call or fold
+                System.out.printf("$%d to call. Bet or Fold (b/f)? ", amountToCall);
                 System.out.flush();
             }
 
             String cmd = scanner.nextLine();
             if ("b".equals(cmd)) {
-                return PlayerAction.bet(getBetAmount(minBet));
+                return PlayerAction.bet(getBetAmount(amountToCall));
             } else if ("c".equals(cmd)) {
-                if (minBet == 0) {
+                if (amountToCall == 0) {
                     return PlayerAction.check();
                 }
             } else if ("f".equals(cmd)) {
@@ -426,7 +424,7 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
     }
 
     private PlayerAction getCallFoldAction(PlayerInfo player) throws TimeoutException {
-        final int amountToCall = max(0, getMaxStake() - player.stake);
+        final int amountToCall = min(player.balance, max(0, getMaxStake() - player.stake));
         PlayerAction action;
         if (player.getPlayerId() == network.getLocalPlayerId()) {
             System.out.println("It's your turn:");
@@ -462,10 +460,6 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
         return result;
     }
 
-    private int getMinStake() {
-        return getMinStake(playerInfoList);
-    }
-
     private int getMinStake(Iterable<PlayerInfo> players) {
         int result = Integer.MAX_VALUE;
         for (PlayerInfo playerInfo : players) {
@@ -480,20 +474,6 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Gets the index of the last player still in the hand.
-     *
-     * <p> This method should only be called after it has been determined that all players except one have folded.
-     */
-    private int getWinner() {
-        for (int i = 0; i < playerInfoList.size(); i++) {
-            if (!playerInfoList.get(i).isFolded) {
-                return i;
-            }
-        }
-        throw new RuntimeException();
     }
 
     private int getNumPlayersStillIn() {
@@ -551,7 +531,7 @@ public class PokerGame extends Thread implements PeerNetwork.Callbacks {
 
             try {
                 int amount = Integer.parseInt(scanner.nextLine());
-                if (amount > 0 && amount == balance || amount >= minBet && amount <= balance) {
+                if (amount >= minBet && amount <= balance) {
                     return amount;
                 }
             } catch (NumberFormatException e) {
