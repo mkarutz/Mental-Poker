@@ -2,14 +2,17 @@ package au.edu.unimelb.mentalpoker;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-/** Created by brandon on 13/05/17. */
+/**
+ * Created by brandon on 13/05/17.
+ */
 public class PokerUtils {
     private static final int POKER_HAND_SIZE = 5;
 
-    /** Returns a list of all possible hand combination for the given player hand. */
+    /**
+     * Returns a list of all possible hand combination for the given player hand.
+     */
     public static List<List<Card>> getAllHands(List<Card> playerCards, List<Card> tableCards) {
         List<List<Card>> result = new ArrayList<>();
         for (List<Card> tableCardCombination : findCombinations(tableCards, POKER_HAND_SIZE - playerCards.size())) {
@@ -21,7 +24,9 @@ public class PokerUtils {
         return result;
     }
 
-    /** Enumerates a list of all combination from table cards of size number. */
+    /**
+     * Enumerates a list of all combination from table cards of size number.
+     */
     private static List<List<Card>> findCombinations(List<Card> tableCards, int number) {
         List<List<Card>> finalResultTemp = new ArrayList<>();
         List<List<Card>> finalResult = new ArrayList<>();
@@ -58,9 +63,10 @@ public class PokerUtils {
     }
 
 
-    public static List<List<Card>> getAllPossiblePlayerHand(List<Card> playerCards, List<List<Card>> tableCardCombinations){
+    public static List<List<Card>> getAllPossiblePlayerHand(
+            List<Card> playerCards, List<List<Card>> tableCardCombinations) {
         List<List<Card>> finalCombinations = new ArrayList<>();
-        for(List<Card> tableCombination: tableCardCombinations){
+        for (List<Card> tableCombination : tableCardCombinations) {
             List<Card> result = tableCombination;
             result.addAll(playerCards);
             finalCombinations.add(result);
@@ -68,59 +74,58 @@ public class PokerUtils {
         return finalCombinations;
     }
 
-    public static PokerHand.Type getHandType(List<Card> playerHand){
-        if(isRoyalFlush(playerHand)){
+    public static PokerHand.Type getHandType(List<Card> playerHand) {
+        if (isRoyalFlush(playerHand)) {
             return PokerHand.Type.STRAIGHT_FLUSH;
         }
-        if(isStraightFlush(playerHand)){
+        if (isStraightFlush(playerHand)) {
             return PokerHand.Type.STRAIGHT_FLUSH;
         }
-        if(isQuad(playerHand)){
+        if (isQuad(playerHand)) {
             return PokerHand.Type.QUAD;
         }
-        if(isFullHouse(playerHand)){
+        if (isFullHouse(playerHand)) {
             return PokerHand.Type.FULL_HOUSE;
         }
-        if(isFlush(playerHand)){
+        if (isFlush(playerHand)) {
             return PokerHand.Type.FLUSH;
         }
-        if(isStraight(playerHand)){
+        if (isStraight(playerHand)) {
             return PokerHand.Type.STRAIGHT;
         }
-        if(isTriple(playerHand)){
+        if (isTriple(playerHand)) {
             return PokerHand.Type.TRIPLE;
         }
-        if(isDoublePair(playerHand)){
+        if (isDoublePair(playerHand)) {
             return PokerHand.Type.TWO_PAIR;
         }
-        if(isPair(playerHand)){
+        if (isPair(playerHand)) {
             return PokerHand.Type.PAIR;
         }
         return PokerHand.Type.HIGH_CARD;
     }
 
-    public static PokerHand getBestHand(List<List<Card>> hands){
+    public static PokerHand getBestHand(List<List<Card>> hands) {
         List<PokerHand> pokerHands = new ArrayList<>();
-        for(List<Card> hand:hands){
-            pokerHands.add(new PokerHand(getHandType(hand),hand));
+        for (List<Card> hand : hands) {
+            pokerHands.add(new PokerHand(getHandType(hand), hand));
         }
         return Collections.max(pokerHands);
     }
 
-    public static PokerHand getPlayerBestHand(List<Card> playerHand, List<Card> tableCards){
-        List<List<Card>> tableCardCombination = findCombinations(tableCards,POKER_HAND_SIZE-playerHand.size());
-        List<List<Card>> playerHandCombinations = getAllPossiblePlayerHand(playerHand,tableCardCombination);
+    public static PokerHand getPlayerBestHand(List<Card> playerHand, List<Card> tableCards) {
+        List<List<Card>> tableCardCombination = findCombinations(tableCards, POKER_HAND_SIZE - playerHand.size());
+        List<List<Card>> playerHandCombinations = getAllPossiblePlayerHand(playerHand, tableCardCombination);
         return getBestHand(playerHandCombinations);
     }
 
     //just to check for special case of straight
-    private static boolean isRoyal(List<Card> cards){
+    private static boolean isRoyal(List<Card> cards) {
         boolean check = true;
-        Collections.sort(cards,Card.COMPARE_BY_RANK);
+        Collections.sort(cards, Card.COMPARE_BY_RANK);
 
         //check if first card is 'Ace'
-        if(cards.get(0).getRawRank() != 1)
-        {
+        if (cards.get(0).getRawRank() != 1) {
             return false;
         }
 
@@ -176,15 +181,8 @@ public class PokerUtils {
     }
 
     private static boolean isQuad(List<Card> cards) {
-        for (int i = 0; i < cards.size() - 2; i++) {
-            if (cards.get(i).getRawRank() == cards.get(i + 1).getRawRank()
-                    && cards.get(i).getRawRank() == cards.get(i + 2).getRawRank()
-                    && cards.get(i).getRawRank() == cards.get(i + 3).getRawRank()) {
-                return true;
-            }
-        }
-
-        return false;
+        return cards.get(0).getRank().equals(cards.get(3).getRank())
+                || cards.get(1).getRank().equals(cards.get(4).getRank());
     }
 
     private static boolean isTriple(List<Card> cards) {
