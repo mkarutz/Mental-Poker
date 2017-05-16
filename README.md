@@ -29,6 +29,7 @@ The source code is organized as follows:
   - __MentalPokerEngine__ defines the interface for the operations the algorithm provides;
   - __SRAPokerEngine__ is an implementation of the SRA mental poker algorithm, modified to work with arbitraily many players.
  - The __net__ package contains a reliable communcation layer built on UDP and classes for creating, and managing connections with peers.
+ - The __crypto__ package handles the generation of encryption and decryption keys (both kept secret), Encryption and decrytion of messages.
  - The __poker__ package provides utilities for representing and evaluating poker hands.
  - __MentalPoker.java__ is the main entry point to the application.
  - __PokerGame.java__ contains the main game loop which handles betting, game-logic and makes use of a MentalPokerEngine for secure dealing of cards.
