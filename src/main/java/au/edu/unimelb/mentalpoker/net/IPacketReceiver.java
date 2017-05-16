@@ -1,10 +1,9 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
+
+import au.edu.unimelb.mentalpoker.Proto;
 
 import java.io.IOException;
 
-/**
- * Created by azable on 12/05/17.
- */
 public interface IPacketReceiver {
     Proto.NetworkPacket receivePacket(Address source) throws IOException;
 }

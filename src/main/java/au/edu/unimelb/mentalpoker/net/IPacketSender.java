@@ -1,8 +1,7 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
-/**
- * Created by azable on 12/05/17.
- */
+import au.edu.unimelb.mentalpoker.Proto;
+
 public interface IPacketSender {
     void sendPacket(Address destination, Proto.NetworkPacket packet);
 }

@@ -1,16 +1,12 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
-import java.io.IOException;
-import java.net.*;
-import java.net.UnknownHostException;
+import au.edu.unimelb.mentalpoker.Proto;
+
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by azable on 12/05/17.
- */
 public class RemoteSender extends Thread {
     private static final long RETRY_TIME = 300;
     private static final long CONNECTION_TIMEOUT = 30000;

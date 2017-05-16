@@ -1,6 +1,6 @@
 package au.edu.unimelb.mentalpoker;
 
-import org.junit.Before;
+import au.edu.unimelb.mentalpoker.crypto.SraKeyPair;
 import org.junit.Test;
 
 import java.math.BigInteger;

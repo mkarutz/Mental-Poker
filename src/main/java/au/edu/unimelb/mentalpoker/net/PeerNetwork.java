@@ -1,15 +1,16 @@
-package au.edu.unimelb.mentalpoker;
+package au.edu.unimelb.mentalpoker.net;
 
+import au.edu.unimelb.mentalpoker.Proto;
+import au.edu.unimelb.mentalpoker.exceptions.InvalidPlayerIdException;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeoutException;
 
-/**
- * Created by azable on 10/05/17.
- */
 public class PeerNetwork extends Thread implements Remote.Callbacks {
     private static final long PING_INTERVAL = 2000;
     private static final long DEFAULT_TIMEOUT = 30000;
