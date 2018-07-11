@@ -27,7 +27,7 @@ Executing the following command will run unit tests, compile and run the Mental 
 The source code is organized as follows:
 - The __algorithm__ package contains the implementation of the secure mental poker algorithm.
   - __MentalPokerEngine__ defines the interface for the operations the algorithm provides;
-  - __SRAPokerEngine__ is an implementation of the SRA mental poker algorithm, modified to work with arbitraily many players.
+  - __SRAPokerEngine__ is an implementation of the SRA mental poker algorithm, modified to work with arbitrarily many players.
  - The __net__ package contains a reliable communcation layer built on UDP and classes for creating, and managing connections with peers.
  - The __crypto__ package handles the generation of encryption and decryption keys (both kept secret), Encryption and decryption of messages.
  - The __poker__ package provides utilities for representing and evaluating poker hands.
